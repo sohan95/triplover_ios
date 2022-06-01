@@ -20,7 +20,7 @@ struct OriginFlightList: View {
                             RoundedRectangle(cornerRadius: 5)
                                         .fill(Color.gray)
                                         .frame(width: 80, height: 35)
-                            Text("Aljazeera")
+                            Text("Bangladesh")
                                 .font(.system(size: 14))
                         }
                         .frame(width: 100, height: 60)
