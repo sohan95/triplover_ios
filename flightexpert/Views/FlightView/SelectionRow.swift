@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct SelectionRow: View {
-//    typealias Action = (AirportData) -> Void
+    typealias Action = (AirportData) -> Void
     
     let airport: AirportData
     @Binding var selectedAirport: AirportData?
-//    var action: Action?
+    var action: Action?
     
     
     var body: some View {
@@ -48,12 +48,12 @@ struct SelectionRow: View {
                     selectedAirport = nil
                 } else {
                     selectedAirport = airport
+                    
+                    // action
+                    if let action = action {
+                        action(airport)
+                    }
                 }
-                
-    //            // action
-    //            if let action = action {
-    //                action(airport)
-    //            }
             }
         }
     }

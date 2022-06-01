@@ -318,7 +318,7 @@ struct FlightView: View {
         print(oneWayRoute)
         HttpUtility.shared.searchFlightService(searchFlighRequest: requestBody) { result in
             DispatchQueue.main.async {
-//                isGotSearchData = "A"
+                isSearching = false
                 guard (result?.item1?.airSearchResponses) != nil else {
                     return
                 }
@@ -326,8 +326,6 @@ struct FlightView: View {
                 let airSearchResponseList: [AirSearchResponses] = (result?.item1?.airSearchResponses)!
                 
                 directionList = airSearchResponseList[0].directions![0]
-                
-                isSearching = false
                 isGotSearchData = "A"
             }
         }
