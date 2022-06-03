@@ -12,7 +12,7 @@ For support, please feel free to contact me at https://www.linkedin.com/in/syeda
 */
 
 import Foundation
-struct AirSearchResponses : Codable {
+struct AirSearchResponses : Codable, Hashable {
 	let uniqueTransID : String?
 	let itemCodeRef : String?
 	let totalPrice : Double?
@@ -63,5 +63,13 @@ struct AirSearchResponses : Codable {
 		passengerCounts = try values.decodeIfPresent(PassengerCounts.self, forKey: .passengerCounts)
 		bookable = try values.decodeIfPresent(Bool.self, forKey: .bookable)
 	}
+    
+    static func == (lhs: AirSearchResponses, rhs: AirSearchResponses) -> Bool {
+            return lhs.uniqueTransID == rhs.uniqueTransID
+        }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(uniqueTransID)
+    }
 
 }

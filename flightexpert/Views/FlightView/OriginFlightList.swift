@@ -14,20 +14,20 @@ struct OriginFlightList: View {
     var body: some View {
         ZStack{
             List {
-                ForEach([2, 4, 6, 8, 10], id: \.self) { item in
+                ForEach(directionList, id: \.self) { direction in
                     HStack(spacing: 15) {
                         VStack{
                             RoundedRectangle(cornerRadius: 5)
                                         .fill(Color.gray)
                                         .frame(width: 80, height: 35)
-                            Text("Bangladesh")
+                            Text(direction.platingCarrierName!)
                                 .font(.system(size: 14))
                         }
                         .frame(width: 100, height: 60)
                         
                         VStack{
                            Text("21:35")
-                            Text("AMM")
+                            Text(direction.from!)
                         }
                         .frame(width:40)
                         .font(.system(size: 12))
@@ -43,16 +43,20 @@ struct OriginFlightList: View {
                             RoundedRectangle(cornerRadius: 5)
                                         .fill(Color.gray)
                                         .frame(width: 100, height: 2)
-                            Text("1 Stop").font(.system(size: 11))
+                            if direction.stops == 0 {
+                                Text("No Stops").font(.system(size: 11))
+                            } else {
+                                Text("direction.stop").font(.system(size: 11))
+                            }
+                            
                         }
                         VStack{
                             Text("21:35")
-                            Text("AMM")
+                            Text(direction.to!)
                         }
                         .frame(width:40)
                         .font(.system(size: 13))
                     }
-                    Text(message)
                     
                 }
                 .background(.white)

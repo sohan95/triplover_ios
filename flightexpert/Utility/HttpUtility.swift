@@ -99,7 +99,24 @@ final class HttpUtility {
         }).resume()
     }
     
+//    func searchFlightService(searchFlighRequest:SearchFlighRequest, completionHandler:@escaping(_ result: SearchedFlightResponse?)->Void) {
+//        var urlRequest = URLRequest(url: URL(string: "http://52.221.202.198:83/api/Search")!)
+//        urlRequest.httpMethod = "post"
+//        urlRequest.addValue("application/json", forHTTPHeaderField: "content-type")
+//        urlRequest.httpBody = try? JSONEncoder().encode(searchFlighRequest)
+//
+//        URLSession.shared.dataTask(with: urlRequest, completionHandler: { data, response, error -> Void in
+//            if (error == nil && data != nil) {
+//
+//                let responseData = try? JSONDecoder().decode(SearchedFlightResponse.self, from: data!)
+//                //print(responseData)
+//                _ = completionHandler(responseData)
+//            }
+//        }).resume()
+//    }
+    
     func searchFlightService(searchFlighRequest:SearchFlighRequest, completionHandler:@escaping(_ result: FlightSearchedDataModel?)->Void) {
+        
         var urlRequest = URLRequest(url: URL(string: "http://52.221.202.198:83/api/Search")!)
         urlRequest.httpMethod = "post"
         urlRequest.addValue("application/json", forHTTPHeaderField: "content-type")
@@ -110,6 +127,7 @@ final class HttpUtility {
                 
                 let responseData = try? JSONDecoder().decode(FlightSearchedDataModel.self, from: data!)
                 print(responseData!)
+//                let responseData = try? newJSONDecoder().decode(SearchedFlightResponse.self, from: data!)
                 _ = completionHandler(responseData)
             }
         }).resume()

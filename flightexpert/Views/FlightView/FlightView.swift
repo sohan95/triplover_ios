@@ -32,6 +32,7 @@ struct FlightView: View {
     
     @State var isSearching: Bool = false
     @State var isGotSearchData: String? = nil
+    
     @State var directionList:[Directions] = []
     
     @State var adults: Int = 2
@@ -311,20 +312,29 @@ struct FlightView: View {
     
     func searchFlight() {
         isSearching = true
-        let oneWayRoute: Route = Route(origin: oneWaySource!.iata, destination: oneWayDestin!.iata, departureDate: getDateString(date: oneWayDate))
+//        let oneWayRoute: Route = Route(origin: oneWaySource!.iata, destination: oneWayDestin!.iata, departureDate: getDateString(date: oneWayDate))
+        let oneWayRoute: Route = Route(origin: "DAC", destination: "CGP", departureDate:"2022-06-03")
+        
         print(oneWayRoute)
         
         let requestBody:SearchFlighRequest = SearchFlighRequest(routes: [oneWayRoute], adults: adults, childs: childs, infants: infants, cabinClass: 1, preferredCarriers: [], prohibitedCarriers: [], childrenAges: [])
-        print(oneWayRoute)
+        print(requestBody)
+//
+//        FlightAPI.searchFlight(searchFlighRequest: requestBody) { data, error in
+//            guard let data = data else {return}
+//            isSearching = false
+//            print(data)
+//
+//        }
         HttpUtility.shared.searchFlightService(searchFlighRequest: requestBody) { result in
             DispatchQueue.main.async {
                 isSearching = false
                 guard (result?.item1?.airSearchResponses) != nil else {
                     return
                 }
-                
+
                 let airSearchResponseList: [AirSearchResponses] = (result?.item1?.airSearchResponses)!
-                
+
                 directionList = airSearchResponseList[0].directions![0]
                 isGotSearchData = "A"
             }

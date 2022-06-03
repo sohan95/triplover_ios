@@ -12,7 +12,8 @@ For support, please feel free to contact me at https://www.linkedin.com/in/syeda
 */
 
 import Foundation
-struct Directions : Codable  {
+struct Directions : Codable, Hashable  {
+    
 	let from : String?
 	let to : String?
 	let fromAirport : String?
@@ -45,5 +46,14 @@ struct Directions : Codable  {
 		stops = try values.decodeIfPresent(Int.self, forKey: .stops)
 		segments = try values.decodeIfPresent([Segments].self, forKey: .segments)
 	}
+    
+    static func == (lhs: Directions, rhs: Directions) -> Bool {
+        return lhs.from == rhs.from
+        }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(from)
+    }
+    
 
 }
