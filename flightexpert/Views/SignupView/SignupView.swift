@@ -20,8 +20,9 @@ struct SignupView: View {
     
     var body: some View {
         ZStack {
-            Color.white
-                .ignoresSafeArea()
+            backgroundGradient
+                .ignoresSafeArea(.all, edges: .all)
+            
             VStack(spacing: 30) {
                 VStack {
                     Text("Register")
@@ -88,25 +89,33 @@ struct SignupView: View {
                         
                     }, label: {
                         Text("Register")
-                            .fontWeight(.medium)
-                            .font(.title)
-                            .foregroundColor(Color.white)
-                            .padding([.top, .bottom], 15)
-                            .padding([.leading, .trailing], 25)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(Color.white, lineWidth: 3))
+                            .padding(.horizontal, 15)
+                            .padding(.vertical,10)
+                            .buttonStyle(.bordered)
+                            .background(.orange)
+                            .foregroundColor(.white)
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+//                            .fontWeight(.medium)
+//                            .font(.title)
+//                            .foregroundColor(Color.white)
+//                            .padding([.top, .bottom], 15)
+//                            .padding([.leading, .trailing], 25)
+//                            .overlay(
+//                                RoundedRectangle(cornerRadius: 10)
+//                                    .stroke(Color.white, lineWidth: 3))
                             
                     })
-                    .background(Color.secondary)
-                    .cornerRadius(10)
+//                    .background(Color.secondary)
+//                    .cornerRadius(10)
                     
                     Spacer()
                 }
+                .padding()
                 .background(Color(red: 0.32, green:0.48, blue: 0.81))
+//                .cornerRadius(15)
             }
-            .cornerRadius(10)
-            .padding()
+//            .cornerRadius(10)
+//            .padding()
             
         }
         .navigationTitle("Register")

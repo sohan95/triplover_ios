@@ -10,10 +10,10 @@ import SwiftUI
 struct HomeView: View {
     var body: some View {
         ZStack {
-            Image("triplover-bg-image")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .ignoresSafeArea()
+//            Image("triplover-bg-image")
+//                .resizable()
+//                .aspectRatio(contentMode: .fit)
+//                .ignoresSafeArea()
             
             VStack(spacing: 16) {
                 HomeButtonView(title: "Flight",iconName: "airplane")

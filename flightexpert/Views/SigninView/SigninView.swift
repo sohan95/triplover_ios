@@ -17,8 +17,8 @@ struct SigninView: View {
     
     var body: some View {
         ZStack {
-            Color.white
-                .ignoresSafeArea()
+            backgroundGradient
+                .ignoresSafeArea(.all, edges: .all)
             
             VStack(spacing: 30) {
                 VStack {
@@ -53,14 +53,12 @@ struct SigninView: View {
                         self.loginAction()
                     }, label: {
                         Text("Login")
-                            .fontWeight(.medium)
-                            .font(.title)
                             .foregroundColor(Color.white)
                             .padding([.top, .bottom], 10)
                             .padding([.leading, .trailing], 30)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(Color.white, lineWidth: 3))
+//                            .overlay(
+//                                RoundedRectangle(cornerRadius: 10)
+//                                    .stroke(Color.white, lineWidth: 3))
                             
                     })
                     .background(Color.secondary)
@@ -74,16 +72,19 @@ struct SigninView: View {
                         NavigationLink("Forgot Password?", destination: SignupView())
                         NavigationLink("New User Signup Here ", destination: SignupView())
                     }
-                    .foregroundColor(.white)
-                    .font(.system(.subheadline))
-                    .padding([.top,.bottom])
+                    .foregroundColor(.black)
+                    .font(.system(size: 12, weight: .medium, design: .monospaced))
+//                    .padding([.top,.bottom])
                 }
+                .padding()
                 .background(Color(red: 0.32, green:0.48, blue: 0.81))
+                .cornerRadius(15)
                 
                 Spacer()
             }
-            .cornerRadius(10)
-            .padding()
+
+//            .buttonBorderShape(.roundedRectangle(radius: 10))
+//            .padding()
         }
         .navigationTitle("Login")
         .navigationBarTitleDisplayMode(.inline)

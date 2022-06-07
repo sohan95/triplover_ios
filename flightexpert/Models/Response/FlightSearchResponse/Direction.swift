@@ -12,29 +12,51 @@ For support, please feel free to contact me at https://www.linkedin.com/in/syeda
 */
 
 import Foundation
-struct Item1 : Codable {
-	let airSearchResponses : [AirSearchResponse]?
-	let airlineFilters : [AirlineFilter]?
-	let minMaxPrice : MinMaxPrice?
-	let stops : [Int]?
-	let totalFlights : Int?
+struct Direction : Codable, Hashable  {
+    let id = UUID().uuidString
+	let from : String?
+	let to : String?
+	let fromAirport : String?
+	let toAirport : String?
+	let platingCarrierCode : String?
+	let platingCarrierName : String?
+	let stops : Int?
+	let segments : [Segment]?
+    
+    //For UI purpose
+    var isSelected: Bool = false
 
 	enum CodingKeys: String, CodingKey {
 
-		case airSearchResponses = "airSearchResponses"
-		case airlineFilters = "airlineFilters"
-		case minMaxPrice = "minMaxPrice"
+		case from = "from"
+		case to = "to"
+		case fromAirport = "fromAirport"
+		case toAirport = "toAirport"
+		case platingCarrierCode = "platingCarrierCode"
+		case platingCarrierName = "platingCarrierName"
 		case stops = "stops"
-		case totalFlights = "totalFlights"
+		case segments = "segments"
 	}
 
 	init(from decoder: Decoder) throws {
 		let values = try decoder.container(keyedBy: CodingKeys.self)
-		airSearchResponses = try values.decodeIfPresent([AirSearchResponse].self, forKey: .airSearchResponses)
-		airlineFilters = try values.decodeIfPresent([AirlineFilter].self, forKey: .airlineFilters)
-		minMaxPrice = try values.decodeIfPresent(MinMaxPrice.self, forKey: .minMaxPrice)
-		stops = try values.decodeIfPresent([Int].self, forKey: .stops)
-		totalFlights = try values.decodeIfPresent(Int.self, forKey: .totalFlights)
+		from = try values.decodeIfPresent(String.self, forKey: .from)
+		to = try values.decodeIfPresent(String.self, forKey: .to)
+		fromAirport = try values.decodeIfPresent(String.self, forKey: .fromAirport)
+		toAirport = try values.decodeIfPresent(String.self, forKey: .toAirport)
+		platingCarrierCode = try values.decodeIfPresent(String.self, forKey: .platingCarrierCode)
+		platingCarrierName = try values.decodeIfPresent(String.self, forKey: .platingCarrierName)
+		stops = try values.decodeIfPresent(Int.self, forKey: .stops)
+		segments = try values.decodeIfPresent([Segment].self, forKey: .segments)
 	}
+    
+    static func == (lhs: Direction, rhs: Direction) -> Bool {
+        return lhs.id == rhs.id
+        }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+    
 
 }

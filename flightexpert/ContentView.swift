@@ -14,6 +14,8 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             ZStack {
+                backgroundGradient
+                    .ignoresSafeArea(.all, edges: .all)
                 
                 if isShowing {
                     SideMenuView(isShowing: $isShowing)
@@ -21,7 +23,7 @@ struct ContentView: View {
                 
                 
                 HomeView()
-                    .background(isShowing ? Color.gray: Color.white)
+                    //.background(isShowing ? Color.gray)
                     .cornerRadius(isShowing ? 20: 10)
                     .offset(x: isShowing ? 300 : 0, y:
                                 isShowing ? 0 : 0)

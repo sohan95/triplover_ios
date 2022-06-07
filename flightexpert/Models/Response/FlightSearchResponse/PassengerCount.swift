@@ -12,48 +12,26 @@ For support, please feel free to contact me at https://www.linkedin.com/in/syeda
 */
 
 import Foundation
-struct Directions : Codable, Hashable  {
-    
-	let from : String?
-	let to : String?
-	let fromAirport : String?
-	let toAirport : String?
-	let platingCarrierCode : String?
-	let platingCarrierName : String?
-	let stops : Int?
-	let segments : [Segments]?
+struct PassengerCount : Codable {
+	let cnn : Int?
+	let inf : Int?
+	let adt : Int?
+	let ins : Int?
 
 	enum CodingKeys: String, CodingKey {
 
-		case from = "from"
-		case to = "to"
-		case fromAirport = "fromAirport"
-		case toAirport = "toAirport"
-		case platingCarrierCode = "platingCarrierCode"
-		case platingCarrierName = "platingCarrierName"
-		case stops = "stops"
-		case segments = "segments"
+		case cnn = "cnn"
+		case inf = "inf"
+		case adt = "adt"
+		case ins = "ins"
 	}
 
 	init(from decoder: Decoder) throws {
 		let values = try decoder.container(keyedBy: CodingKeys.self)
-		from = try values.decodeIfPresent(String.self, forKey: .from)
-		to = try values.decodeIfPresent(String.self, forKey: .to)
-		fromAirport = try values.decodeIfPresent(String.self, forKey: .fromAirport)
-		toAirport = try values.decodeIfPresent(String.self, forKey: .toAirport)
-		platingCarrierCode = try values.decodeIfPresent(String.self, forKey: .platingCarrierCode)
-		platingCarrierName = try values.decodeIfPresent(String.self, forKey: .platingCarrierName)
-		stops = try values.decodeIfPresent(Int.self, forKey: .stops)
-		segments = try values.decodeIfPresent([Segments].self, forKey: .segments)
+		cnn = try values.decodeIfPresent(Int.self, forKey: .cnn)
+		inf = try values.decodeIfPresent(Int.self, forKey: .inf)
+		adt = try values.decodeIfPresent(Int.self, forKey: .adt)
+		ins = try values.decodeIfPresent(Int.self, forKey: .ins)
 	}
-    
-    static func == (lhs: Directions, rhs: Directions) -> Bool {
-        return lhs.from == rhs.from
-        }
-
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(from)
-    }
-    
 
 }

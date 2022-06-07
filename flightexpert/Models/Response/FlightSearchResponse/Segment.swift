@@ -12,7 +12,7 @@ For support, please feel free to contact me at https://www.linkedin.com/in/syeda
 */
 
 import Foundation
-struct Segments : Codable {
+struct Segment : Codable {
 	let from : String?
 	let fromAirport : String?
 	let to : String?

@@ -12,7 +12,7 @@ For support, please feel free to contact me at https://www.linkedin.com/in/syeda
 */
 
 import Foundation
-struct AirSearchResponses : Codable, Hashable {
+struct AirSearchResponse : Codable, Hashable {
 	let uniqueTransID : String?
 	let itemCodeRef : String?
 	let totalPrice : Double?
@@ -22,10 +22,10 @@ struct AirSearchResponses : Codable, Hashable {
 	let platingCarrierName : String?
 	let platingCarrier : String?
 	let refundable : Bool?
-	let directions : [[Directions]]?
-	let bookingComponents : [BookingComponents]?
+	let directions : [[Direction]]?
+	let bookingComponents : [BookingComponent]?
 	let passengerFares : PassengerFares?
-	let passengerCounts : PassengerCounts?
+	let passengerCounts : PassengerCount?
 	let bookable : Bool?
 
 	enum CodingKeys: String, CodingKey {
@@ -57,14 +57,14 @@ struct AirSearchResponses : Codable, Hashable {
 		platingCarrierName = try values.decodeIfPresent(String.self, forKey: .platingCarrierName)
 		platingCarrier = try values.decodeIfPresent(String.self, forKey: .platingCarrier)
 		refundable = try values.decodeIfPresent(Bool.self, forKey: .refundable)
-		directions = try values.decodeIfPresent([[Directions]].self, forKey: .directions)
-		bookingComponents = try values.decodeIfPresent([BookingComponents].self, forKey: .bookingComponents)
+		directions = try values.decodeIfPresent([[Direction]].self, forKey: .directions)
+		bookingComponents = try values.decodeIfPresent([BookingComponent].self, forKey: .bookingComponents)
 		passengerFares = try values.decodeIfPresent(PassengerFares.self, forKey: .passengerFares)
-		passengerCounts = try values.decodeIfPresent(PassengerCounts.self, forKey: .passengerCounts)
+		passengerCounts = try values.decodeIfPresent(PassengerCount.self, forKey: .passengerCounts)
 		bookable = try values.decodeIfPresent(Bool.self, forKey: .bookable)
 	}
     
-    static func == (lhs: AirSearchResponses, rhs: AirSearchResponses) -> Bool {
+    static func == (lhs: AirSearchResponse, rhs: AirSearchResponse) -> Bool {
             return lhs.uniqueTransID == rhs.uniqueTransID
         }
 

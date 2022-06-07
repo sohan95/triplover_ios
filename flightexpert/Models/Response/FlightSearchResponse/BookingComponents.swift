@@ -12,7 +12,7 @@ For support, please feel free to contact me at https://www.linkedin.com/in/syeda
 */
 
 import Foundation
-struct BookingComponents : Codable {
+struct BookingComponent : Codable {
 	let discountPrice : Double?
 	let totalPrice : Double?
 	let basePrice : Double?

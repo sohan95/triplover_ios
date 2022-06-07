@@ -28,12 +28,87 @@ struct SearchFlighRequest: Encodable {
     let childrenAges: [Int]
 }
 
+class FlightSearchModel: ObservableObject {
+    
+    @Published var airSearchResponses: [AirSearchResponse] = []
+    @Published var backwardDirections:[Direction] = []
+    @Published var forwardDirections:[Direction] = []
+    @Published var isSearchComplete:Bool = false
+    @Published var isSearching:Bool = false
+    @Published var isGotSearchData: String? = nil
+    
+    @Published var originDir: Direction? = nil
+    @Published var destinationDir: Direction? = nil
+    
+    func setOrigin(direction: Direction) {
+        self.originDir = direction
+        print(self.originDir!)
+    }
+
+    func setDestination(direction: Direction) {
+        self.destinationDir = direction
+        print(self.destinationDir!)
+    }
+    
+    func getAirSearchResponses(requestBody:SearchFlighRequest) {
+        self.isSearching = true
+        HttpUtility.shared.searchFlightService(searchFlighRequest: requestBody) { result in
+            
+            DispatchQueue.main.async { [ self] in
+                self.isSearchComplete = true
+                self.isSearching = false
+                guard (result?.item1?.airSearchResponses) != nil else {
+                    return
+                }
+
+                self.airSearchResponses = (result?.item1?.airSearchResponses)!
+                
+                if self.airSearchResponses.count > 0 {
+                    self.isGotSearchData = "A"
+                }
+                
+//                let forwardD = self.airSearchResponses.flatMap({ airSearchItem in
+//                    return airSearchItem.directions![0]
+//                })
+//
+//                let backwardD = self.airSearchResponses.flatMap({ airSearchItem in
+//                    return airSearchItem.directions![1]
+//                })
+//
+//                self.forwardDirections = forwardD
+//                self.backwardDirections = backwardD
+            }
+        }
+    }
+    
+    func getForwardDirection() {
+        
+        let forwardD = self.airSearchResponses.flatMap({ airSearchItem in
+            return airSearchItem.directions![0]
+        })
+        
+        self.forwardDirections = forwardD
+    }
+    
+    func backwardDirection() {
+        
+        let backwardD = self.airSearchResponses.flatMap({ airSearchItem in
+            return airSearchItem.directions![1]
+        })
+        
+        self.backwardDirections = backwardD
+    }
+    
+}
+
 struct FlightView: View {
+    
+    @StateObject var flightSearchModel = FlightSearchModel()
     
     @State var isSearching: Bool = false
     @State var isGotSearchData: String? = nil
     
-    @State var directionList:[Directions] = []
+    @State var directionList:[Direction] = []
     
     @State var adults: Int = 2
     @State var childs: Int = 1
@@ -80,58 +155,59 @@ struct FlightView: View {
         ZStack {
             backgroundGradient
                 .ignoresSafeArea(.all, edges: .all)
-            NavigationLink(destination: OriginFlightList(message: "Test", directionList: directionList), tag: "A", selection: $isGotSearchData) { EmptyView() }
-            if !isSearching {
+            
+            NavigationLink(destination:OriginFlightList(title: "SourceToDestination",flightSearchModel: flightSearchModel), tag: "A", selection: $flightSearchModel.isGotSearchData) { EmptyView() }
+            if !flightSearchModel.isSearching {
                 VStack {
                 
-                // TripRouteSegment
-                ScrollView([], showsIndicators: false, content: {
-                    LazyHGrid(rows: gridLayout, alignment: .center, spacing: columnSpacing, pinnedViews: [], content: {
+                    // TripRouteSegment
+                    ScrollView([], showsIndicators: false, content: {
+                        LazyHGrid(rows: gridLayout, alignment: .center, spacing: columnSpacing, pinnedViews: [], content: {
+                            
+                            ForEach(flightRouteTypes, id: \.self) { type in
+                                TripSegmentedView(typeSelected: self.$typeSelected, name: type)
+                            }
+                        })//: GRID
+                        .frame(width: 240, height: 50)
+                        .cornerRadius(5)
                         
-                        ForEach(flightRouteTypes, id: \.self) { type in
-                            TripSegmentedView(typeSelected: self.$typeSelected, name: type)
-                        }
-                    })//: GRID
-                    .frame(width: 240, height: 50)
-                    .cornerRadius(5)
+                    })//: SCROLL
+                    .frame(width: 300, height: 50)
+                    .background(Color("button-bg-color").cornerRadius(5))
+                    .padding(.bottom, 30)
                     
-                })//: SCROLL
-                .frame(width: 300, height: 50)
-                .background(Color("button-bg-color").cornerRadius(5))
-                .padding(.bottom, 30)
-                
-                if isOneWay {
-                    OneWayRoute(source: $oneWaySource, destination: $oneWayDestin, selectedDate: $oneWayDate)
-                }
-//                if isRoundTrip {
-//                    RouteView(route: $roundWayRoutes[0])
-//                    RouteView(route: $roundWayRoutes[1])
-//                }
-//                if isMultiCity {
-//                    ForEach(0 ..< multiCityRouteCount, id:\.self) { i in
-//                        RouteView(route: $multiCityRoutes[i])
-//                    }
-//
-//                    HStack {
-//                        Button {
-//                            if multiCityRouteCount < 4 {
-//                                multiCityRouteCount += 1
-//                            }
-//                        } label: {
-//                            Label("Add More Trip", systemImage: "plus.square")
-//                        }
-//
-//                        if multiCityRouteCount > 2 {
-//                            Button {
-//                                if multiCityRouteCount > 2 {
-//                                    multiCityRouteCount -= 1
-//                                }
-//                            } label: {
-//                                Label("Remove Trip", systemImage: "minus.square")
-//                            }
-//                        }
-//                    }
-//                }
+                    if isOneWay {
+                        OneWayRoute(source: $oneWaySource, destination: $oneWayDestin, selectedDate: $oneWayDate)
+                    }
+    //                if isRoundTrip {
+    //                    RouteView(route: $roundWayRoutes[0])
+    //                    RouteView(route: $roundWayRoutes[1])
+    //                }
+    //                if isMultiCity {
+    //                    ForEach(0 ..< multiCityRouteCount, id:\.self) { i in
+    //                        RouteView(route: $multiCityRoutes[i])
+    //                    }
+    //
+    //                    HStack {
+    //                        Button {
+    //                            if multiCityRouteCount < 4 {
+    //                                multiCityRouteCount += 1
+    //                            }
+    //                        } label: {
+    //                            Label("Add More Trip", systemImage: "plus.square")
+    //                        }
+    //
+    //                        if multiCityRouteCount > 2 {
+    //                            Button {
+    //                                if multiCityRouteCount > 2 {
+    //                                    multiCityRouteCount -= 1
+    //                                }
+    //                            } label: {
+    //                                Label("Remove Trip", systemImage: "minus.square")
+    //                            }
+    //                        }
+    //                    }
+    //                }
                 
                 
                 Spacer()
@@ -273,15 +349,15 @@ struct FlightView: View {
                 
                 //:is Direct Flight
                 HStack {
-//                    Toggle(isOn: $isDirectFlight) {
-//                        //
-//                    }.padding()
+    //                    Toggle(isOn: $isDirectFlight) {
+    //                        //
+    //                    }.padding()
                     Toggle("Direct Flight", isOn: $isDirectFlight)
                         .padding()
-//                    Text("Direct Flight")
-//                        .font(.title)
-//                        .foregroundColor(Color.black)
-//                    Spacer()
+    //                    Text("Direct Flight")
+    //                        .font(.title)
+    //                        .foregroundColor(Color.black)
+    //                    Spacer()
                 }
                 .background(isDirectFlight ? Color.orange : Color(red: 249/255, green: 228/255, blue: 209/255))
                 
@@ -300,7 +376,7 @@ struct FlightView: View {
                 .background(Color.blue)
             }
             }
-            if isSearching {
+            else {
                 LoadingView()
             }
             
@@ -311,9 +387,17 @@ struct FlightView: View {
     }
     
     func searchFlight() {
+        let oneWayRoute: Route = Route(origin: "DAC", destination: "CGP", departureDate:"2022-06-10")
+        let requestBody:SearchFlighRequest = SearchFlighRequest(routes: [oneWayRoute], adults: adults, childs: childs, infants: infants, cabinClass: 1, preferredCarriers: [], prohibitedCarriers: [], childrenAges: [])
+        
+        //flightSearchModel.isSearching = true
+        flightSearchModel.getAirSearchResponses(requestBody: requestBody)
+    }
+    
+    func searchFlight2() {
         isSearching = true
 //        let oneWayRoute: Route = Route(origin: oneWaySource!.iata, destination: oneWayDestin!.iata, departureDate: getDateString(date: oneWayDate))
-        let oneWayRoute: Route = Route(origin: "DAC", destination: "CGP", departureDate:"2022-06-03")
+        let oneWayRoute: Route = Route(origin: "DAC", destination: "CGP", departureDate:"2022-06-10")
         
         print(oneWayRoute)
         
@@ -333,9 +417,19 @@ struct FlightView: View {
                     return
                 }
 
-                let airSearchResponseList: [AirSearchResponses] = (result?.item1?.airSearchResponses)!
+                let airSearchResponseList: [AirSearchResponse] = (result?.item1?.airSearchResponses)!
 
-                directionList = airSearchResponseList[0].directions![0]
+                directionList = airSearchResponseList.flatMap({ airSearchItem in
+                    return airSearchItem.directions![0]
+                })
+                
+//                let dirList = airSearchResponseList.map { (airSearchItem) in
+//                    return airSearchItem.directions![0]
+//                }
+//                print(dirList)
+//                directionList = dirList
+                
+//                directionList = airSearchResponseList[0].directions![0]
                 isGotSearchData = "A"
             }
         }
@@ -386,14 +480,9 @@ struct TripSegmentedView: View {
         return typeSelected == name
     }
     
-    func test() {
-        
-    }
-    
     var body: some View {
         Button(action: {
             typeSelected = name
-            print("typeSelected=\(typeSelected)")
         }, label: {
             HStack(alignment: .center, spacing: 1, content: {
                 Text(name)
