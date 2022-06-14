@@ -28,79 +28,6 @@ struct SearchFlighRequest: Encodable {
     let childrenAges: [Int]
 }
 
-class FlightSearchModel: ObservableObject {
-    
-    @Published var airSearchResponses: [AirSearchResponse] = []
-    @Published var backwardDirections:[Direction] = []
-    @Published var forwardDirections:[Direction] = []
-    @Published var isSearchComplete:Bool = false
-    @Published var isSearching:Bool = false
-    @Published var isGotSearchData: String? = nil
-    
-    @Published var originDir: Direction? = nil
-    @Published var destinationDir: Direction? = nil
-    
-    func setOrigin(direction: Direction) {
-        self.originDir = direction
-        print(self.originDir!)
-    }
-
-    func setDestination(direction: Direction) {
-        self.destinationDir = direction
-        print(self.destinationDir!)
-    }
-    
-    func getAirSearchResponses(requestBody:SearchFlighRequest) {
-        self.isSearching = true
-        HttpUtility.shared.searchFlightService(searchFlighRequest: requestBody) { result in
-            
-            DispatchQueue.main.async { [ self] in
-                self.isSearchComplete = true
-                self.isSearching = false
-                guard (result?.item1?.airSearchResponses) != nil else {
-                    return
-                }
-
-                self.airSearchResponses = (result?.item1?.airSearchResponses)!
-                
-                if self.airSearchResponses.count > 0 {
-                    self.isGotSearchData = "A"
-                }
-                
-//                let forwardD = self.airSearchResponses.flatMap({ airSearchItem in
-//                    return airSearchItem.directions![0]
-//                })
-//
-//                let backwardD = self.airSearchResponses.flatMap({ airSearchItem in
-//                    return airSearchItem.directions![1]
-//                })
-//
-//                self.forwardDirections = forwardD
-//                self.backwardDirections = backwardD
-            }
-        }
-    }
-    
-    func getForwardDirection() {
-        
-        let forwardD = self.airSearchResponses.flatMap({ airSearchItem in
-            return airSearchItem.directions![0]
-        })
-        
-        self.forwardDirections = forwardD
-    }
-    
-    func backwardDirection() {
-        
-        let backwardD = self.airSearchResponses.flatMap({ airSearchItem in
-            return airSearchItem.directions![1]
-        })
-        
-        self.backwardDirections = backwardD
-    }
-    
-}
-
 struct FlightView: View {
     
     @StateObject var flightSearchModel = FlightSearchModel()
@@ -159,7 +86,6 @@ struct FlightView: View {
             NavigationLink(destination:OriginFlightList(title: "SourceToDestination",flightSearchModel: flightSearchModel), tag: "A", selection: $flightSearchModel.isGotSearchData) { EmptyView() }
             if !flightSearchModel.isSearching {
                 VStack {
-                
                     // TripRouteSegment
                     ScrollView([], showsIndicators: false, content: {
                         LazyHGrid(rows: gridLayout, alignment: .center, spacing: columnSpacing, pinnedViews: [], content: {
@@ -208,173 +134,171 @@ struct FlightView: View {
     //                        }
     //                    }
     //                }
-                
-                
-                Spacer()
-                
-                VStack(spacing:0) {
-                    Divider()
-                        .frame(height: 1)
-                        .background(Color.red)
-                    HStack(alignment: .center, spacing:0) {
-                        //firstDiv
-                        VStack(spacing:20) {
-                            HStack{
-                                Button {
-                                    if adults<10 {
-                                        adults += 1
-                                    }
-                                } label: {
-                                    Image(systemName: "plus.square")
-                                        .resizable()
-                                        .frame(width: 25,height: 25)
-                                    
-                                }.foregroundColor(.black)
-                                
-                                Text("\(adults)")
-                                
-                                Button {
-                                    if adults > 0 {
-                                        adults -= 1
-                                    }
-                                } label: {
-                                    Image(systemName: "minus.square")
-                                        .resizable()
-                                        .frame(width: 25,height: 25)
-                                    
-                                }.foregroundColor(.black)
-                                
-                            }
-                            Text("Adult(\(adults)+)")
-                                .frame(width: 100)
-                        }
-                        .padding(20)
-                        .frame(width: 130)
-                        
-                        Divider()
-                            .frame(width: 1)
-                            .background(Color.red)
-                        //MiddleDiv
-                        VStack(spacing:20) {
-                            HStack{
-                                Button {
-                                    if childs < 10 {
-                                        childs += 1
-                                    }
-                                } label: {
-                                    Image(systemName: "plus.square")
-                                        .resizable()
-                                        .frame(width: 25,height: 25)
-                                    
-                                }.foregroundColor(.black)
-                                
-                                Text("\(childs)")
-                                
-                                Button {
-                                    if childs > 0 {
-                                        childs -= 1
-                                    }
-                                } label: {
-                                    Image(systemName: "minus.square")
-                                        .resizable()
-                                        .frame(width: 25,height: 25)
-                                    
-                                }.foregroundColor(.black)
-                                
-                            }
-                            Text("Child(\(childs)+)")
-                                .frame(width: 100)
-                        }
-                        .padding(20)
-                        .frame(width: 130)
-                        
-                        Divider()
-                            .frame(width: 1)
-                            .background(Color.red)
-                        //LaseDiv
-                        VStack(spacing:20) {
-                            HStack{
-                                Button {
-                                    if infants<10 {
-                                        infants += 1
-                                    }
-                                } label: {
-                                    Image(systemName: "plus.square")
-                                        .resizable()
-                                        .frame(width: 25,height: 25)
-                                    
-                                }.foregroundColor(.black)
-                                
-                                Text("\(infants)")
-                                
-                                Button {
-                                    if infants > 0 {
-                                        infants -= 1
-                                    }
-                                } label: {
-                                    Image(systemName: "minus.square")
-                                        .resizable()
-                                        .frame(width: 25,height: 25)
-                                    
-                                }.foregroundColor(.black)
-                                
-                            }
-                            Text("Infant(\(infants)+)")
-                                .frame(width: 100)
-                        }
-                        .padding(20)
-                        .frame(width: 130)
-                    }
-                    .frame(height: 130)
-                    Divider()
-                        .frame(height: 1)
-                        .background(Color.red)
-                }
-                
-                //: CabinClass
-                ScrollView([], showsIndicators: false, content: {
-                    LazyHGrid(rows: gridLayout, alignment: .center, spacing: columnSpacing, pinnedViews: [], content: {
-                        
-                        ForEach(cabinClassList, id: \.self) { cabinName in
-                            CabinSegmentedView(cabinSelected: $cabinClass, name: cabinName)
-                        }
-                    })//: GRID
-                    .frame(width:10, height: 10)
-                    .cornerRadius(5)
+
+                    Spacer()
                     
-                })//: SCROLL
-                .frame(maxWidth: .infinity, alignment: .trailing)
-                .frame(height:70)
-                .background(Color(red: 249/255, green: 228/255, blue: 209/255))
-                
-                //:is Direct Flight
-                HStack {
-    //                    Toggle(isOn: $isDirectFlight) {
-    //                        //
-    //                    }.padding()
-                    Toggle("Direct Flight", isOn: $isDirectFlight)
-                        .padding()
-    //                    Text("Direct Flight")
-    //                        .font(.title)
-    //                        .foregroundColor(Color.black)
-    //                    Spacer()
-                }
-                .background(isDirectFlight ? Color.orange : Color(red: 249/255, green: 228/255, blue: 209/255))
-                
-                //: Search Button
-                VStack {
-                    Button {
-                        self.searchFlight()
-                    } label: {
-                        Text("Search Flight")
-                            .frame(maxWidth: .infinity, alignment: .center)
-                            .frame(height:60)
-                            .foregroundColor(Color.white)
-                            .font(.system(size: 24, weight:.heavy))
+                    VStack(spacing:0) {
+                        Divider()
+                            .frame(height: 1)
+                            .background(Color.red)
+                        HStack(alignment: .center, spacing:0) {
+                            //firstDiv
+                            VStack(spacing:20) {
+                                HStack{
+                                    Button {
+                                        if adults<10 {
+                                            adults += 1
+                                        }
+                                    } label: {
+                                        Image(systemName: "plus.square")
+                                            .resizable()
+                                            .frame(width: 25,height: 25)
+                                        
+                                    }.foregroundColor(.black)
+                                    
+                                    Text("\(adults)")
+                                    
+                                    Button {
+                                        if adults > 0 {
+                                            adults -= 1
+                                        }
+                                    } label: {
+                                        Image(systemName: "minus.square")
+                                            .resizable()
+                                            .frame(width: 25,height: 25)
+                                        
+                                    }.foregroundColor(.black)
+                                    
+                                }
+                                Text("Adult(\(adults)+)")
+                                    .frame(width: 100)
+                            }
+                            .padding(20)
+                            .frame(width: 130)
+                            
+                            Divider()
+                                .frame(width: 1)
+                                .background(Color.red)
+                            //MiddleDiv
+                            VStack(spacing:20) {
+                                HStack{
+                                    Button {
+                                        if childs < 10 {
+                                            childs += 1
+                                        }
+                                    } label: {
+                                        Image(systemName: "plus.square")
+                                            .resizable()
+                                            .frame(width: 25,height: 25)
+                                        
+                                    }.foregroundColor(.black)
+                                    
+                                    Text("\(childs)")
+                                    
+                                    Button {
+                                        if childs > 0 {
+                                            childs -= 1
+                                        }
+                                    } label: {
+                                        Image(systemName: "minus.square")
+                                            .resizable()
+                                            .frame(width: 25,height: 25)
+                                        
+                                    }.foregroundColor(.black)
+                                    
+                                }
+                                Text("Child(\(childs)+)")
+                                    .frame(width: 100)
+                            }
+                            .padding(20)
+                            .frame(width: 130)
+                            
+                            Divider()
+                                .frame(width: 1)
+                                .background(Color.red)
+                            //LaseDiv
+                            VStack(spacing:20) {
+                                HStack{
+                                    Button {
+                                        if infants<10 {
+                                            infants += 1
+                                        }
+                                    } label: {
+                                        Image(systemName: "plus.square")
+                                            .resizable()
+                                            .frame(width: 25,height: 25)
+                                        
+                                    }.foregroundColor(.black)
+                                    
+                                    Text("\(infants)")
+                                    
+                                    Button {
+                                        if infants > 0 {
+                                            infants -= 1
+                                        }
+                                    } label: {
+                                        Image(systemName: "minus.square")
+                                            .resizable()
+                                            .frame(width: 25,height: 25)
+                                        
+                                    }.foregroundColor(.black)
+                                    
+                                }
+                                Text("Infant(\(infants)+)")
+                                    .frame(width: 100)
+                            }
+                            .padding(20)
+                            .frame(width: 130)
+                        }
+                        .frame(height: 130)
+                        Divider()
+                            .frame(height: 1)
+                            .background(Color.red)
                     }
+                    //: CabinClass
+                    ScrollView([], showsIndicators: false, content: {
+                        LazyHGrid(rows: gridLayout, alignment: .center, spacing: columnSpacing, pinnedViews: [], content: {
+                            
+                            ForEach(cabinClassList, id: \.self) { cabinName in
+                                CabinSegmentedView(cabinSelected: $cabinClass, name: cabinName)
+                            }
+                        })//: GRID
+                        .frame(width:10, height: 10)
+                        .cornerRadius(5)
+                        
+                    })//: SCROLL
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+                    .frame(height:70)
+                    .background(Color(red: 249/255, green: 228/255, blue: 209/255))
+                    
+                    //:is Direct Flight
+                    HStack {
+        //                    Toggle(isOn: $isDirectFlight) {
+        //                        //
+        //                    }.padding()
+                        Toggle("Direct Flight", isOn: $isDirectFlight)
+                            .padding()
+        //                    Text("Direct Flight")
+        //                        .font(.title)
+        //                        .foregroundColor(Color.black)
+        //                    Spacer()
+                    }
+                    .background(isDirectFlight ? Color.orange : Color(red: 249/255, green: 228/255, blue: 209/255))
+                    
+                    //: Search Button
+                    VStack {
+                        Button {
+                            self.searchFlight()
+                        } label: {
+                            Text("Search Flight")
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .frame(height:60)
+                                .foregroundColor(Color.white)
+                                .font(.system(size: 24, weight:.heavy))
+                        }
+                    }
+                    .background(Color.blue)
                 }
-                .background(Color.blue)
-            }
             }
             else {
                 LoadingView()
@@ -387,7 +311,7 @@ struct FlightView: View {
     }
     
     func searchFlight() {
-        let oneWayRoute: Route = Route(origin: "DAC", destination: "CGP", departureDate:"2022-06-10")
+        let oneWayRoute: Route = Route(origin: "DAC", destination: "CGP", departureDate:"2022-06-16")
         let requestBody:SearchFlighRequest = SearchFlighRequest(routes: [oneWayRoute], adults: adults, childs: childs, infants: infants, cabinClass: 1, preferredCarriers: [], prohibitedCarriers: [], childrenAges: [])
         
         //flightSearchModel.isSearching = true
@@ -397,7 +321,7 @@ struct FlightView: View {
     func searchFlight2() {
         isSearching = true
 //        let oneWayRoute: Route = Route(origin: oneWaySource!.iata, destination: oneWayDestin!.iata, departureDate: getDateString(date: oneWayDate))
-        let oneWayRoute: Route = Route(origin: "DAC", destination: "CGP", departureDate:"2022-06-10")
+        let oneWayRoute: Route = Route(origin: "DAC", destination: "CGP", departureDate:"2022-06-16")
         
         print(oneWayRoute)
         

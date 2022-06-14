@@ -23,8 +23,12 @@ struct Direction : Codable, Hashable  {
 	let stops : Int?
 	let segments : [Segment]?
     
-    //For UI purpose
-    var isSelected: Bool = false
+    var uniqueTransID : String?
+    var itemCodeRef : String?
+    var segmentCodeRef: String?
+    
+//    //For UI purpose
+//    var isSelected: Bool = false
 
 	enum CodingKeys: String, CodingKey {
 

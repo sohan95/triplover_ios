@@ -31,7 +31,7 @@ struct SideMenuView: View {
                                 SideMenuOptionView(viewModel: option)
                             })
                     } else if option.title == "Logout" {
-                        NavigationLink(destination:LogoutView(isShowing: $isShowing),
+                        NavigationLink(destination:SignoutView(isShowing: $isShowing),
                             label: {
                                 SideMenuOptionView(viewModel: option)
                             })
@@ -56,22 +56,4 @@ struct SideMenuView_Previews: PreviewProvider {
     }
 }
 
-struct LogoutView: View {
-    @Binding var isShowing: Bool
-    @EnvironmentObject var viewModel: AppViewModel
-    
-    var body: some View {
-        VStack {
-            Text("Do you want to Logout?")
-            
-            
-            Button(action: {
-                viewModel.signOut()
-            }, label: {
-                Text("Yes")
-            })
-        
-        }
-    }
-}
 

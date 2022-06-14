@@ -10,9 +10,9 @@ import SwiftUI
 struct ListRow: View {
     typealias Action = (Direction) -> Void
     
-    @State var selectedModel: RandomModel? = nil
+//    @State var selectedModel: RandomModel? = nil
     @State var direction: Direction
-    @Binding var selectedDirection: Direction?
+    @Binding var isSelectBtnTapped: Bool
     var action: Action?
     
 //    @ObservedObject var flightSearchModel: FlightSearchModel()
@@ -92,12 +92,7 @@ struct ListRow: View {
                 Spacer()
                 HStack {
                     Button {
-                        selectedModel = RandomModel(title:"Details", iata:direction.from!)
-                        if let action = action {
-                            selectedDirection = direction
-                            selectedDirection?.isSelected = false
-                            action(selectedDirection!)
-                        }
+                        FlightDetailsAction()
                     } label: {
                         Text("Flight Details")
                             .underline()
@@ -105,14 +100,7 @@ struct ListRow: View {
                     }
                     
                     Button {
-                        selectedModel = RandomModel(title:"Select", iata:direction.from!)
-                        if let action = action {
-                            selectedDirection = direction
-                            selectedDirection?.isSelected = true
-                            print("changed direction=\(self.direction)")
-                            action(selectedDirection!)
-                        }
-                        
+                        FlightSelectAction()
                     } label: {
                         Text("Select")
                             .padding(.horizontal,10)
@@ -150,14 +138,33 @@ struct ListRow: View {
         //.padding(.horizontal)
     }
     
+    func FlightDetailsAction() {
+//        selectedModel = RandomModel(title:"Details", iata:direction.from!)
+        if let action = action {
+            isSelectBtnTapped = false
+//            selectedDirection?.isSelected = false
+            action(direction)
+        }
+    }
+    
+    func FlightSelectAction() {
+        
+//        selectedModel = RandomModel(title:"Select", iata:direction.from!)
+        if let action = action {
+            isSelectBtnTapped = true
+            action(direction)
+        }
+        
+    }
+    
 }
 
-struct ListRow_Previews: PreviewProvider {
-    static var previews: some View {
-        let dir = try? Direction(from: "Dhaka" as! Decoder)
-       // ListRow(direction: .contains(dir))
-    }
-}
+//struct ListRow_Previews: PreviewProvider {
+//    static var previews: some View {
+////        let dir = try? Direction(from: "Dhaka" as! Decoder)
+////        ListRow(direction: .constant(dir), isSelectBtnTapped: true)
+//    }
+//}
 
 
 

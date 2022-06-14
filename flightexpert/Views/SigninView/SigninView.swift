@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SigninView: View {
+    var from: String = String()
     @State var isLoggedin: Bool = false
     @State var userEmail: String = String()
     @State var userPassword: String = String()
@@ -100,6 +101,7 @@ struct SigninView: View {
                 //Save token in localStorage
                 defaults.set(userEmail, forKey: "userEmail")
                 defaults.set(result?.token, forKey:"token")
+                defaults.set(true, forKey: "isSignin")
                 isLoggedin = true
                 presentationMode.wrappedValue.dismiss()
             }
