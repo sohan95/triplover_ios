@@ -22,8 +22,10 @@ struct AirportList: View {
     var body: some View {
         NavigationView {
             ZStack {
-                backgroundGradient
-                    .ignoresSafeArea(.all, edges: .all)
+                BackgroundImage
+                    .resizable()
+                    .scaledToFill()
+                    .edgesIgnoringSafeArea(.all)
                 
                 List {
                     ForEach(searchResults, id:\.self) { airport in

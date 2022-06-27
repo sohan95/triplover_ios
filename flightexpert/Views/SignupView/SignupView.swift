@@ -8,9 +8,7 @@
 import SwiftUI
 
 struct SignupView: View {
-    
-    @Environment(\.presentationMode) var presentationMode
-    
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State var fullName = ""
     @State var mobile = ""
     @State var email = ""
@@ -18,108 +16,146 @@ struct SignupView: View {
     @State var confirmPassword = ""
     @State var isPasswordSave = false
     
+    @State private var checked = true
+    
+    var btnBack : some View { Button(action: {
+        self.presentationMode.wrappedValue.dismiss()
+        }) {
+            HStack {
+            Image(systemName: "arrow.backward") // set image here
+                .aspectRatio(contentMode: .fit)
+                .foregroundColor(.black)
+            }
+        }
+    }
+    
     var body: some View {
         ZStack {
-            backgroundGradient
-                .ignoresSafeArea(.all, edges: .all)
+            BackgroundImage
+                .resizable()
+                .scaledToFill()
+                .edgesIgnoringSafeArea(.all)
             
-            VStack(spacing: 30) {
+            VStack(spacing: 10) {
                 VStack {
-                    Text("Register")
-                        .fontWeight(.medium)
-                        .font(.title)
-                        .foregroundColor(Color.white)
-                        .padding()
-                    
-                    VStack {
-                        CustomTextField(placeholder:Text("Full Name").foregroundColor(.black), text: $fullName)
+                    VStack(spacing:10) {
+                        Text("Create Account!")
+                            .fontWeight(.medium)
+                            .font(.system(size: 25, weight: .heavy, design: .rounded))
                             .foregroundColor(Color.black)
-                            .disableAutocorrection(true)
-                            .autocapitalization(.none)
-                            .padding()
-                            .background(Color(.secondarySystemBackground))
-                            .foregroundColor(Color.red)
-                            .cornerRadius(10)
-                        
-                        CustomTextField(placeholder:Text("Mobile Number").foregroundColor(.black), text: $mobile)
+                        Text("Let's continue your journey")
+                            .fontWeight(.medium)
+                            .font(.system(size: 14,design: .rounded))
                             .foregroundColor(Color.black)
-                            .disableAutocorrection(true)
-                            .autocapitalization(.none)
-                            .padding()
-                            .background(Color(
-                            .secondarySystemBackground))
-                            .foregroundColor(Color.black)
-                            .cornerRadius(10)
-                        
-                        
-                        CustomTextField(placeholder:Text("Email").foregroundColor(.black), text: $email)
-                            .foregroundColor(Color.black)
-                            .disableAutocorrection(true)
-                            .autocapitalization(.none)
-                            .padding()
-                            .background(Color(
-                            .secondarySystemBackground))
-                            .foregroundColor(Color.black)
-                            .cornerRadius(10)
-                        
-                        CustomSecureField(placeholder:Text("Password").foregroundColor(.black), text: $password)
-                            .foregroundColor(Color.black)
-                            .disableAutocorrection(true)
-                            .autocapitalization(.none)
-                            .padding()
-                            .background(Color(
-                            .secondarySystemBackground))
-                            .foregroundColor(Color.black)
-                            .cornerRadius(10)
-                        
-                        CustomSecureField(placeholder:Text("Confirm Password").foregroundColor(.black), text: $confirmPassword)
-                            .foregroundColor(Color.black)
-                            .disableAutocorrection(true)
-                            .autocapitalization(.none)
-                            .padding()
-                            .background(Color(
-                            .secondarySystemBackground))
-                            .foregroundColor(Color.black)
-                            .cornerRadius(10)
                     }
-                    .padding()
+                    
+                    VStack(spacing:10) {
+                            
+                        SignupTextField(placeholder:"Name", text: $fullName)
+                        SignupTextField(placeholder:"Email", text: $email)
+                        SecureInputView("Password", text: $password)
+                        SecureInputView("Re-Enter Password", text: $confirmPassword)
+                        SignupTextField(placeholder:"Phone Number", text: $mobile)
+                    }
+                    .padding(.horizontal, 30)
+                    .padding(.vertical, 10)
+                    
+                    
+                    
+                    VStack(alignment: .leading, spacing: 2) {
+                        HStack {
+                            Image("bullet-icon")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width:10)
+                            Text("Password must be 8 chareacters")
+                                .font(.system(size: 13))
+                        }
+                        HStack {
+                            Image("bullet-icon")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width:10)
+                            Text("Password must have 1 upper case(AB) & lower case latter (ab)")
+                                .font(.system(size: 13))
+                                .multilineTextAlignment(.leading)
+                                .lineLimit(2)
+                        }
+                        HStack {
+                            Image("bullet-icon")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width:10)
+                            Text("Password must have one number")
+                                .font(.system(size: 13))
+                        }
+                        HStack {
+                            CheckBoxView(checked: $checked)
+                            VStack(alignment: .leading, spacing: 2){
+                                Text("Element that requires checkmark!")
+                                NavigationLink {
+                                    SigninView()
+                                } label: {
+                                    Text("Terms & Conditions")
+                                        .underline()
+                                        .font(.system(size: 14, weight:.bold))
+                                }
+                                
+                            }
+                            .foregroundColor(.black)
+                            .font(.system(size: 13, weight: .medium, design: .monospaced))
+                            
+                        }
+                        
+                    }
+                    .padding(.horizontal, 30)
                     
                     Button(action: {
                         self.registerAction()
-                        
                     }, label: {
-                        Text("Register")
-                            .padding(.horizontal, 15)
-                            .padding(.vertical,10)
-                            .buttonStyle(.bordered)
-                            .background(.orange)
-                            .foregroundColor(.white)
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
-//                            .fontWeight(.medium)
-//                            .font(.title)
-//                            .foregroundColor(Color.white)
-//                            .padding([.top, .bottom], 15)
-//                            .padding([.leading, .trailing], 25)
-//                            .overlay(
-//                                RoundedRectangle(cornerRadius: 10)
-//                                    .stroke(Color.white, lineWidth: 3))
-                            
+                        Text("Create Account")
+                            .frame(maxWidth:.infinity)
+                            .padding([.top, .bottom], 10)
+                            .background(Color.secondary)
+                            .foregroundColor(Color.white)
+                            .cornerRadius(7.5)
                     })
-//                    .background(Color.secondary)
-//                    .cornerRadius(10)
+                    .padding(.horizontal, 30)
                     
-                    Spacer()
+                    HStack {
+                        Text("Already have an account?")
+                        NavigationLink {
+                            SigninView()
+                        } label: {
+                            Text("Login")
+                                .underline()
+                                .font(.system(size: 14, weight:.bold))
+                        }
+                    }
+                    .foregroundColor(.black)
+                    .font(.system(size: 14, weight: .medium, design: .monospaced))
                 }
-                .padding()
-                .background(Color(red: 0.32, green:0.48, blue: 0.81))
-//                .cornerRadius(15)
+                .frame(minHeight: 600, maxHeight: .infinity)
+                .background(
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(Color.gray.opacity(0.3)
+                    )
+                    .padding([.leading, .trailing], 20)
+                    .padding(.top, 100)
+                )
+                
+                Image("app_name_header")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 40)
+                    .padding(.bottom, 64)
+                    .padding(.top, 20)
             }
-//            .cornerRadius(10)
-//            .padding()
-            
         }
-        .navigationTitle("Register")
+        .navigationTitle("Login/Register")
         .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
+        .navigationBarItems(leading: btnBack)
         
     }
     
@@ -147,35 +183,18 @@ struct SignupView: View {
         //viewModel.signUp(firstName: firstName, lastName: lastName, email: email, password: password, reEnterPassword: reEnterpassword)
     }
 }
-    
-struct CustomTextField: View {
-    var placeholder: Text
-    @Binding var text: String
-    var editingChanged: (Bool)->() = { _ in }
-    var commit: ()->() = { }
+
+struct CheckBoxView: View {
+    @Binding var checked: Bool
 
     var body: some View {
-        ZStack(alignment: .leading) {
-            if text.isEmpty { placeholder }
-            TextField("", text: $text, onEditingChanged: editingChanged, onCommit: commit)
-        }
+        Image(systemName: checked ? "checkmark.square.fill" : "square")
+            .foregroundColor(checked ? Color(UIColor.black) : Color.secondary)
+            .onTapGesture {
+                self.checked.toggle()
+            }
     }
 }
-
-struct CustomSecureField: View {
-    var placeholder: Text
-    @Binding var text: String
-    var editingChanged: (Bool)->() = { _ in }
-    var commit: ()->() = { }
-
-    var body: some View {
-        ZStack(alignment: .leading) {
-            if text.isEmpty { placeholder }
-            SecureField("", text: $text, onCommit: commit)
-        }
-    }
-}
-
 
 
 struct SignupView_Previews: PreviewProvider {

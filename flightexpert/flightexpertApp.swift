@@ -14,7 +14,7 @@ struct flightexpertApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            SplashScreen()
 //            AirportList()
 //            SigninView()
 //            let viewModel = AppViewModel()

@@ -19,8 +19,10 @@ struct OriginFlightList: View {
     var body: some View {
         
         ZStack {
-            backgroundGradient
-                .ignoresSafeArea(.all, edges: .all)
+            BackgroundImage
+                .resizable()
+                .scaledToFill()
+                .edgesIgnoringSafeArea(.all)
             
             NavigationLink(destination:TravelerDetails(flightSearchModel: flightSearchModel), tag: "TravelerDetails", selection: $flightSearchModel.selection) { EmptyView() }
             NavigationLink(destination:SigninView(), tag: "SigninView", selection: $flightSearchModel.selection) { EmptyView() }
@@ -48,6 +50,7 @@ struct OriginFlightList: View {
                 .navigationTitle("Flight")
                 .navigationBarTitleDisplayMode(.inline)
                 .onAppear() {
+                    flightSearchModel.flightRouteType
                     flightSearchModel.getForwardDirection()
                 }
                 .onTapGesture {
@@ -169,7 +172,6 @@ struct OriginFlightList: View {
             else {
                 LoadingView()
             }
-            
             
         }
         

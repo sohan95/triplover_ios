@@ -10,8 +10,10 @@ import SwiftUI
 class AppViewModel: ObservableObject {
     
     @Published var LoginResponse: LoginResponse? = nil
-    @Published var signedIn = false;
+    @Published var signedIn = false
+    @Published var selectedTab: Int = 0
     
+
 //    var isSignendIn: Bool {
 //        return true;
 //    }

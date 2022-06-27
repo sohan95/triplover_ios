@@ -7,42 +7,27 @@
 
 import SwiftUI
 
+let backgroundGradient = LinearGradient(
+    colors: [Color(red: 128/255, green: 173/255, blue: 214/255), Color(red: 254/255, green: 253/255, blue: 253/255),Color(red: 249/255, green: 228/255, blue: 209/255)],
+    startPoint: .top, endPoint: .bottom)
+let BackgroundImage = Image("home_background")
+
 struct ContentView: View {
-    @State private var isShowing = false
-//    @EnvironmentObject var viewModel: AppViewModel
+    
+    @EnvironmentObject var viewModel: AppViewModel
     
     var body: some View {
         NavigationView {
             ZStack {
-                backgroundGradient
-                    .ignoresSafeArea(.all, edges: .all)
-                
-                if isShowing {
-                    SideMenuView(isShowing: $isShowing)
-                }
-                
+                BackgroundImage
+                    .resizable()
+                    .scaledToFill()
+                    .edgesIgnoringSafeArea(.all)
                 
                 HomeView()
-                    //.background(isShowing ? Color.gray)
-                    .cornerRadius(isShowing ? 20: 10)
-                    .offset(x: isShowing ? 300 : 0, y:
-                                isShowing ? 0 : 0)
-                    .scaleEffect(isShowing ? 1 : 1)
-                    .navigationBarItems(leading: Button(action: {
-                        withAnimation(.spring()) {
-                            isShowing.toggle()
-                        }
-                        
-                    }, label: {
-                        Image(systemName: "list.bullet")
-                            .foregroundColor(.black)
-                    }))
-                    .navigationTitle("Home")
+                    .environmentObject(viewModel)
+//                    .navigationTitle("Home")
                     .navigationBarTitleDisplayMode(.inline)
-                
-            }
-            .onAppear {
-                isShowing = false;
             }
         }
     }

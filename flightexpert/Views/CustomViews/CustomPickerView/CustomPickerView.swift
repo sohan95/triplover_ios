@@ -7,10 +7,6 @@
 
 import SwiftUI
 
-protocol CustomPicker {
-    func saveUpdates(_ newItem: String)
-}
-
 struct CustomPickerView: View {
     var items: [Country]
     @State private var filteredItems: [Country] = []
@@ -20,14 +16,14 @@ struct CustomPickerView: View {
     @Binding var pickerField: String
     @Binding var presentPicker: Bool
     var isCountryCode: Bool
-    var saveUpdates: ((String) -> Void)?
+    
     var body: some View {
         let filterBinding = Binding<String> (
             get: { filterString },
             set: {
                 filterString = $0
                 if filterString != "" {
-                    filteredItems = items.filter{$0.name.lowercased().contains(filterString.lowercased())}
+                    filteredItems = items.filter{$0.name!.lowercased().contains(filterString.lowercased())}
                 } else {
                     filteredItems = items
                 }
@@ -47,22 +43,6 @@ struct CustomPickerView: View {
                             Text("Cancel")
                         }
                         .padding(10)
-//                        Spacer()
-//                        if let saveUpdates = saveUpdates {
-//                            Button(action: {
-//                                if !items.contains(filterString) {
-//                                    saveUpdates(filterString)
-//                                }
-//                                pickerField = filterString
-//                                withAnimation {
-//                                    presentPicker = false
-//                                }
-//                            }) {
-//                                Image(systemName: "plus.circle")
-//                                    .frame(width: 44, height: 44)
-//                            }
-//                            .disabled(filterString.isEmpty)
-//                        }
                     }
                     .background(Color(UIColor.darkGray))
                     .foregroundColor(.white)
@@ -76,15 +56,15 @@ struct CustomPickerView: View {
                     List {
                         ForEach(filteredItems, id: \.self) { item in
                             Button(action: {
-                                pickerField = isCountryCode ? item.countryCode : item.phoneCountryCode
+                                pickerField = (isCountryCode ? item.countryCode : item.phoneCountryCode)!
                                 withAnimation {
                                     presentPicker = false
                                 }
                             }) {
                                 if(isCountryCode){
-                                    Text("\(item.name) (\(item.countryCode))")
+                                    Text("\(item.name!) (\(item.countryCode!))")
                                 } else {
-                                    Text("\(item.name) (\(item.phoneCountryCode))")
+                                    Text("\(item.name!) (\(item.phoneCountryCode!))")
                                 }
                                 
                             }
@@ -121,7 +101,6 @@ struct CustomPickerView: View {
             }
         }
     }
-    
 }
 
 struct CustomPickerView_Previews: PreviewProvider {

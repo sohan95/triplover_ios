@@ -7,10 +7,6 @@
 
 import SwiftUI
 
-let backgroundGradient = LinearGradient(
-    colors: [Color(red: 128/255, green: 173/255, blue: 214/255), Color(red: 254/255, green: 253/255, blue: 253/255),Color(red: 249/255, green: 228/255, blue: 209/255)],
-    startPoint: .top, endPoint: .bottom)
-
 struct Route: Encodable {
     let origin: String
     let destination: String
@@ -47,13 +43,11 @@ struct FlightView: View {
     @State var showAirports: Bool = false
     
     @State private var isDirectFlight = false
+
+    @State var routeArray = [AirportData]()
+    @State var routeDate = [Date]()
     
-    // Route=OneWay
-    @State var oneWaySource: AirportData? = AirportData(name: "Aasiaat", city: "Aasiaat", country:"Greenland", iata: "JEG")
-    @State var oneWayDestin: AirportData? = AirportData(name: "Aalborg", city: "Aalborg", country:"Denmark", iata: "AAL")
-    @State var oneWayDate = Date()
-    
-    var flightRouteTypes = ["One-Way" ,"Round-Trip", "Multi-city"]
+    var flightRouteTypes = ["One-Way" ,"Round-Trip", "Multi-City"]
     var cabinClassList = ["Economy" ,"PremiumEconomy", "Business", "First", "PremiumFirst"]
     
     @State var typeSelected: String = "One-Way"
@@ -70,7 +64,7 @@ struct FlightView: View {
         return typeSelected == flightRouteTypes[2]
     }
     
-    @State var multiCityRouteCount: Int = 2
+    @State var multiCityRouteCount: Int = 1
     
     let columnSpacing: CGFloat = 5
     let rowSpacing: CGFloat = 10
@@ -82,58 +76,88 @@ struct FlightView: View {
         ZStack {
             backgroundGradient
                 .ignoresSafeArea(.all, edges: .all)
+//            BackgroundImage
+//                .resizable()
+//                .scaledToFill()
+//                .ignoresSafeArea(.all, edges: .all)
             
             NavigationLink(destination:OriginFlightList(title: "SourceToDestination",flightSearchModel: flightSearchModel), tag: "A", selection: $flightSearchModel.isGotSearchData) { EmptyView() }
+            
             if !flightSearchModel.isSearching {
                 VStack {
                     // TripRouteSegment
-                    ScrollView([], showsIndicators: false, content: {
-                        LazyHGrid(rows: gridLayout, alignment: .center, spacing: columnSpacing, pinnedViews: [], content: {
-                            
-                            ForEach(flightRouteTypes, id: \.self) { type in
-                                TripSegmentedView(typeSelected: self.$typeSelected, name: type)
-                            }
-                        })//: GRID
-                        .frame(width: 240, height: 50)
-                        .cornerRadius(5)
-                        
-                    })//: SCROLL
-                    .frame(width: 300, height: 50)
-                    .background(Color("button-bg-color").cornerRadius(5))
-                    .padding(.bottom, 30)
+//                    ScrollView([], showsIndicators: false, content: {
+//                        LazyHGrid(rows: gridLayout, alignment: .center, spacing: columnSpacing, pinnedViews: [], content: {
+//
+//                            ForEach(flightRouteTypes, id: \.self) { type in
+//                                TripSegmentedView(typeSelected: self.typeSelected, name: type){ routeType in
+//
+//                                    if self.typeSelected != routeType {
+//                                        self.typeSelected = routeType
+//                                        self.resetView()
+//                                    }
+//                                }
+//                            }
+//                        })//: GRID
+//                        .frame(width: 240, height: 50)
+//                        .cornerRadius(5)
+//
+//                    })//: SCROLL
+//                    .frame(width: 300, height: 50)
+//                    .background(Color("button-bg-color").cornerRadius(5))
+//                    .padding(.bottom, 30)
+                    
+                    RadioRouteGroupBotton(selectedId: self.typeSelected) { selected in
+                        print("Selected RouteType is: \(selected)")
+                        self.typeSelected = selected
+                        self.resetView()
+                    }
                     
                     if isOneWay {
-                        OneWayRoute(source: $oneWaySource, destination: $oneWayDestin, selectedDate: $oneWayDate)
+                        if routeArray.count == 2 {
+                            OneWayRoute(source: $routeArray[0], destination: $routeArray[1], selectedDate: $routeDate[0])
+                        }
                     }
-    //                if isRoundTrip {
-    //                    RouteView(route: $roundWayRoutes[0])
-    //                    RouteView(route: $roundWayRoutes[1])
-    //                }
-    //                if isMultiCity {
-    //                    ForEach(0 ..< multiCityRouteCount, id:\.self) { i in
-    //                        RouteView(route: $multiCityRoutes[i])
-    //                    }
-    //
-    //                    HStack {
-    //                        Button {
-    //                            if multiCityRouteCount < 4 {
-    //                                multiCityRouteCount += 1
-    //                            }
-    //                        } label: {
-    //                            Label("Add More Trip", systemImage: "plus.square")
-    //                        }
-    //
-    //                        if multiCityRouteCount > 2 {
-    //                            Button {
-    //                                if multiCityRouteCount > 2 {
-    //                                    multiCityRouteCount -= 1
-    //                                }
-    //                            } label: {
-    //                                Label("Remove Trip", systemImage: "minus.square")
-    //                            }
-    //                        }
-    //                    }
-    //                }
+                    if isRoundTrip {
+                        if routeArray.count == 2 {
+                            OneWayRoute(source: self.$routeArray[0], destination: self.$routeArray[1], selectedDate: self.$routeDate[0])
+                            OneWayRoute(source: self.$routeArray[1], destination: self.$routeArray[0], selectedDate: self.$routeDate[1])
+                        }
+                    }
+                    if isMultiCity {
+                        ForEach(0 ..< multiCityRouteCount, id:\.self) { i in
+                            //RouteView(route: $multiCityRoutes[i])
+                            OneWayRoute(source: self.$routeArray[i], destination: self.$routeArray[i+1], selectedDate: self.$routeDate[i])
+                        }
+    
+                        HStack {
+                            Button {
+                                if multiCityRouteCount < 4 {
+                                    multiCityRouteCount += 1
+                                    let lastOne = AirportData(name: "Aasiaat", city: "Aasiaat", country:"Greenland", iata: "JEG")
+                                    self.routeArray.append(lastOne)
+                                    let oneWayDate = Date()
+                                    self.routeDate.append(oneWayDate)
+                                }
+                            } label: {
+                                Label("Add More Trip", systemImage: "plus.square")
+                            }
+    
+                            if multiCityRouteCount > 1 {
+                                Button {
+                                    if multiCityRouteCount > 1 {
+                                        multiCityRouteCount -= 1
+                                        if self.routeArray.count > 1 {
+                                            self.routeArray.removeLast()
+                                            self.routeDate.removeLast()
+                                        }
+                                    }
+                                } label: {
+                                    Label("Remove Trip", systemImage: "minus.square")
+                                }
+                            }
+                        }
+                    }
 
                     Spacer()
                     
@@ -143,112 +167,30 @@ struct FlightView: View {
                             .background(Color.red)
                         HStack(alignment: .center, spacing:0) {
                             //firstDiv
-                            VStack(spacing:20) {
-                                HStack{
-                                    Button {
-                                        if adults<10 {
-                                            adults += 1
-                                        }
-                                    } label: {
-                                        Image(systemName: "plus.square")
-                                            .resizable()
-                                            .frame(width: 25,height: 25)
-                                        
-                                    }.foregroundColor(.black)
-                                    
-                                    Text("\(adults)")
-                                    
-                                    Button {
-                                        if adults > 0 {
-                                            adults -= 1
-                                        }
-                                    } label: {
-                                        Image(systemName: "minus.square")
-                                            .resizable()
-                                            .frame(width: 25,height: 25)
-                                        
-                                    }.foregroundColor(.black)
-                                    
+                            CustomerCountView(title: "Adults", customerCount: $adults, maxNumber: 8){ count in
+                                adults = count
+                                if adults < infants {
+                                    infants = adults
                                 }
-                                Text("Adult(\(adults)+)")
-                                    .frame(width: 100)
                             }
-                            .padding(20)
-                            .frame(width: 130)
-                            
                             Divider()
                                 .frame(width: 1)
                                 .background(Color.red)
                             //MiddleDiv
-                            VStack(spacing:20) {
-                                HStack{
-                                    Button {
-                                        if childs < 10 {
-                                            childs += 1
-                                        }
-                                    } label: {
-                                        Image(systemName: "plus.square")
-                                            .resizable()
-                                            .frame(width: 25,height: 25)
-                                        
-                                    }.foregroundColor(.black)
-                                    
-                                    Text("\(childs)")
-                                    
-                                    Button {
-                                        if childs > 0 {
-                                            childs -= 1
-                                        }
-                                    } label: {
-                                        Image(systemName: "minus.square")
-                                            .resizable()
-                                            .frame(width: 25,height: 25)
-                                        
-                                    }.foregroundColor(.black)
-                                    
-                                }
-                                Text("Child(\(childs)+)")
-                                    .frame(width: 100)
+                            CustomerCountView(title: "Childs", customerCount: $childs, maxNumber: 5){ count in
+                                childs = count
                             }
-                            .padding(20)
-                            .frame(width: 130)
                             
                             Divider()
                                 .frame(width: 1)
                                 .background(Color.red)
                             //LaseDiv
-                            VStack(spacing:20) {
-                                HStack{
-                                    Button {
-                                        if infants<10 {
-                                            infants += 1
-                                        }
-                                    } label: {
-                                        Image(systemName: "plus.square")
-                                            .resizable()
-                                            .frame(width: 25,height: 25)
-                                        
-                                    }.foregroundColor(.black)
-                                    
-                                    Text("\(infants)")
-                                    
-                                    Button {
-                                        if infants > 0 {
-                                            infants -= 1
-                                        }
-                                    } label: {
-                                        Image(systemName: "minus.square")
-                                            .resizable()
-                                            .frame(width: 25,height: 25)
-                                        
-                                    }.foregroundColor(.black)
-                                    
+                            CustomerCountView(title: "Infants", customerCount: $infants, maxNumber: 8){ count in
+                                infants = count
+                                if infants > adults {
+                                    adults = infants
                                 }
-                                Text("Infant(\(infants)+)")
-                                    .frame(width: 100)
                             }
-                            .padding(20)
-                            .frame(width: 130)
                         }
                         .frame(height: 130)
                         Divider()
@@ -264,11 +206,11 @@ struct FlightView: View {
                             }
                         })//: GRID
                         .frame(width:10, height: 10)
-                        .cornerRadius(5)
+//                        .cornerRadius(5)
                         
                     })//: SCROLL
                     .frame(maxWidth: .infinity, alignment: .trailing)
-                    .frame(height:70)
+                    .frame(height:60)
                     .background(Color(red: 249/255, green: 228/255, blue: 209/255))
                     
                     //:is Direct Flight
@@ -307,15 +249,73 @@ struct FlightView: View {
         }
         .navigationTitle("Flight")
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear() {
+            self.resetView()
+        }
         
     }
     
-    func searchFlight() {
-        let oneWayRoute: Route = Route(origin: "DAC", destination: "CGP", departureDate:"2022-06-16")
-        let requestBody:SearchFlighRequest = SearchFlighRequest(routes: [oneWayRoute], adults: adults, childs: childs, infants: infants, cabinClass: 1, preferredCarriers: [], prohibitedCarriers: [], childrenAges: [])
+    func resetView() {
+        routeArray = [AirportData]()
+        routeDate = [Date]()
         
-        //flightSearchModel.isSearching = true
+        if isOneWay {
+            let one = AirportData(name: "Aasiaat", city: "Aasiaat", country:"Greenland", iata: "JEG")
+            let two = AirportData(name: "Aalborg", city: "Aalborg", country:"Denmark", iata: "AAL")
+            self.routeArray.append(contentsOf: [one,two])
+            let oneWayDate = Date()
+            self.routeDate.append(oneWayDate)
+            
+        } else if isRoundTrip {
+            let one = AirportData(name: "Aasiaat", city: "Aasiaat", country:"Greenland", iata: "JEG")
+            let two = AirportData(name: "Aalborg", city: "Aalborg", country:"Denmark", iata: "AAL")
+            self.routeArray.append(contentsOf: [one,two])
+            let oneWayDate = Date()
+            let twoWayDate = Date()
+            self.routeDate.append(oneWayDate)
+            self.routeDate.append(twoWayDate)
+            
+        } else if isMultiCity {
+            self.multiCityRouteCount = 1
+            let one = AirportData(name: "Aasiaat", city: "Aasiaat", country:"Greenland", iata: "JEG")
+            let two = AirportData(name: "Aalborg", city: "Aalborg", country:"Denmark", iata: "AAL")
+            self.routeArray.append(contentsOf: [one,two])
+            let oneWayDate = Date()
+            self.routeDate.append(oneWayDate)
+        }
+    }
+    
+    func searchFlight() {
+        var routeArrayObj = [Route]()
+        
+        if isOneWay {
+            let oneWayRoute: Route = Route(origin: routeArray[0].iata, destination: routeArray[1].iata, departureDate: getDateString(date: routeDate[0]))
+            routeArrayObj.append(oneWayRoute)
+            
+//            let oneWayRoute1: Route = Route(origin: "DAC", destination: "CGP", departureDate:"2022-06-16")
+        } else if isRoundTrip {
+            let oneWayRoute: Route = Route(origin: routeArray[0].iata, destination: routeArray[1].iata, departureDate: getDateString(date: routeDate[0]))
+            let twoWayRoute: Route = Route(origin: routeArray[1].iata, destination: routeArray[0].iata, departureDate: getDateString(date: routeDate[1]))
+            routeArrayObj.append(oneWayRoute)
+            routeArrayObj.append(twoWayRoute)
+        } else if isMultiCity {
+            for n in 0..<multiCityRouteCount {
+                let oneWayRoute: Route = Route(origin: routeArray[n].iata, destination: routeArray[n+1].iata, departureDate: getDateString(date: routeDate[n]))
+                routeArrayObj.append(oneWayRoute)
+            }
+        }
+        
+        let requestBody:SearchFlighRequest = SearchFlighRequest(routes: routeArrayObj, adults: adults, childs: childs, infants: infants, cabinClass: 1, preferredCarriers: [], prohibitedCarriers: [], childrenAges: [])
+        
+        flightSearchModel.flightRouteType = flightRouteTypes[0]
+        flightSearchModel.searchFlighRequest = requestBody
         flightSearchModel.getAirSearchResponses(requestBody: requestBody)
+        
+//        let oneWayRoute: Route = Route(origin: "DAC", destination: "CGP", departureDate:"2022-06-16")
+//        let requestBody:SearchFlighRequest = SearchFlighRequest(routes: [oneWayRoute], adults: adults, childs: childs, infants: infants, cabinClass: 1, preferredCarriers: [], prohibitedCarriers: [], childrenAges: [])
+//
+//        //flightSearchModel.isSearching = true
+//        flightSearchModel.getAirSearchResponses(requestBody: requestBody)
     }
     
     func searchFlight2() {
@@ -334,29 +334,30 @@ struct FlightView: View {
 //            print(data)
 //
 //        }
-        HttpUtility.shared.searchFlightService(searchFlighRequest: requestBody) { result in
-            DispatchQueue.main.async {
-                isSearching = false
-                guard (result?.item1?.airSearchResponses) != nil else {
-                    return
-                }
-
-                let airSearchResponseList: [AirSearchResponse] = (result?.item1?.airSearchResponses)!
-
-                directionList = airSearchResponseList.flatMap({ airSearchItem in
-                    return airSearchItem.directions![0]
-                })
-                
-//                let dirList = airSearchResponseList.map { (airSearchItem) in
-//                    return airSearchItem.directions![0]
+        
+//        HttpUtility.shared.searchFlightService(searchFlighRequest: requestBody) { result in
+//            DispatchQueue.main.async {
+//                isSearching = false
+//                guard (result?.item1?.airSearchResponses) != nil else {
+//                    return
 //                }
-//                print(dirList)
-//                directionList = dirList
-                
-//                directionList = airSearchResponseList[0].directions![0]
-                isGotSearchData = "A"
-            }
-        }
+//
+//                let airSearchResponseList: [AirSearchResponse] = (result?.item1?.airSearchResponses)!
+//
+//                directionList = airSearchResponseList.flatMap({ airSearchItem in
+//                    return airSearchItem.directions![0]
+//                })
+//
+////                let dirList = airSearchResponseList.map { (airSearchItem) in
+////                    return airSearchItem.directions![0]
+////                }
+////                print(dirList)
+////                directionList = dirList
+//
+////                directionList = airSearchResponseList[0].directions![0]
+//                isGotSearchData = "A"
+//            }
+//        }
     }
     
     func getDateString(date:Date) -> String {
@@ -381,77 +382,5 @@ struct FlightView_Previews: PreviewProvider {
     }
 }
 
-struct LoadingView: View {
-    var body: some View {
-        ZStack {
-            Color(.systemBackground)
-                .ignoresSafeArea()
-                .opacity(0.5)
-            ProgressView()
-                .progressViewStyle(CircularProgressViewStyle(tint: .red))
-                .scaleEffect(3)
-        }
-    }
-}
 
-struct TripSegmentedView: View {
-    
-    @Binding var typeSelected: String
-    
-    let name: String
-    
-    private var selected: Bool {
-        return typeSelected == name
-    }
-    
-    var body: some View {
-        Button(action: {
-            typeSelected = name
-        }, label: {
-            HStack(alignment: .center, spacing: 1, content: {
-                Text(name)
-                    .font(.footnote)
-                    .fontWeight(.medium)
-                    .foregroundColor(self.selected ? Color("button-bg-color"): Color.white)
-                
-            })//: HSTACK
-            .frame(width:100,height: 50)
-            .background(self.selected ? Color.white.cornerRadius(5)
-                        : Color("button-bg-color").cornerRadius(5))
-        })//: BUTTON
-    }
-}
 
-struct CabinSegmentedView: View {
-    
-    @Binding var cabinSelected: String
-    
-    let name: String
-    
-    private var selected: Bool {
-        return cabinSelected == name
-    }
-    
-    func test() {
-        
-    }
-    
-    var body: some View {
-        Button(action: {
-            cabinSelected = name
-            print("typeSelected=\(cabinSelected)")
-        }, label: {
-            HStack(alignment: .center, spacing: 1, content: {
-                Text(name)
-                    .font(.subheadline)
-                    .fontWeight(.regular)
-                    .foregroundColor(Color.black)
-                    .multilineTextAlignment(.center)
-                
-            })//: HSTACK
-            .frame(width:70,height:60)
-//            .frame(width:60,height: 60)
-            .background(self.selected ? Color(red: 249/255, green: 228/255, blue: 209/255) : Color.white)
-        })//: BUTTON
-    }
-}

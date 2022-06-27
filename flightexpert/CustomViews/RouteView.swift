@@ -17,9 +17,9 @@ struct OneWayRoute: View {
     @State var selectedModel: RandomModel? = nil
 //    @State var showAirportList: Bool = false
     
-    @Binding var source: AirportData?
+    @Binding var source: AirportData
     //= AirportData(name: "Aasiaat", city: "Aasiaat", country:"Greenland", iata: "JEG")
-    @Binding var destination: AirportData?
+    @Binding var destination: AirportData
     //= AirportData(name: "Aalborg", city: "Aalborg", country:"Denmark", iata: "AAL")
     
     @Binding var selectedDate: Date
@@ -29,10 +29,10 @@ struct OneWayRoute: View {
             //Source
             Button {
                 //showAirportList.toggle()
-                selectedModel = RandomModel(title:"source", iata: source!.iata)
+                selectedModel = RandomModel(title:"source", iata: source.iata)
                 
             } label: {
-                AirportButton(airport: source!)
+                AirportButton(airport: source)
 //                Text("Button=\(self.destination!.iata)")
                 
             }
@@ -41,9 +41,9 @@ struct OneWayRoute: View {
             
             Button {
 //                showAirportList.toggle()
-                selectedModel = RandomModel(title: "destination", iata: destination!.iata)
+                selectedModel = RandomModel(title: "destination", iata: destination.iata)
             } label: {
-                AirportButton(airport: destination!)
+                AirportButton(airport: destination)
 //                Text("Button=\(self.source!.iata)")
             }
             //            .sheet(isPresented: $showAirportList, content: {

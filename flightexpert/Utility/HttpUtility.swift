@@ -209,7 +209,7 @@ final class HttpUtility {
                 
                 let decoder = JSONDecoder()
                 let responseData = try? decoder.decode(BookingResponse.self, from: data!)
-                print(responseData)
+                print(responseData!)
 //                let responseData = try? newJSONDecoder().decode(SearchedFlightResponse.self, from: data!)
                 _ = completionHandler(responseData)
             }
@@ -248,7 +248,7 @@ final class HttpUtility {
                 
                 let decoder = JSONDecoder()
                 let responseData = try? decoder.decode(BookingResponse.self, from: data!)
-                print(responseData)
+                print(responseData!)
 //                let responseData = try? newJSONDecoder().decode(SearchedFlightResponse.self, from: data!)
                 _ = completionHandler(responseData)
             }

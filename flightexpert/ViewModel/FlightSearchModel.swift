@@ -7,6 +7,7 @@
 
 import Foundation
 
+
 class FlightSearchModel: ObservableObject {
     
     @Published var airSearchResponses: [AirSearchResponse] = []
@@ -22,6 +23,12 @@ class FlightSearchModel: ObservableObject {
     //RePrice Response
     @Published var rePriceResponse: RePriceResponse = RePriceResponse()
     @Published var selection: String? = nil
+    
+    @Published var flightRouteType: String?
+//    @Published var oneWayRoute:[AirportData] = []
+//    @Published var roundTripRoute:[AirportData] = []
+//    @Published var multiCityRoute:[AirportData] = []
+    @Published var searchFlighRequest: SearchFlighRequest?
     
     
     

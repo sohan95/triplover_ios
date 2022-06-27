@@ -16,79 +16,117 @@ struct SigninView: View {
     
     let defaults = UserDefaults.standard
     
+    var btnBack : some View { Button(action: {
+        self.presentationMode.wrappedValue.dismiss()
+        }) {
+            HStack {
+            Image(systemName: "arrow.backward") // set image here
+                .aspectRatio(contentMode: .fit)
+                .foregroundColor(.black)
+            }
+        }
+    }
+    
     var body: some View {
         ZStack {
-            backgroundGradient
-                .ignoresSafeArea(.all, edges: .all)
+            BackgroundImage
+                .resizable()
+                .scaledToFill()
+                .edgesIgnoringSafeArea(.all)
             
-            VStack(spacing: 30) {
-                VStack {
-                    Text("Login")
-                        .fontWeight(.medium)
-                        .font(.title)
-                        .foregroundColor(Color.white)
-                        .padding()
-                    
-                    VStack(spacing: 15) {
-                        CustomTextField(placeholder:Text("Email").foregroundColor(.black), text: $userEmail)
-                            .foregroundColor(Color.black)
-                            .disableAutocorrection(true)
-                            .autocapitalization(.none)
-                            .padding()
-                            .background(Color(.secondarySystemBackground))
-                            .foregroundColor(Color.black)
-                            .cornerRadius(10)
+            VStack(spacing: 10) {
+                VStack(spacing: 30) {
+                    VStack(spacing: 30) {
+                        VStack {
+                            Text("Welcome!")
+                                .fontWeight(.medium)
+                                .font(.system(size: 30, weight: .heavy, design: .rounded))
+                                .foregroundColor(Color.black)
+                            Text("Let's continue your journey")
+                                .fontWeight(.medium)
+                                .font(.system(size: 14,design: .rounded))
+                                .foregroundColor(Color.black)
+                        }
                         
-                        CustomSecureField(placeholder:Text("Password").foregroundColor(.black), text: $userPassword)
-                            .foregroundColor(Color.black)
+                        VStack(spacing: 15) {
+                            HStack {
+                                Image(systemName: "envelope")
+                                    .foregroundColor(.black)
+                                    .padding(15)
+                                TextField("Email", text: $userEmail)
+                            }
                             .disableAutocorrection(true)
                             .autocapitalization(.none)
-                            .padding()
                             .background(Color(.secondarySystemBackground))
                             .foregroundColor(Color.black)
-                            .cornerRadius(10)
-                    }
-                    .padding()
-                    
-                    Button(action: {
-                        self.loginAction()
-                    }, label: {
-                        Text("Login")
-                            .foregroundColor(Color.white)
-                            .padding([.top, .bottom], 10)
-                            .padding([.leading, .trailing], 30)
-//                            .overlay(
-//                                RoundedRectangle(cornerRadius: 10)
-//                                    .stroke(Color.white, lineWidth: 3))
+                            .cornerRadius(7.5)
                             
-                    })
-                    .background(Color.secondary)
-                    .cornerRadius(10)
-                    .padding([.top,.bottom])
-//                    .alert(isPresented: $isLoggedin, content: {
-//                        Alert(title: Text("Login Success"), message: Text("Right now you can book any fligh!"), dismissButton: .cancel(Text("Ok")))
-//                    })
-                    
-                    HStack {
-                        NavigationLink("Forgot Password?", destination: SignupView())
-                        NavigationLink("New User Signup Here ", destination: SignupView())
+                            HStack {
+                                Image(systemName: "lock.fill")
+                                    .foregroundColor(.black)
+                                    .padding(15)
+                                SecureField("Password", text: $userPassword)
+                            }
+                            .disableAutocorrection(true)
+                            .autocapitalization(.none)
+                            .background(Color(.secondarySystemBackground))
+                            .foregroundColor(Color.black)
+                            .cornerRadius(7.5)
+                        }
+                        
+                        Button(action: {
+                            self.loginAction()
+                        }, label: {
+                            Text("Login")
+                                .frame(maxWidth:.infinity)
+                                .padding([.top, .bottom], 10)
+                                .background(Color.secondary)
+                                .foregroundColor(Color.white)
+                                .cornerRadius(7.5) 
+                        })
+                        
+    //                    .alert(isPresented: $isLoggedin, content: {
+    //                        Alert(title: Text("Login Success"), message: Text("Right now you can book any fligh!"), dismissButton: .cancel(Text("Ok")))
+    //                    })
+                        Text("Forgot Password")
+                            .padding()
+                        HStack {
+                            Text("Don't have an account?")
+                            NavigationLink {
+                                SignupView()
+                            } label: {
+                                Text("Create New")
+                                    .underline()
+                                    .font(.system(size: 14, weight:.bold))
+                            }
+                        }
+                        .foregroundColor(.black)
+                        .font(.system(size: 14, weight: .medium, design: .monospaced))
+    //                    .padding([.top,.bottom])
                     }
-                    .foregroundColor(.black)
-                    .font(.system(size: 12, weight: .medium, design: .monospaced))
-//                    .padding([.top,.bottom])
+                    .padding(30)
                 }
-                .padding()
-                .background(Color(red: 0.32, green:0.48, blue: 0.81))
-                .cornerRadius(15)
+                .frame(minHeight: 600, maxHeight: .infinity)
+                .background(
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(Color.gray.opacity(0.3)
+                    )
+                    .padding([.leading, .trailing], 20)
+                    .padding(.top, 100)
+                )
                 
-                Spacer()
+                Image("app_name_header")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 40)
+                    .padding(.bottom, 64)
+                    .padding(.top, 20)
             }
-
-//            .buttonBorderShape(.roundedRectangle(radius: 10))
-//            .padding()
         }
-        .navigationTitle("Login")
+        .navigationTitle("Login/Register")
         .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
+        .navigationBarItems(leading: btnBack)
         
     }
     

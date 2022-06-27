@@ -8,10 +8,16 @@
 import Foundation
 
 struct AirportData: Hashable, Codable {
-    var name: String
-    var city: String
-    var country: String
-    var iata: String
+    var name: String = String()
+    var city: String = String()
+    var country: String = String()
+    var iata: String = String()
+}
+
+struct RouteData: Hashable, Codable {
+    var source: AirportData
+    var destination: AirportData
+    var travelDate: Date
 }
 
 
