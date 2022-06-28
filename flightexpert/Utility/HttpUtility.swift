@@ -151,14 +151,20 @@ final class HttpUtility {
 //        encoder.dateEncodingStrategy = .formatted(formatter)
         urlRequest.httpBody = try? encoder.encode(rePriceRequest)
         
-//        let encoder3 = JSONEncoder()
+        let encoder3 = JSONEncoder()
 //        encoder3.dateEncodingStrategy = .millisecondsSince1970
-//        let myEventsJSONData = try! encoder3.encode(rePriceRequest)
-//        print(String(data: myEventsJSONData, encoding: .utf8)!)
+        let myEventsJSONData = try! encoder3.encode(rePriceRequest)
+        print(String(data: myEventsJSONData, encoding: .utf8)!)
         
         
         URLSession.shared.dataTask(with: urlRequest, completionHandler: { data, response, error -> Void in
             if (error == nil && data != nil) {
+                
+//                let json = try? JSONSerialization.jsonObject(with: data!) as? Dictionary<String, AnyObject>
+//                print(json!)
+                do{
+                    let json = try JSONSerialization.jsonObject(with: data!, options: []) as? [String : Any]
+                }catch{ print("erroMsg") }
                 
 //                let formatter = DateFormatter()
 //                formatter.dateFormat = "yyyy-MM-dd"

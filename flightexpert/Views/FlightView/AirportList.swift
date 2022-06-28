@@ -38,16 +38,16 @@ struct AirportList: View {
                 }
                 .padding(.top, 10)
                 .searchable(text: $searchText)
-                .navigationTitle("\(selectedModel.title) Airports")
-                .navigationBarItems(
-                    leading: Button(action: {
-                        presentationMode.wrappedValue.dismiss()
-                    }, label: {
-                        Image(systemName: "xmark")
-                            .foregroundColor(.white)
-                            .font(.system(size: 25))
-                    })
-                )
+//                .navigationTitle("\(selectedModel.title) Airports")
+//                .navigationBarItems(
+//                    leading: Button(action: {
+//                        presentationMode.wrappedValue.dismiss()
+//                    }, label: {
+//                        Image(systemName: "xmark")
+//                            .foregroundColor(.white)
+//                            .font(.system(size: 25))
+//                    })
+//                )
             }
         }
         

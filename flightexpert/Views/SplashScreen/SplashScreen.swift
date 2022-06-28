@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-let splashScreen = Image("splash_screen")
+let SplashScreenBg = Image("splash_screen")
 
 struct ProgressBar: View {
     @Binding var isActive: Bool
@@ -68,7 +68,7 @@ struct SplashScreen: View {
                 .environmentObject(viewModel)
         } else {
             ZStack {
-                splashScreen
+                SplashScreenBg
                     .resizable()
                     .scaledToFill()
                     .edgesIgnoringSafeArea(.all)

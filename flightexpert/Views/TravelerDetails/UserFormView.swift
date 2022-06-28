@@ -224,43 +224,47 @@ struct UserFormView: View {
                                                      tag: $tag,
                                                      selectedTag: 1)
                             }
-                            
-                            VStack(alignment: .leading) {
-                                Text("Document Type")
-                                DropDownView(value: $passengerInfo.documentType, placeholder: "passport", dropDownList: ["passport"])
-                            }
-                        }
-                        HStack {//Row-4
-                            VStack(alignment: .leading) {
-                                Text("Document Number*")
-                                TextField("AAA123456", text: $passengerInfo.documentNumber)
-                                    .padding(7)
-                                    .background(Color.gray.opacity(0.3).cornerRadius(5))
-                            }
-                            
-                            VStack(alignment: .leading) {
-                                Text("Issued In")
-                                TextField("Dhaka", text: $passengerInfo.issuingCountry)
-                                    .padding(7)
-                                    .background(Color.gray.opacity(0.3).cornerRadius(5))
-                            }
-                        }
-                        HStack {//Row-5
-                            VStack(alignment: .leading) {
-                                Text("Expires No*")
-                                DatePicker("", selection: $passengerInfo.expireDate, in: Date()..., displayedComponents: .date)
-                                    .frame(maxWidth:.infinity)
-                                    .accentColor(.orange)
-                                    .background(Color.gray.opacity(0.3).cornerRadius(5))
-                                    .labelsHidden()
-                                    .foregroundColor(.red)
-                            }
-                            
                             VStack(alignment: .leading) {
                                 Text("Gender")
                                 DropDownView(value: $passengerInfo.gender, placeholder: "Female", dropDownList: ["Male", "Female"])
                             }
+                            
+//                            VStack(alignment: .leading) {
+//                                Text("Document Type")
+//                                DropDownView(value: $passengerInfo.documentType, placeholder: "passport", dropDownList: ["passport"])
+//                            }
                         }
+//                        HStack {//Row-4
+//                            VStack(alignment: .leading) {
+//                                Text("Document Number*")
+//                                TextField("AAA123456", text: $passengerInfo.documentNumber)
+//                                    .padding(7)
+//                                    .background(Color.gray.opacity(0.3).cornerRadius(5))
+//                            }
+//
+//                            VStack(alignment: .leading) {
+//                                Text("Issued In")
+//                                TextField("Dhaka", text: $passengerInfo.issuingCountry)
+//                                    .padding(7)
+//                                    .background(Color.gray.opacity(0.3).cornerRadius(5))
+//                            }
+//                        }
+//                        HStack {//Row-5
+//                            VStack(alignment: .leading) {
+//                                Text("Expires No*")
+//                                DatePicker("", selection: $passengerInfo.expireDate, in: Date()..., displayedComponents: .date)
+//                                    .frame(maxWidth:.infinity)
+//                                    .accentColor(.orange)
+//                                    .background(Color.gray.opacity(0.3).cornerRadius(5))
+//                                    .labelsHidden()
+//                                    .foregroundColor(.red)
+//                            }
+//
+//                            VStack(alignment: .leading) {
+//                                Text("Gender")
+//                                DropDownView(value: $passengerInfo.gender, placeholder: "Female", dropDownList: ["Male", "Female"])
+//                            }
+//                        }
                         
                     }
                     .frame(minWidth: 0, maxWidth: .infinity)
@@ -289,8 +293,15 @@ struct UserFormView: View {
                             }
                             
                             VStack(alignment: .leading) {
-                                Text("Phone")
-                                TextField("Phone", text: $passengerInfo.phone)
+                                Text("City Name")
+                                TextField("Dhaka", text: $passengerInfo.cityName)
+                                    .padding(7)
+                                    .background(Color.gray.opacity(0.3).cornerRadius(5))
+                            }
+                            
+                            VStack(alignment: .leading) {
+                                Text("Country Code")
+                                TextField("BD", text: $passengerInfo.countryCode)
                                     .padding(7)
                                     .background(Color.gray.opacity(0.3).cornerRadius(5))
                             }
@@ -305,18 +316,12 @@ struct UserFormView: View {
                                                      selectedTag: 2)
                             }
                             VStack(alignment: .leading) {
-                                Text("Country Code")
-                                TextField("BD", text: $passengerInfo.countryCode)
+                                Text("Phone")
+                                TextField("Phone", text: $passengerInfo.phone)
                                     .padding(7)
                                     .background(Color.gray.opacity(0.3).cornerRadius(5))
                             }
                             
-                            VStack(alignment: .leading) {
-                                Text("City Name")
-                                TextField("Dhaka", text: $passengerInfo.cityName)
-                                    .padding(7)
-                                    .background(Color.gray.opacity(0.3).cornerRadius(5))
-                            }
                         }
                     }
                     .frame(minWidth: 0, maxWidth: .infinity)

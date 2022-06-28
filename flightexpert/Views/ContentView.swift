@@ -26,7 +26,6 @@ struct ContentView: View {
                 
                 HomeView()
                     .environmentObject(viewModel)
-//                    .navigationTitle("Home")
                     .navigationBarTitleDisplayMode(.inline)
             }
         }

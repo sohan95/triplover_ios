@@ -33,8 +33,8 @@ struct FlightView: View {
     
     @State var directionList:[Direction] = []
     
-    @State var adults: Int = 2
-    @State var childs: Int = 1
+    @State var adults: Int = 1
+    @State var childs: Int = 0
     @State var infants: Int = 0
     @State var cabinClass: String = "Economy" // cabinClass
     @State var preferredCarriers: [String] = []

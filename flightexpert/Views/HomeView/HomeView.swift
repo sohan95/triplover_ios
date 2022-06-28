@@ -90,9 +90,8 @@ struct HomeView: View {
                         }
                     }
                     
-                    Button {
-                        self.selectedTab = "My Booking"
-//                        self.showsAlert.toggle()
+                    NavigationLink {
+                        MyBooking()
                     } label: {
                         VStack{
                             Image(systemName: "paperplane")
@@ -102,7 +101,7 @@ struct HomeView: View {
                             Text("My Booking")
                                 .padding(.top, -5)
                                 .font(.system(size: 12, weight: .bold))
-                        }
+                        } 
                     }
                     
                     NavigationLink {

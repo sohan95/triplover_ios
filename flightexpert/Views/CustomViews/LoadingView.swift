@@ -17,20 +17,21 @@ struct LoadingView: View {
     
     var body: some View {
         ZStack {
-            BackgroundImage
+            SplashScreenBg
                 .resizable()
                 .scaledToFill()
                 .edgesIgnoringSafeArea(.all)
-//            Color(.systemBackground)
-//                .ignoresSafeArea()
-//                .opacity(0.5)
-//
-//            ProgressView()
-//                .progressViewStyle(CircularProgressViewStyle(tint: .red))
-//                .scaleEffect(3)
+            
+            Color(.systemBackground)
+                .ignoresSafeArea()
+                .opacity(0.5)
+
             ProgressView()
-                .progressViewStyle(LinearProgressViewStyle(tint: .green))
+                .progressViewStyle(CircularProgressViewStyle(tint: .red))
                 .scaleEffect(3)
+//            ProgressView()
+//                .progressViewStyle(LinearProgressViewStyle(tint: .green))
+//                .scaleEffect(3)
             
         }
     }
