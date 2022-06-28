@@ -21,8 +21,8 @@ struct RadioButtonField: View {
         id: String,
         label:String,
         size: CGFloat = 20,
-        color: Color = Color.black,
-        textSize: CGFloat = 9,
+        color: Color = Color.white,
+        textSize: CGFloat = 11,
         isMarked: Bool = false,
         callback: @escaping (String)->()
         ) {
@@ -40,26 +40,35 @@ struct RadioButtonField: View {
             self.callback(self.id)
         }) {
             HStack(alignment: .center, spacing: 5) {
-                Image(systemName: self.isMarked ? "largecircle.fill.circle" : "circle")
+                Image(systemName: "largecircle.fill.circle")
                     .renderingMode(.original)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: self.size, height: self.size)
+                    .foregroundColor(self.isMarked ? Color("title_third") : self.color)
                 Text(label)
-                    .font(Font.system(size: textSize))
+                    .font(Font.system(size: textSize, weight: .bold))
+                    .foregroundColor(self.color)
                 Spacer()
             }
-            .foregroundColor(self.color)
             .padding(.horizontal, 5)
             .padding(.vertical, 8)
             
         }
-        .foregroundColor(Color.white)
         .background(
-            RoundedRectangle(cornerRadius: 5).fill(Color.blue)
+            RoundedRectangle(cornerRadius: 5).fill(Color("colorPrimary"))
         )
     }
 }
+
+struct RadioButtonField_Previews: PreviewProvider {
+    static var previews: some View {
+        RadioButtonField(id: "ABCD", label: "ABCD") { nAME in
+            //
+        }
+    }
+}
+
 
 //MARK:- Group of Radio Buttons
 enum RouteType: String {
@@ -75,7 +84,7 @@ struct RadioRouteGroupBotton: View {
     let callback: (String) -> ()
     
     var body: some View {
-        HStack(alignment: .firstTextBaseline, spacing: 10) {
+        HStack(alignment: .center, spacing: 10) {
             radioOneWay
             radioRound
             radioMultiCity

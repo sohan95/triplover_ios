@@ -74,180 +74,169 @@ struct FlightView: View {
     
     var body: some View {
         ZStack {
-            backgroundGradient
+            BackgroundImage
+                .resizable()
+                .scaledToFill()
                 .ignoresSafeArea(.all, edges: .all)
-//            BackgroundImage
-//                .resizable()
-//                .scaledToFill()
-//                .ignoresSafeArea(.all, edges: .all)
             
             NavigationLink(destination:OriginFlightList(title: "SourceToDestination",flightSearchModel: flightSearchModel), tag: "A", selection: $flightSearchModel.isGotSearchData) { EmptyView() }
-            
+           
             if !flightSearchModel.isSearching {
-                VStack {
-                    // TripRouteSegment
-//                    ScrollView([], showsIndicators: false, content: {
-//                        LazyHGrid(rows: gridLayout, alignment: .center, spacing: columnSpacing, pinnedViews: [], content: {
-//
-//                            ForEach(flightRouteTypes, id: \.self) { type in
-//                                TripSegmentedView(typeSelected: self.typeSelected, name: type){ routeType in
-//
-//                                    if self.typeSelected != routeType {
-//                                        self.typeSelected = routeType
-//                                        self.resetView()
-//                                    }
-//                                }
-//                            }
-//                        })//: GRID
-//                        .frame(width: 240, height: 50)
-//                        .cornerRadius(5)
-//
-//                    })//: SCROLL
-//                    .frame(width: 300, height: 50)
-//                    .background(Color("button-bg-color").cornerRadius(5))
-//                    .padding(.bottom, 30)
-                    
-                    RadioRouteGroupBotton(selectedId: self.typeSelected) { selected in
-                        print("Selected RouteType is: \(selected)")
-                        self.typeSelected = selected
-                        self.resetView()
-                    }
-                    
-                    if isOneWay {
-                        if routeArray.count == 2 {
-                            OneWayRoute(source: $routeArray[0], destination: $routeArray[1], selectedDate: $routeDate[0])
+                VStack() {
+                    VStack(spacing:15) {
+                        Text("Flights")
+                            .font(.system(size: 24, weight: .bold))
+                            .padding(.top, 20)
+                        
+                        RadioRouteGroupBotton(selectedId: self.typeSelected) { selected in
+                            print("Selected RouteType is: \(selected)")
+                            self.typeSelected = selected
+                            self.resetView()
                         }
-                    }
-                    if isRoundTrip {
-                        if routeArray.count == 2 {
-                            OneWayRoute(source: self.$routeArray[0], destination: self.$routeArray[1], selectedDate: self.$routeDate[0])
-                            OneWayRoute(source: self.$routeArray[1], destination: self.$routeArray[0], selectedDate: self.$routeDate[1])
-                        }
-                    }
-                    if isMultiCity {
-                        ForEach(0 ..< multiCityRouteCount, id:\.self) { i in
-                            //RouteView(route: $multiCityRoutes[i])
-                            OneWayRoute(source: self.$routeArray[i], destination: self.$routeArray[i+1], selectedDate: self.$routeDate[i])
-                        }
-    
-                        HStack {
-                            Button {
-                                if multiCityRouteCount < 4 {
-                                    multiCityRouteCount += 1
-                                    let lastOne = AirportData(name: "Aasiaat", city: "Aasiaat", country:"Greenland", iata: "JEG")
-                                    self.routeArray.append(lastOne)
-                                    let oneWayDate = Date()
-                                    self.routeDate.append(oneWayDate)
-                                }
-                            } label: {
-                                Label("Add More Trip", systemImage: "plus.square")
+                        .padding(.horizontal,20)
+                        
+                        if isOneWay {
+                            if routeArray.count == 2 {
+                                OneWayRoute(source: $routeArray[0], destination: $routeArray[1], selectedDate: $routeDate[0])
                             }
-    
-                            if multiCityRouteCount > 1 {
+                        }
+                        if isRoundTrip {
+                            if routeArray.count == 2 {
+                                OneWayRoute(source: self.$routeArray[0], destination: self.$routeArray[1], selectedDate: self.$routeDate[0])
+                                OneWayRoute(source: self.$routeArray[1], destination: self.$routeArray[0], selectedDate: self.$routeDate[1])
+                            }
+                        }
+                        if isMultiCity {
+                            ForEach(0 ..< multiCityRouteCount, id:\.self) { i in
+                                //RouteView(route: $multiCityRoutes[i])
+                                OneWayRoute(source: self.$routeArray[i], destination: self.$routeArray[i+1], selectedDate: self.$routeDate[i])
+                            }
+        
+                            HStack {
                                 Button {
-                                    if multiCityRouteCount > 1 {
-                                        multiCityRouteCount -= 1
-                                        if self.routeArray.count > 1 {
-                                            self.routeArray.removeLast()
-                                            self.routeDate.removeLast()
-                                        }
+                                    if multiCityRouteCount < 4 {
+                                        multiCityRouteCount += 1
+                                        let lastOne = AirportData(name: "Aasiaat", city: "Aasiaat", country:"Greenland", iata: "JEG")
+                                        self.routeArray.append(lastOne)
+                                        let oneWayDate = Date()
+                                        self.routeDate.append(oneWayDate)
                                     }
                                 } label: {
-                                    Label("Remove Trip", systemImage: "minus.square")
+                                    Label("Add More Trip", systemImage: "plus.square")
+                                }
+        
+                                if multiCityRouteCount > 1 {
+                                    Button {
+                                        if multiCityRouteCount > 1 {
+                                            multiCityRouteCount -= 1
+                                            if self.routeArray.count > 1 {
+                                                self.routeArray.removeLast()
+                                                self.routeDate.removeLast()
+                                            }
+                                        }
+                                    } label: {
+                                        Label("Remove Trip", systemImage: "minus.square")
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    Spacer()
-                    
-                    VStack(spacing:0) {
-                        Divider()
-                            .frame(height: 1)
-                            .background(Color.red)
-                        HStack(alignment: .center, spacing:0) {
-                            //firstDiv
-                            CustomerCountView(title: "Adults", customerCount: $adults, maxNumber: 8){ count in
-                                adults = count
-                                if adults < infants {
-                                    infants = adults
-                                }
-                            }
-                            Divider()
-                                .frame(width: 1)
-                                .background(Color.red)
-                            //MiddleDiv
-                            CustomerCountView(title: "Childs", customerCount: $childs, maxNumber: 5){ count in
-                                childs = count
-                            }
-                            
-                            Divider()
-                                .frame(width: 1)
-                                .background(Color.red)
-                            //LaseDiv
-                            CustomerCountView(title: "Infants", customerCount: $infants, maxNumber: 8){ count in
-                                infants = count
-                                if infants > adults {
-                                    adults = infants
-                                }
-                            }
-                        }
-                        .frame(height: 130)
-                        Divider()
-                            .frame(height: 1)
-                            .background(Color.red)
-                    }
-                    //: CabinClass
-                    ScrollView([], showsIndicators: false, content: {
-                        LazyHGrid(rows: gridLayout, alignment: .center, spacing: columnSpacing, pinnedViews: [], content: {
-                            
-                            ForEach(cabinClassList, id: \.self) { cabinName in
-                                CabinSegmentedView(cabinSelected: $cabinClass, name: cabinName)
-                            }
-                        })//: GRID
-                        .frame(width:10, height: 10)
-//                        .cornerRadius(5)
+                        Spacer()
                         
-                    })//: SCROLL
-                    .frame(maxWidth: .infinity, alignment: .trailing)
-                    .frame(height:60)
-                    .background(Color(red: 249/255, green: 228/255, blue: 209/255))
-                    
-                    //:is Direct Flight
-                    HStack {
-        //                    Toggle(isOn: $isDirectFlight) {
-        //                        //
-        //                    }.padding()
-                        Toggle("Direct Flight", isOn: $isDirectFlight)
-                            .padding()
-        //                    Text("Direct Flight")
-        //                        .font(.title)
-        //                        .foregroundColor(Color.black)
-        //                    Spacer()
-                    }
-                    .background(isDirectFlight ? Color.orange : Color(red: 249/255, green: 228/255, blue: 209/255))
-                    
-                    //: Search Button
-                    VStack {
-                        Button {
-                            self.searchFlight()
-                        } label: {
-                            Text("Search Flight")
-                                .frame(maxWidth: .infinity, alignment: .center)
-                                .frame(height:60)
-                                .foregroundColor(Color.white)
-                                .font(.system(size: 24, weight:.heavy))
+                        VStack(spacing:0) {
+                            Divider()
+                                .frame(height: 1)
+                                .background(Color.red)
+                            HStack(alignment: .center, spacing:0) {
+                                //firstDiv
+                                CustomerCountView(title: "Adults", customerCount: $adults, maxNumber: 8){ count in
+                                    adults = count
+                                    if adults < infants {
+                                        infants = adults
+                                    }
+                                }
+                                Divider()
+                                    .frame(width: 1)
+                                    .background(Color.red)
+                                //MiddleDiv
+                                CustomerCountView(title: "Childs", customerCount: $childs, maxNumber: 5){ count in
+                                    childs = count
+                                }
+                                
+                                Divider()
+                                    .frame(width: 1)
+                                    .background(Color.red)
+                                //LaseDiv
+                                CustomerCountView(title: "Infants", customerCount: $infants, maxNumber: 8){ count in
+                                    infants = count
+                                    if infants > adults {
+                                        adults = infants
+                                    }
+                                }
+                            }
+                            .frame(height: 130)
+                            Divider()
+                                .frame(height: 1)
+                                .background(Color.red)
+                        }
+                        //: CabinClass
+                        ScrollView([], showsIndicators: false, content: {
+                            LazyHGrid(rows: gridLayout, alignment: .center, spacing: columnSpacing, pinnedViews: [], content: {
+                                
+                                ForEach(cabinClassList, id: \.self) { cabinName in
+                                    CabinSegmentedView(cabinSelected: $cabinClass, name: cabinName)
+                                }
+                            })//: GRID
+                            .frame(width:10, height: 10)
+    //                        .cornerRadius(5)
+                            
+                        })//: SCROLL
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                        .frame(height:60)
+                        .background(Color(red: 249/255, green: 228/255, blue: 209/255))
+                        
+                        //:is Direct Flight
+                        HStack {
+            //                    Toggle(isOn: $isDirectFlight) {
+            //                        //
+            //                    }.padding()
+                            Toggle("Direct Flight", isOn: $isDirectFlight)
+                                .padding()
+            //                    Text("Direct Flight")
+            //                        .font(.title)
+            //                        .foregroundColor(Color.black)
+            //                    Spacer()
+                        }
+                        .background(isDirectFlight ? Color.orange : Color(red: 249/255, green: 228/255, blue: 209/255))
+                        
+                        //: Search Button
+                        VStack {
+                            Button {
+                                self.searchFlight()
+                            } label: {
+                                Text("GO!")
+                            }
+                            .frame(width: 160, height: 80, alignment: .center)
+                            .font(.system(size: 24, weight:.heavy))
+                            .foregroundColor(.white)
+                            .background(RoundedRectangle(cornerRadius: 15)
+                                .fill(blueGradient))
                         }
                     }
-                    .background(Color.blue)
+                    .frame(minHeight: 500, maxHeight: 600)
+                    .background(
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(Color.white)
+                        .padding([.leading, .trailing], 10)
+                    )
                 }
+                
             }
             else {
                 LoadingView()
             }
-            
         }
-        .navigationTitle("Flight")
+        .navigationTitle("TripLover")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear() {
             self.resetView()

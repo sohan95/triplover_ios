@@ -10,7 +10,6 @@ import SwiftUI
 let backgroundGradient = LinearGradient(
     colors: [Color(red: 128/255, green: 173/255, blue: 214/255), Color(red: 254/255, green: 253/255, blue: 253/255),Color(red: 249/255, green: 228/255, blue: 209/255)],
     startPoint: .top, endPoint: .bottom)
-let BackgroundImage = Image("home_background")
 
 struct ContentView: View {
     
@@ -25,9 +24,10 @@ struct ContentView: View {
                     .edgesIgnoringSafeArea(.all)
                 
                 HomeView()
-                    .environmentObject(viewModel)
-                    .navigationBarTitleDisplayMode(.inline)
+                    
             }
+            .environmentObject(viewModel)
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }

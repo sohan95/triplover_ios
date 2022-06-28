@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-let SplashScreenBg = Image("splash_screen")
-
 struct ProgressBar: View {
     @Binding var isActive: Bool
     @State var progressValue: Double = 0.0

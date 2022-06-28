@@ -66,7 +66,7 @@ struct MyBooking: View {
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: 60)
-                .background(.blue)
+                .background(Color("colorPrimary"))
                 .accentColor(.white)
                 .padding(.bottom, 64)
             }

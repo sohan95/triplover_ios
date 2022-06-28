@@ -116,7 +116,7 @@ struct SignupView: View {
                         Text("Create Account")
                             .frame(maxWidth:.infinity)
                             .padding([.top, .bottom], 10)
-                            .background(Color.secondary)
+                            .background(blueGradient)
                             .foregroundColor(Color.white)
                             .cornerRadius(7.5)
                     })

@@ -11,6 +11,7 @@
 		1F1D9EB42840701C00771544 /* RouteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F1D9EB32840701C00771544 /* RouteView.swift */; };
 		1F1D9EC32840855200771544 /* AirportDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F1D9EC22840855200771544 /* AirportDataLoader.swift */; };
 		1F23A2B7286B3AC1007438C7 /* MyBooking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F23A2B6286B3AC1007438C7 /* MyBooking.swift */; };
+		1F23A2B9286B6233007438C7 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F23A2B8286B6233007438C7 /* Utility.swift */; };
 		1F2CFDA4284A51D7003E2D40 /* ListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2CFDA3284A51D7003E2D40 /* ListRow.swift */; };
 		1F2E7C9A284555A30071490A /* SearchRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2E7C99284555A30071490A /* SearchRequest.swift */; };
 		1F2F4AED2868D8D900D80D0D /* CustomTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2F4AEC2868D8D900D80D0D /* CustomTextFieldView.swift */; };
@@ -121,6 +122,7 @@
 		1F1D9EB32840701C00771544 /* RouteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteView.swift; sourceTree = "<group>"; };
 		1F1D9EC22840855200771544 /* AirportDataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirportDataLoader.swift; sourceTree = "<group>"; };
 		1F23A2B6286B3AC1007438C7 /* MyBooking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyBooking.swift; sourceTree = "<group>"; };
+		1F23A2B8286B6233007438C7 /* Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 		1F2CFDA3284A51D7003E2D40 /* ListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRow.swift; sourceTree = "<group>"; };
 		1F2E7C99284555A30071490A /* SearchRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchRequest.swift; sourceTree = "<group>"; };
 		1F2F4AEC2868D8D900D80D0D /* CustomTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextFieldView.swift; sourceTree = "<group>"; };
@@ -238,6 +240,14 @@
 				1F23A2B6286B3AC1007438C7 /* MyBooking.swift */,
 			);
 			path = MyBooking;
+			sourceTree = "<group>";
+		};
+		1F23A2BA286B642E007438C7 /* LoadingView */ = {
+			isa = PBXGroup;
+			children = (
+				1F9A8A152858F55900D4626B /* LoadingView.swift */,
+			);
+			path = LoadingView;
 			sourceTree = "<group>";
 		};
 		1F36BA512835D3AB00B4EE93 /* HomeView */ = {
@@ -413,6 +423,7 @@
 			children = (
 				1F36BA4F2835CBE800B4EE93 /* HttpUtility.swift */,
 				1FB67AE628485D380047C651 /* FlightAPI.swift */,
+				1F23A2B8286B6233007438C7 /* Utility.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -430,14 +441,15 @@
 			children = (
 				1FF41DF72824DD3100755A79 /* flightexpertApp.swift */,
 				1FF41DF92824DD3100755A79 /* ContentView.swift */,
-				1F23A2B5286B3AAF007438C7 /* MyBooking */,
+				1F23A2BA286B642E007438C7 /* LoadingView */,
 				1FC7DD942865C65800F808A5 /* SplashScreen */,
+				1F36BA512835D3AB00B4EE93 /* HomeView */,
+				1F23A2B5286B3AAF007438C7 /* MyBooking */,
 				1FB97C502855F9570099D690 /* CustomViews */,
 				1FB9918B283DB6880051546E /* FlightView */,
 				1FBC9646285752F5007C7ACA /* OriginFlightList */,
 				1F95F0BA28504F3300BF85F0 /* TravelerDetails */,
 				1F36BA522835D3DD00B4EE93 /* SideMenuView */,
-				1F36BA512835D3AB00B4EE93 /* HomeView */,
 				1F1F1431283C6E6000BB1C5D /* SignupView */,
 				1F36BA532835D46400B4EE93 /* SigninView */,
 				1FA6625D285802F400922554 /* SignoutView */,
@@ -450,7 +462,6 @@
 			children = (
 				1FB97C512855F9630099D690 /* CustomPickerView */,
 				1FB97C52285621190099D690 /* DropDownView.swift */,
-				1F9A8A152858F55900D4626B /* LoadingView.swift */,
 				1F363B6A286215C500D858BA /* CustomerCountView.swift */,
 				1F363B6C2862166B00D858BA /* CabinSegmentedView.swift */,
 				1F363B6E2862169E00D858BA /* TripSegmentedView.swift */,
@@ -718,6 +729,7 @@
 				1FB67AFB284870E40047C651 /* AirSearchResponse.swift in Sources */,
 				1FB67B03284870E40047C651 /* Cnn.swift in Sources */,
 				1F36BA502835CBE800B4EE93 /* HttpUtility.swift in Sources */,
+				1F23A2B9286B6233007438C7 /* Utility.swift in Sources */,
 				1FA6625F2858031000922554 /* SignoutView.swift in Sources */,
 				1FBE4F2E282A0B8400E25128 /* HomeView.swift in Sources */,
 				1F363B6F2862169E00D858BA /* TripSegmentedView.swift in Sources */,
@@ -938,6 +950,7 @@
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = flightexpert/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TripLover;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -978,6 +991,7 @@
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = flightexpert/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TripLover;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

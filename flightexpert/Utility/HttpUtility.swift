@@ -6,6 +6,7 @@
 //
 
 import Foundation
+
 final class HttpUtility {
     static let shared = HttpUtility()
     private init(){}
