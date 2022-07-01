@@ -234,111 +234,112 @@ struct FlightView: View {
                         .padding([.leading, .trailing], 10)
                     )
                 }
-                FlexibleSheet(sheetMode: $sheetMode) {
-                    VStack() {
-                        HStack() {
-                            Text("")
-                                .frame(width:60)
-                            Spacer()
-                            
-                            Text("Traveler, Class")
-                                .font(.system(size: 18))
-                                .foregroundColor(.black)
-                            Spacer()
-                            Button {
-                                print("Cancel Btn tapped")
-                            } label: {
-                                Text("Cancel")
-                                    .font(.body)
-                                    .foregroundColor(.red)
-                            }
-                        }
-                        .frame(maxWidth:.infinity, maxHeight:40)
-                        .background(Color.gray)
-                        
-                        VStack {
-                            VStack(spacing:10){
-                                HStack(spacing: 10) {
-                                    Button {
-                                        //
-                                    } label: {
-                                        VStack(alignment:.leading, spacing: 5){
-                                            Text("Class")
-                                            Text("Premium")
-                                            Text("Click to change")
-                                        }
-                                    }
-                                    .frame(minWidth:0, maxWidth: .infinity,maxHeight: 80)
-                                    .background(.white)
-                                    .addBorder(Color.gray, width: 2, cornerRadius: 10)
-                                    
-                                    Button {
-                                        //
-                                    } label: {
-                                        VStack(alignment:.leading, spacing: 5){
-                                            Text("ADULT (12+)")
-                                            Text("1 Traveler")
-                                            Text("Click to change")
-                                        }
-                                    }
-                                    .frame(minWidth:0, maxWidth: .infinity, maxHeight: 80)
-                                    .background(.white)
-                                    .addBorder(Color.gray, width: 2, cornerRadius: 10)
-                                }
-                                .foregroundColor(.gray)
-                                .padding(.horizontal, 15)
-                                
-                                HStack(spacing: 10) {
-                                    Button {
-                                        //
-                                    } label: {
-                                        VStack(alignment:.leading, spacing: 5){
-                                            Text("CHILD (12+)")
-                                            Text("1 Traveler")
-                                            Text("Click to change")
-                                        }
-                                    }
-                                    .frame(minWidth:0, maxWidth: .infinity,maxHeight: 80)
-                                    .background(.white)
-                                    .addBorder(Color.gray, width: 2, cornerRadius: 10)
-                                    
-                                    Button {
-                                        //
-                                    } label: {
-                                        VStack(alignment:.leading, spacing: 5){
-                                            Text("INFANT(0 - 2)")
-                                            Text("1 Traveler")
-                                            Text("Click to change")
-                                        }
-                                    }
-                                    .frame(minWidth:0, maxWidth: .infinity,maxHeight: 80)
-                                    .background(.white)
-                                    .addBorder(Color.gray, width: 2, cornerRadius: 10)
-                                }
-                                .foregroundColor(.gray)
-                                .padding(.horizontal, 15)
-                            }
-                        }
-                        .frame(maxWidth:.infinity, minHeight: 300, maxHeight:500)
-                        .padding(.bottom,10)
-                        .background(.white)
-                        
-                        Button(action: {
-                            //
-                        }, label: {
-                            Text("DONE")
-                                .frame(maxWidth:.infinity)
-                                .padding([.top, .bottom], 12)
-                                .background(blueGradient)
-                                .foregroundColor(Color.white)
-                                .cornerRadius(10)
-                        })
-                        .padding(.horizontal, 15)
-                        
-                        Spacer()
-                    }
-                    .background(.white)
-                }
+                
+//                FlexibleSheet(sheetMode: $sheetMode) {
+//                    VStack() {
+//                        HStack() {
+//                            Text("")
+//                                .frame(width:60)
+//                            Spacer()
+//                            
+//                            Text("Traveler, Class")
+//                                .font(.system(size: 18))
+//                                .foregroundColor(.black)
+//                            Spacer()
+//                            Button {
+//                                print("Cancel Btn tapped")
+//                            } label: {
+//                                Text("Cancel")
+//                                    .font(.body)
+//                                    .foregroundColor(.red)
+//                            }
+//                        }
+//                        .frame(maxWidth:.infinity, maxHeight:40)
+//                        .background(Color.gray)
+//                        
+//                        VStack {
+//                            VStack(spacing:10){
+//                                HStack(spacing: 10) {
+//                                    Button {
+//                                        //
+//                                    } label: {
+//                                        VStack(alignment:.leading, spacing: 5){
+//                                            Text("Class")
+//                                            Text("Premium")
+//                                            Text("Click to change")
+//                                        }
+//                                    }
+//                                    .frame(minWidth:0, maxWidth: .infinity,maxHeight: 80)
+//                                    .background(.white)
+//                                    .addBorder(Color.gray, width: 2, cornerRadius: 10)
+//                                    
+//                                    Button {
+//                                        //
+//                                    } label: {
+//                                        VStack(alignment:.leading, spacing: 5){
+//                                            Text("ADULT (12+)")
+//                                            Text("1 Traveler")
+//                                            Text("Click to change")
+//                                        }
+//                                    }
+//                                    .frame(minWidth:0, maxWidth: .infinity, maxHeight: 80)
+//                                    .background(.white)
+//                                    .addBorder(Color.gray, width: 2, cornerRadius: 10)
+//                                }
+//                                .foregroundColor(.gray)
+//                                .padding(.horizontal, 15)
+//                                
+//                                HStack(spacing: 10) {
+//                                    Button {
+//                                        //
+//                                    } label: {
+//                                        VStack(alignment:.leading, spacing: 5){
+//                                            Text("CHILD (12+)")
+//                                            Text("1 Traveler")
+//                                            Text("Click to change")
+//                                        }
+//                                    }
+//                                    .frame(minWidth:0, maxWidth: .infinity,maxHeight: 80)
+//                                    .background(.white)
+//                                    .addBorder(Color.gray, width: 2, cornerRadius: 10)
+//                                    
+//                                    Button {
+//                                        //
+//                                    } label: {
+//                                        VStack(alignment:.leading, spacing: 5){
+//                                            Text("INFANT(0 - 2)")
+//                                            Text("1 Traveler")
+//                                            Text("Click to change")
+//                                        }
+//                                    }
+//                                    .frame(minWidth:0, maxWidth: .infinity,maxHeight: 80)
+//                                    .background(.white)
+//                                    .addBorder(Color.gray, width: 2, cornerRadius: 10)
+//                                }
+//                                .foregroundColor(.gray)
+//                                .padding(.horizontal, 15)
+//                            }
+//                        }
+//                        .frame(maxWidth:.infinity, minHeight: 300, maxHeight:500)
+//                        .padding(.bottom,10)
+//                        .background(.white)
+//                        
+//                        Button(action: {
+//                            //
+//                        }, label: {
+//                            Text("DONE")
+//                                .frame(maxWidth:.infinity)
+//                                .padding([.top, .bottom], 12)
+//                                .background(blueGradient)
+//                                .foregroundColor(Color.white)
+//                                .cornerRadius(10)
+//                        })
+//                        .padding(.horizontal, 15)
+//                        
+//                        Spacer()
+//                    }
+//                    .background(.white)
+//                }
             }
             else {
                 LoadingView()
