@@ -10,6 +10,7 @@ import SwiftUI
 enum SheetMode {
     case none
     case quater
+    case semi
     case half
     case full
 }
@@ -25,6 +26,8 @@ struct FlexibleSheet<Content: View>: View {
                 return UIScreen.main.bounds.height
             case .quater:
                 return UIScreen.main.bounds.height - 200
+            case .semi:
+                return UIScreen.main.bounds.height/3
             case .half:
                 return UIScreen.main.bounds.height/2
             case .full:
@@ -47,7 +50,7 @@ struct FlexibleSheet<Content: View>: View {
 
 struct FlexibleSheetView_Previews: PreviewProvider {
     static var previews: some View {
-        FlexibleSheet(sheetMode: .constant(.none)) {
+        FlexibleSheet(sheetMode: .constant(.quater)) {
             VStack{
                 Text("None")
             }.frame(width: .infinity, height: .infinity)

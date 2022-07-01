@@ -33,6 +33,8 @@ struct FlightDetailsView<Content: View>: View {
                 return UIScreen.main.bounds.height
             case .quater:
                 return UIScreen.main.bounds.height - 200
+            case .semi:
+                return UIScreen.main.bounds.height/3
             case .half:
                 return UIScreen.main.bounds.height/2
             case .full:
