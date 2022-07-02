@@ -18,6 +18,17 @@ struct TravelerDetails: View {
     @State var userDataArray = [UserData]()
     @State var isAgree: Bool = false
 
+    @Environment(\.presentationMode) var presentationMode
+    var btnBack : some View { Button(action: {
+        self.presentationMode.wrappedValue.dismiss()
+        }) {
+            HStack {
+            Image(systemName: "arrow.backward") // set image here
+                .aspectRatio(contentMode: .fit)
+                .foregroundColor(.black)
+            }
+        }
+    }
     
     var body: some View {
         ZStack {
@@ -75,6 +86,10 @@ struct TravelerDetails: View {
                 }
             }
         }
+        .navigationTitle("Traveler Details")
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
+        .navigationBarItems(leading: btnBack)
         .onAppear {
 //            for i in 1...self.totalUserCount {
 //                print("\(i)")

@@ -22,7 +22,7 @@ struct RadioButtonField: View {
         label:String,
         size: CGFloat = 20,
         color: Color = Color.white,
-        textSize: CGFloat = 11,
+        textSize: CGFloat = 10,
         isMarked: Bool = false,
         callback: @escaping (String)->()
         ) {
@@ -79,7 +79,7 @@ enum RouteType: String {
 
 struct RadioRouteGroupBotton: View {
     
-    @State var selectedId: String
+    @Binding var selectedId: String
     
     let callback: (String) -> ()
     

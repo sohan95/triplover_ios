@@ -17,27 +17,54 @@ struct AirportList: View {
     
     let airportList = AirportDataLoader().airportList
     @State var selectedAirport: AirportData?
+    
     @State private var searchText = ""
+    @State var searching = false
     
     var body: some View {
-        NavigationView {
-            ZStack {
-                BackgroundImage
-                    .resizable()
-                    .scaledToFill()
-                    .edgesIgnoringSafeArea(.all)
-                
-                List {
-                    ForEach(searchResults, id:\.self) { airport in
-                        SelectionRow(airport: airport, selectedAirport: $selectedAirport) {airport in
-                                print(airport)
-                                DismissSheet()
-                            }
-                    }.padding()
-                    
+        VStack(alignment: .leading) {
+            SearchBar(searchText: $searchText, searching: $searching)
+            List {
+                ForEach(airportList.filter({ (airport: AirportData) -> Bool in
+                    return airport.iata.hasPrefix(searchText) ||
+                    airport.name.hasPrefix(searchText) ||
+                    airport.city.hasPrefix(searchText) || searchText == ""
+                }), id: \.self) { airport in
+                    //Text(airport.iata)
+                    SelectionRow(airport: airport, selectedAirport: $selectedAirport) {airport in
+                            print(airport)
+                            DismissSheet()
+                        }
                 }
-                .padding(.top, 10)
-                .searchable(text: $searchText)
+            }
+            .listStyle(GroupedListStyle())
+        }
+
+//        VStack {
+//            HStack{
+//                Button {
+//                    presentationMode.wrappedValue.dismiss()
+//                } label: {
+//                    Image(systemName: "xmark")
+//                        .foregroundColor(.red)
+//                        .font(.system(size: 25))
+//                }
+//                Spacer()
+//
+//                Text("ABCD")
+//            }
+//            .padding()
+//            List(searchResults, id:\.self) { airport in
+//                SelectionRow(airport: airport, selectedAirport: $selectedAirport) {airport in
+//                        print(airport)
+//                        DismissSheet()
+//                    }
+//            }
+//            .searchable(text: $searchText)
+//        }
+                
+        //                .padding(.top, 10)
+                
 //                .navigationTitle("\(selectedModel.title) Airports")
 //                .navigationBarItems(
 //                    leading: Button(action: {
@@ -48,8 +75,8 @@ struct AirportList: View {
 //                            .font(.system(size: 25))
 //                    })
 //                )
-            }
-        }
+//            }
+//        }
         
     }
     
@@ -85,4 +112,56 @@ struct AirportList_Previews: PreviewProvider {
         //        AirportList(selectedAirport: .constant(AirportData(name: "Sylhet", city:"Sylhet", country: "Bangladesh", iata: "SLT")))
     }
 }
+
+struct SearchBar: View {
+    
+    @Binding var searchText: String
+    @Binding var searching: Bool
+    
+    var body: some View {
+        HStack {
+            ZStack {
+                Rectangle()
+                    .foregroundColor(Color("mercaryColor"))
+                HStack {
+                    Image(systemName: "magnifyingglass")
+                    TextField("Search ..", text: $searchText) { startedEditing in
+                        if startedEditing {
+                            withAnimation {
+                                searching = true
+                            }
+                        }
+                    } onCommit: {
+                        withAnimation {
+                            searching = false
+                        }
+                    }
+                    
+                }
+                .foregroundColor(.gray)
+                .padding(.leading, 13)
+            }
+                .frame(height: 40)
+                .cornerRadius(13)
+                .padding()
+            if searching {
+                Button("Cancel") {
+                    searchText = ""
+                    withAnimation {
+                       searching = false
+                       UIApplication.shared.dismissKeyboard()
+                    }
+                }
+                .padding(.trailing, 10)
+            }
+        }
+    }
+}
+
+
+extension UIApplication {
+     func dismissKeyboard() {
+         sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+     }
+ }
 

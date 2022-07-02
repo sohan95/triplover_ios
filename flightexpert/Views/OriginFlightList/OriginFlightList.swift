@@ -16,6 +16,18 @@ struct OriginFlightList: View {
     @State private var selection: String? = nil
     @State private var popUpTitle: String = "Close"
     
+    @Environment(\.presentationMode) var presentationMode
+    var btnBack : some View { Button(action: {
+        self.presentationMode.wrappedValue.dismiss()
+        }) {
+            HStack {
+            Image(systemName: "arrow.backward") // set image here
+                .aspectRatio(contentMode: .fit)
+                .foregroundColor(.black)
+            }
+        }
+    }
+    
     var body: some View {
         
         ZStack {
@@ -49,6 +61,8 @@ struct OriginFlightList: View {
                 }
                 .navigationTitle("Flight")
                 .navigationBarTitleDisplayMode(.inline)
+                .navigationBarBackButtonHidden(true)
+                .navigationBarItems(leading: btnBack)
                 .onAppear() {
                     flightSearchModel.flightRouteType
                     flightSearchModel.getForwardDirection()
