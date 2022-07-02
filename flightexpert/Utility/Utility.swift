@@ -49,3 +49,4 @@ let tabBarColor = Color(hex: "#6CB6F6")
 let BackgroundImage = Image("home_background")
 let SplashScreenBg = Image("splash_screen")
 
+
