@@ -69,7 +69,7 @@ struct FlightView: View {
     }
     
     @State var multiCityRouteCount: Int = 1
-    @State var selectedModel: RandomModel? = nil
+//    @State var selectedModel: RandomModel? = nil
     @State var bgHeight: Double = 420.0
     @State var shouldScroll: Bool = false
     
@@ -125,42 +125,9 @@ struct FlightView: View {
                                         if routeArray.count == 2 {
                                             //Row-1
                                             ZStack {
-                                                
                                                 HStack(spacing: 10) {
-                                                    Button {
-                                                        selectedModel = RandomModel(title:"source-0", iata: routeArray[0].iata)
-                                                    } label: {
-                                                        VStack(alignment:.leading, spacing: 5){
-                                                            Text("From")
-                                                                .font(.system(size: 14, weight: .medium, design: .rounded))
-                                                            Text(routeArray[0].iata)
-                                                                .font(.system(size: 16, weight: .heavy, design: .rounded))
-                                                                .foregroundColor(.black)
-                                                            Text("Click to search")
-                                                                .font(.system(size: 12, weight: .medium, design: .rounded))
-                                                        }
-                                                        .padding(5)
-                                                    }
-                                                    .frame(minWidth:0, maxWidth: .infinity,minHeight: 80, maxHeight: 80)
-                                                    .background(.white)
-                                                    .addBorder(Color.gray, width: 2, cornerRadius: 10)
-                                                    
-                                                    Button {
-                                                        selectedModel = RandomModel(title:"source-1", iata: routeArray[1].iata)
-                                                    } label: {
-                                                        VStack(alignment:.leading, spacing: 5){
-                                                            Text("To")
-                                                                .font(.system(size: 14, weight: .medium, design: .rounded))
-                                                            Text(routeArray[1].iata)
-                                                                .font(.system(size: 16, weight: .heavy, design: .rounded))
-                                                                .foregroundColor(.black)
-                                                            Text("Click to search")
-                                                                .font(.system(size: 12, weight: .medium, design: .rounded))
-                                                        }
-                                                    }
-                                                    .frame(minWidth:0, maxWidth: .infinity, minHeight: 80, maxHeight: 80)
-                                                    .background(.white)
-                                                    .addBorder(Color.gray, width: 2, cornerRadius: 10)
+                                                    RoutePointButton(source: $routeArray[0])
+                                                    RoutePointButton(source: $routeArray[1])
                                                 }
                                                 .foregroundColor(.gray)
                                                 .padding(.horizontal, 15)
@@ -260,58 +227,18 @@ struct FlightView: View {
                                         ForEach(0 ..< multiCityRouteCount, id:\.self) { i in
                                             VStack {
                                                 HStack(spacing: 10) {
-                                                    Button {
-                                                        selectedModel = RandomModel(title:"source-\(i)", iata: routeArray[i].iata)
-                                                    } label: {
-                                                        VStack(alignment:.leading, spacing: 5){
-                                                            Text("From")
-                                                                .font(.system(size: 14, weight: .medium, design: .rounded))
-                                                            Text(routeArray[i].iata)
-                                                                .font(.system(size: 16, weight: .heavy, design: .rounded))
-                                                                .foregroundColor(.black)
-                                                            Text("Click to search")
-                                                                .font(.system(size: 12, weight: .medium, design: .rounded))
-                                                        }
-                                                        .padding(5)
-                                                    }
-                                                    .frame(minWidth:0, maxWidth: .infinity,minHeight: 80, maxHeight: 80)
-                                                    .background(.white)
-                                                    .addBorder(Color.gray, width: 2, cornerRadius: 10)
-                                                    
-                                                    Button {
-                                                        selectedModel = RandomModel(title:"source-\(i+1)", iata: routeArray[i+1].iata)
-                                                    } label: {
-                                                        VStack(alignment:.leading, spacing: 5){
-                                                            Text("To")
-                                                                .font(.system(size: 14, weight: .medium, design: .rounded))
-                                                            Text(routeArray[i+1].iata)
-                                                                .font(.system(size: 16, weight: .heavy, design: .rounded))
-                                                                .foregroundColor(.black)
-                                                            Text("Click to search")
-                                                                .font(.system(size: 12, weight: .medium, design: .rounded))
-                                                        }
-                                                    }
-                                                    .frame(minWidth:0, maxWidth: .infinity, minHeight: 80, maxHeight: 80)
-                                                    .background(.white)
-                                                    .addBorder(Color.gray, width: 2, cornerRadius: 10)
+                                                    RoutePointButton(source: $routeArray[i])
+                                                    RoutePointButton(source: $routeArray[i+1])
                                                 }
                                                 .foregroundColor(.gray)
                                                 .padding(.horizontal, 15)
                                                 
                                                 HStack {
-                                                    Button {
-                                                        if multiCityRouteCount > 2 {
-                                                            multiCityRouteCount -= 1
-                                                            self.bgHeight = bgHeight - Double(self.multiCityRouteCount) * 40.0
-                                                            if self.routeArray.count > 1 {
-                                                                self.routeArray.removeLast()
-                                                                self.routeDate.removeLast()
-                                                            }
-                                                            
-                                                        }
-                                                    } label: {
-                                                        Text("Remove")
-                                                            .foregroundColor(Color.red)
+                                                    if i > 1 {
+                                                    Button("Remove") {
+                                                        routePathUpdate(isIncrease: true)
+                                                    }
+                                                    .foregroundColor(Color.red)
                                                     }
                                                     DatePicker("Departure Time", selection: $routeDate[i], in: Date()..., displayedComponents: .date)
                                                         .padding(.leading, 50)
@@ -321,55 +248,25 @@ struct FlightView: View {
                                                         .background(.white)
                                                         .foregroundColor(Color.black)
                                                 }
+                                                .padding(.horizontal, 10)
                                                 
                                             }
-                                            
-    //                                        OneWayRoute(source: self.$routeArray[i], destination: self.$routeArray[i+1], selectedDate: self.$routeDate[i])
                                         }
-    //                                    if isMultiCity {
-    //                                                                ForEach(0 ..< multiCityRouteCount, id:\.self) { i in
-    //                                                                    //RouteView(route: $multiCityRoutes[i])
-    //                                                                    OneWayRoute(source: self.$routeArray[i], destination: self.$routeArray[i+1], selectedDate: self.$routeDate[i])
-    //                                                                }
-                                        //
-                                        //                            HStack {
-                                        //                                Button {
-                                        //                                    if multiCityRouteCount < 4 {
-                                        //                                        multiCityRouteCount += 1
-                                        //                                        let lastOne = AirportData(name: "Aasiaat", city: "Aasiaat", country:"Greenland", iata: "JEG")
-                                        //                                        self.routeArray.append(lastOne)
-                                        //                                        let oneWayDate = Date()
-                                        //                                        self.routeDate.append(oneWayDate)
-                                        //                                    }
-                                        //                                } label: {
-                                        //                                    Label("Add More Trip", systemImage: "plus.square")
-                                        //                                }
-                                        //
-//                                                                        if multiCityRouteCount > 1 {
-//                                                                            Button {
-//                                                                                if multiCityRouteCount > 1 {
-//                                                                                    multiCityRouteCount -= 1
-//                                                                                    if self.routeArray.count > 1 {
-//                                                                                        self.routeArray.removeLast()
-//                                                                                        self.routeDate.removeLast()
-//                                                                                    }
-//                                                                                }
-//                                                                            } label: {
-//                                                                                Label("Remove Trip", systemImage: "minus.square")
-//                                                                            }
-//                                                                        }
-                                        //                            }
-                                        //                        }
+    
                                     }
                                     //Row-Last Row for Cabin, passenger and Go Btn
                                     HStack(spacing: 5) {
+                                        //SearchFilterButton()
                                         Button {
                                             showOptionModal = true
                                         } label: {
                                             VStack(alignment:.leading, spacing: 5){
                                                 Text("TRAVEL, CLASS")
+                                                    .font(.system(size: 14, weight: .medium, design: .rounded))
                                                 Text("\(adults+childs+infants) Traveler")
+                                                    .font(.system(size: 16, weight: .heavy, design: .rounded))
                                                 Text(cabinClass)
+                                                    .font(.system(size: 14, weight: .medium, design: .rounded))
                                             }
                                             .padding(5)
                                         }
@@ -392,133 +289,6 @@ struct FlightView: View {
                                     .padding(.horizontal, 15)
                                 }
                             }
-                            
-                            
-    //                        if isOneWay {
-    //                            if routeArray.count == 2 {
-    //                                OneWayRoute(source: $routeArray[0], destination: $routeArray[1], selectedDate: $routeDate[0])
-    //                            }
-    //                        }
-    //                        if isRoundTrip {
-    //                            if routeArray.count == 2 {
-    //                                OneWayRoute(source: self.$routeArray[0], destination: self.$routeArray[1], selectedDate: self.$routeDate[0])
-    //                                OneWayRoute(source: self.$routeArray[1], destination: self.$routeArray[0], selectedDate: self.$routeDate[1])
-    //                            }
-    //                        }
-    //                        if isMultiCity {
-    //                            ForEach(0 ..< multiCityRouteCount, id:\.self) { i in
-    //                                //RouteView(route: $multiCityRoutes[i])
-    //                                OneWayRoute(source: self.$routeArray[i], destination: self.$routeArray[i+1], selectedDate: self.$routeDate[i])
-    //                            }
-    //
-    //                            HStack {
-    //                                Button {
-//                                        if multiCityRouteCount < 4 {
-//                                            multiCityRouteCount += 1
-//                                            let lastOne = AirportData(name: "Aasiaat", city: "Aasiaat", country:"Greenland", iata: "JEG")
-//                                            self.routeArray.append(lastOne)
-//                                            let oneWayDate = Date()
-//                                            self.routeDate.append(oneWayDate)
-//                                        }
-    //                                } label: {
-    //                                    Label("Add More Trip", systemImage: "plus.square")
-    //                                }
-    //
-    //                                if multiCityRouteCount > 1 {
-    //                                    Button {
-    //                                        if multiCityRouteCount > 1 {
-    //                                            multiCityRouteCount -= 1
-    //                                            if self.routeArray.count > 1 {
-    //                                                self.routeArray.removeLast()
-    //                                                self.routeDate.removeLast()
-    //                                            }
-    //                                        }
-    //                                    } label: {
-    //                                        Label("Remove Trip", systemImage: "minus.square")
-    //                                    }
-    //                                }
-    //                            }
-    //                        }
-    //
-    //                        VStack(spacing:0) {
-    //                            Divider()
-    //                                .frame(height: 1)
-    //                                .background(Color.red)
-    //                            HStack(alignment: .center, spacing:0) {
-    //                                //firstDiv
-    //                                CustomerCountView(title: "Adults", customerCount: $adults, maxNumber: 8){ count in
-    //                                    adults = count
-    //                                    if adults < infants {
-    //                                        infants = adults
-    //                                    }
-    //                                }
-    //                                Divider()
-    //                                    .frame(width: 1)
-    //                                    .background(Color.red)
-    //                                //MiddleDiv
-    //                                CustomerCountView(title: "Childs", customerCount: $childs, maxNumber: 5){ count in
-    //                                    childs = count
-    //                                }
-    //
-    //                                Divider()
-    //                                    .frame(width: 1)
-    //                                    .background(Color.red)
-    //                                //LaseDiv
-    //                                CustomerCountView(title: "Infants", customerCount: $infants, maxNumber: 8){ count in
-    //                                    infants = count
-    //                                    if infants > adults {
-    //                                        adults = infants
-    //                                    }
-    //                                }
-    //                            }
-    //                            .frame(height: 130)
-    //                            Divider()
-    //                                .frame(height: 1)
-    //                                .background(Color.red)
-    //                        }
-                            //: CabinClass
-    //                        ScrollView([], showsIndicators: false, content: {
-    //                            LazyHGrid(rows: gridLayout, alignment: .center, spacing: columnSpacing, pinnedViews: [], content: {
-    //
-    //                                ForEach(cabinClassList, id: \.self) { cabinName in
-    //                                    CabinSegmentedView(cabinSelected: $cabinClass, name: cabinName)
-    //                                }
-    //                            })//: GRID
-    //                            .frame(width:10, height: 10)
-    //    //                        .cornerRadius(5)
-    //
-    //                        })//: SCROLL
-    //                        .frame(maxWidth: .infinity, alignment: .trailing)
-    //                        .frame(height:60)
-    //                        .background(Color(red: 249/255, green: 228/255, blue: 209/255))
-                            
-                            //:is Direct Flight
-    //                        HStack {
-    //            //                    Toggle(isOn: $isDirectFlight) {
-    //            //                        //
-    //            //                    }.padding()
-    //                            Toggle("Direct Flight", isOn: $isDirectFlight)
-    //                                .padding()
-    //            //                    Text("Direct Flight")
-    //            //                        .font(.title)
-    //            //                        .foregroundColor(Color.black)
-    //            //                    Spacer()
-    //                        }
-    //                        .background(isDirectFlight ? Color.orange : Color(red: 249/255, green: 228/255, blue: 209/255))
-                            
-                            //: Search Button
-    //                        VStack {
-    //                            Button {
-    //                                self.searchFlight()
-    //                            } label: {
-    //                                Text("GO!")
-    //                            }
-    //                            .frame(width: 160, height: 80, alignment: .center)
-    //                            .font(.system(size: 24, weight:.heavy))
-    //                            .foregroundColor(.white)
-    //                            .background(RoundedRectangle(cornerRadius: 15)
-    //                                .fill(blueGradient))
-    //                        }
                         }
                         .frame(height: bgHeight)
                         .padding(10)
@@ -535,31 +305,9 @@ struct FlightView: View {
                             .padding(10)
 //                            .offset(y: 60)
                     }
+                    .offset(y: 50)
                     .clipped()
-//                    .frame(height: bgHeight)
-                    
-                    
                 }
-                .sheet(item: $selectedModel) { model in
-                    AirportList(selectedModel:model) { airport in
-                        if (selectedModel?.title == "source-0") {
-                            routeArray[0] = airport
-                            print("source=\(airport)")
-                        } else if (selectedModel?.title == "source-1") {
-                            routeArray[1] = airport
-                            print("Destination=\(airport)")
-                        }
-                        else if (selectedModel?.title == "source-2") {
-                            routeArray[2] = airport
-                            print("Destination=\(airport)")
-                        }
-                        else if (selectedModel?.title == "source-3") {
-                            routeArray[3] = airport
-                            print("Destination=\(airport)")
-                        }
-                    }
-                }
-                
                 
                 SearchOptionModal(isShowing:$showOptionModal,
                                   adults: $adults,
@@ -582,6 +330,18 @@ struct FlightView: View {
     
     private var axes: Axis.Set {
         return shouldScroll ? .vertical : []
+    }
+        
+    func routePathUpdate(isIncrease: Bool) {
+        if multiCityRouteCount > 2 {
+            multiCityRouteCount -= 1
+            self.bgHeight = bgHeight - Double(self.multiCityRouteCount) * 40.0
+            if self.routeArray.count > 1 {
+                self.routeArray.removeLast()
+                self.routeDate.removeLast()
+            }
+            
+        }
     }
     
     func resetView() {
