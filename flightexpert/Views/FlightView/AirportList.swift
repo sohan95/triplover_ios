@@ -10,8 +10,6 @@ import SwiftUI
 struct AirportList: View {
     
     @Environment(\.presentationMode) var presentationMode
-    var selectedModel: RandomModel
-    
     typealias Action = (AirportData) -> Void
     var action: Action?
     
@@ -32,52 +30,13 @@ struct AirportList: View {
                 }), id: \.self) { airport in
                     //Text(airport.iata)
                     SelectionRow(airport: airport, selectedAirport: $selectedAirport) {airport in
-                            print(airport)
-                            DismissSheet()
-                        }
+                        print(airport)
+                        DismissSheet()
+                    }
                 }
             }
             .listStyle(GroupedListStyle())
         }
-
-//        VStack {
-//            HStack{
-//                Button {
-//                    presentationMode.wrappedValue.dismiss()
-//                } label: {
-//                    Image(systemName: "xmark")
-//                        .foregroundColor(.red)
-//                        .font(.system(size: 25))
-//                }
-//                Spacer()
-//
-//                Text("ABCD")
-//            }
-//            .padding()
-//            List(searchResults, id:\.self) { airport in
-//                SelectionRow(airport: airport, selectedAirport: $selectedAirport) {airport in
-//                        print(airport)
-//                        DismissSheet()
-//                    }
-//            }
-//            .searchable(text: $searchText)
-//        }
-                
-        //                .padding(.top, 10)
-                
-//                .navigationTitle("\(selectedModel.title) Airports")
-//                .navigationBarItems(
-//                    leading: Button(action: {
-//                        presentationMode.wrappedValue.dismiss()
-//                    }, label: {
-//                        Image(systemName: "xmark")
-//                            .foregroundColor(.white)
-//                            .font(.system(size: 25))
-//                    })
-//                )
-//            }
-//        }
-        
     }
     
     var searchResults: [AirportData] {
@@ -106,12 +65,12 @@ struct AirportList: View {
     }
 }
 
-struct AirportList_Previews: PreviewProvider {
-    static var previews: some View {
-        AirportList(selectedModel: RandomModel(title: "source", iata: "BAB"))
-        //        AirportList(selectedAirport: .constant(AirportData(name: "Sylhet", city:"Sylhet", country: "Bangladesh", iata: "SLT")))
-    }
-}
+//struct AirportList_Previews: PreviewProvider {
+//    static var previews: some View {
+//        AirportList(selectedModel: RandomModel(title: "source", iata: "BAB"))
+//        //        AirportList(selectedAirport: .constant(AirportData(name: "Sylhet", city:"Sylhet", country: "Bangladesh", iata: "SLT")))
+//    }
+//}
 
 struct SearchBar: View {
     
