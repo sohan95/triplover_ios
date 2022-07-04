@@ -30,6 +30,20 @@ class FlightSearchModel: ObservableObject {
 //    @Published var multiCityRoute:[AirportData] = []
     @Published var searchFlighRequest: SearchFlighRequest?
     
+    var flightRouteTypes = ["One-Way" ,"Round-Trip", "Multi-City"]
+    
+    var isOneWay: Bool {
+        return flightRouteType == flightRouteTypes[0]
+    }
+    
+    var isRoundTrip: Bool {
+        return flightRouteType == flightRouteTypes[1]
+    }
+    
+    var isMultiCity: Bool {
+        return flightRouteType == flightRouteTypes[2]
+    }
+    
     
     
     func setOrigin(direction: Direction) {

@@ -51,9 +51,6 @@ struct FlightView: View {
     var flightRouteTypes = ["One-Way" ,"Round-Trip", "Multi-City"]
     var cabinClassList = ["Economy" ,"PremiumEconomy", "Business", "First", "PremiumFirst"]
     
-//    @State var journeyDate: Date
-//    @State var returnDate: Date
-    
     @State var typeSelected: String = "One-Way"
     
     private var isOneWay: Bool {
@@ -389,16 +386,19 @@ struct FlightView: View {
         var routeArrayObj = [Route]()
         
         if isOneWay {
+            flightSearchModel.flightRouteType = flightRouteTypes[0]
             let oneWayRoute: Route = Route(origin: routeArray[0].iata, destination: routeArray[1].iata, departureDate: getDateString(date: routeDate[0]))
             routeArrayObj.append(oneWayRoute)
             
 //            let oneWayRoute1: Route = Route(origin: "DAC", destination: "CGP", departureDate:"2022-06-16")
         } else if isRoundTrip {
+            flightSearchModel.flightRouteType = flightRouteTypes[1]
             let oneWayRoute: Route = Route(origin: routeArray[0].iata, destination: routeArray[1].iata, departureDate: getDateString(date: routeDate[0]))
             let twoWayRoute: Route = Route(origin: routeArray[1].iata, destination: routeArray[0].iata, departureDate: getDateString(date: routeDate[1]))
             routeArrayObj.append(oneWayRoute)
             routeArrayObj.append(twoWayRoute)
         } else if isMultiCity {
+            flightSearchModel.flightRouteType = flightRouteTypes[2]
             for n in 0..<multiCityRouteCount {
                 let oneWayRoute: Route = Route(origin: routeArray[n].iata, destination: routeArray[n+1].iata, departureDate: getDateString(date: routeDate[n]))
                 routeArrayObj.append(oneWayRoute)
@@ -407,8 +407,10 @@ struct FlightView: View {
         
         let requestBody:SearchFlighRequest = SearchFlighRequest(routes: routeArrayObj, adults: adults, childs: childs, infants: infants, cabinClass: 1, preferredCarriers: [], prohibitedCarriers: [], childrenAges: [])
         
-        flightSearchModel.flightRouteType = flightRouteTypes[0]
+        //Save SearchType and others
+        
         flightSearchModel.searchFlighRequest = requestBody
+        
         flightSearchModel.getAirSearchResponses(requestBody: requestBody)
         
 //        let oneWayRoute: Route = Route(origin: "DAC", destination: "CGP", departureDate:"2022-06-16")
@@ -418,7 +420,7 @@ struct FlightView: View {
 //        flightSearchModel.getAirSearchResponses(requestBody: requestBody)
     }
     
-    func searchFlight2() {
+    func searchFlightNotUsed() {
         isSearching = true
 //        let oneWayRoute: Route = Route(origin: oneWaySource!.iata, destination: oneWayDestin!.iata, departureDate: getDateString(date: oneWayDate))
         let oneWayRoute: Route = Route(origin: "DAC", destination: "CGP", departureDate:"2022-06-16")
