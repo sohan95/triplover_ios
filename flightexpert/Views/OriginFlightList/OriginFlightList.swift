@@ -10,9 +10,10 @@ import SwiftUI
 struct OriginFlightList: View {
     var title:String
     @ObservedObject var flightSearchModel: FlightSearchModel
-    @State private var sheetMode: SheetMode = .none
     
-    @State private var isSelectBtnTapped: Bool = false
+//    @State private var sheetMode: SheetMode = .none
+    
+//    @State private var isSelectBtnTapped: Bool = false
     @State private var selection: String? = nil
     @State private var popUpTitle: String = "Close"
     
@@ -36,25 +37,26 @@ struct OriginFlightList: View {
                 .scaledToFill()
                 .edgesIgnoringSafeArea(.all)
             
-            NavigationLink(destination:TravelerDetails(flightSearchModel: flightSearchModel), tag: "TravelerDetails", selection: $flightSearchModel.selection) { EmptyView() }
-            NavigationLink(destination:SigninView(), tag: "SigninView", selection: $flightSearchModel.selection) { EmptyView() }
+//            NavigationLink(destination:TravelerDetails(flightSearchModel: flightSearchModel), tag: "TravelerDetails", selection: $flightSearchModel.selection) { EmptyView() }
+//            NavigationLink(destination:SigninView(), tag: "SigninView", selection: $flightSearchModel.selection) { EmptyView() }
+            NavigationLink(destination:RoutesConfirmView(flightSearchModel: flightSearchModel), tag: "RoutesConfirmView", selection: $flightSearchModel.selection) { EmptyView() }
             
             if !flightSearchModel.isSearching {
                 ScrollView {
                     VStack(spacing: 20) {
                         ForEach(flightSearchModel.forwardDirections, id: \.self) {direction in
-                            ListRow(direction: direction, isSelectBtnTapped: $isSelectBtnTapped) { directionResult in
+                            ListRow(direction: direction, isSelectBtnTapped: $flightSearchModel.isSelectBtnTapped) { directionResult in
                                 
                                 selectOriginFlight(direction: directionResult)
                                 //selectedDirectoin = directionResult
                                 //print(selectedDirectoin!)
-                                if isSelectBtnTapped {
-                                    popUpTitle = "Select"
-                                } else {
-                                    popUpTitle = "Close"
-                                }
-                                
-                                sheetMode = .half
+//                                if isSelectBtnTapped {
+//                                    popUpTitle = "Select"
+//                                } else {
+//                                    popUpTitle = "Close"
+//                                }
+                                flightSearchModel.selection = "RoutesConfirmView"
+                                //sheetMode = .half
                             }
                         }
                     }
@@ -92,10 +94,10 @@ struct OriginFlightList: View {
                     flightSearchModel.flightRouteType
                     flightSearchModel.getForwardDirection()
                 }
-                .onTapGesture {
-                    sheetMode = .none
-                }
-                
+//                .onTapGesture {
+//                    //sheetMode = .none
+//                }
+                /*
                 FlexibleSheet(sheetMode: $sheetMode) {
                     ZStack {
                         backgroundGradient
@@ -207,6 +209,7 @@ struct OriginFlightList: View {
                     }
                     
                 }
+                 */
             }
             else {
                 LoadingView()
@@ -220,37 +223,6 @@ struct OriginFlightList: View {
         flightSearchModel.setOrigin(direction: direction)
     }
     
-    func ConfirmAction() {
-        //self.rePriceService()
-        
-        if self.isSelectBtnTapped {
-            let isSignin = UserDefaults.standard.bool(forKey: "isSignin")
-            if isSignin {
-                self.rePriceService()
-//                flightSearchModel.selection = "UserForm"
-            } else {
-                flightSearchModel.selection = "SigninView"
-                //self.selection = "SigninView"
-                //self.rePriceService()
-            }
-        } else {
-            self.sheetMode = .none
-        }
-    }
-    
-    func CloseAction() {
-        self.sheetMode = .none
-    }
-    
-    func rePriceService() {
-        let segmentCodeRefs:[String?] = [
-            flightSearchModel.originDir?.segmentCodeRef!]
-        
-        let rePriceRequest: RePriceRequest = RePriceRequest(uniqueTransID: (flightSearchModel.originDir?.uniqueTransID)!, itemCodeRef: (flightSearchModel.originDir?.itemCodeRef)!, taxRedemptions: [], segmentCodeRefs: segmentCodeRefs)
-        
-        //flightSearchModel.isSearching = true
-        flightSearchModel.rePriceStatus(requestBody: rePriceRequest)
-    }
 }
 
 struct OriginFlightList_Previews: PreviewProvider {

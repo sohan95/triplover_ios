@@ -19,10 +19,12 @@ class FlightSearchModel: ObservableObject {
     
     @Published var originDir: Direction? = nil
     @Published var destinationDir: Direction? = nil
+    @Published var selectedDirectionList: [Direction] = []
     
     //RePrice Response
     @Published var rePriceResponse: RePriceResponse = RePriceResponse()
     @Published var selection: String? = nil
+    @Published var isSelectBtnTapped: Bool = false
     
     @Published var flightRouteType: String?
 //    @Published var oneWayRoute:[AirportData] = []
@@ -82,6 +84,9 @@ class FlightSearchModel: ObservableObject {
                 var tempDir: Direction = direction
                 tempDir.uniqueTransID = airResponse.uniqueTransID
                 tempDir.itemCodeRef = airResponse.itemCodeRef
+                
+                tempDir.bookingComponents = airResponse.bookingComponents
+                
                 tempDir.segmentCodeRef = direction.segments![0].segmentCodeRef
                 return tempDir
             }
