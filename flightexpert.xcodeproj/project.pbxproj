@@ -75,6 +75,8 @@
 		1FC61D0B2847795D00956952 /* AirportData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC61D0A2847795D00956952 /* AirportData.swift */; };
 		1FC7DD962865C66B00F808A5 /* SplashScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC7DD952865C66B00F808A5 /* SplashScreen.swift */; };
 		1FCA2E20286F0E5700526295 /* SearchOptionModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCA2E1F286F0E5700526295 /* SearchOptionModal.swift */; };
+		1FD1D9B028733EA8008EB7AC /* RoutesConfirmView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD1D9AF28733EA8008EB7AC /* RoutesConfirmView.swift */; };
+		1FD1D9B228736E69008EB7AC /* FlightDetailsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD1D9B128736E69008EB7AC /* FlightDetailsCell.swift */; };
 		1FF41DF82824DD3100755A79 /* flightexpertApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FF41DF72824DD3100755A79 /* flightexpertApp.swift */; };
 		1FF41DFA2824DD3100755A79 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FF41DF92824DD3100755A79 /* ContentView.swift */; };
 		1FF41DFC2824DD3400755A79 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1FF41DFB2824DD3400755A79 /* Assets.xcassets */; };
@@ -187,6 +189,8 @@
 		1FC61D0A2847795D00956952 /* AirportData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AirportData.swift; sourceTree = "<group>"; };
 		1FC7DD952865C66B00F808A5 /* SplashScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreen.swift; sourceTree = "<group>"; };
 		1FCA2E1F286F0E5700526295 /* SearchOptionModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchOptionModal.swift; sourceTree = "<group>"; };
+		1FD1D9AF28733EA8008EB7AC /* RoutesConfirmView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutesConfirmView.swift; sourceTree = "<group>"; };
+		1FD1D9B128736E69008EB7AC /* FlightDetailsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlightDetailsCell.swift; sourceTree = "<group>"; };
 		1FF41DF42824DD3100755A79 /* flightexpert.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = flightexpert.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1FF41DF72824DD3100755A79 /* flightexpertApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = flightexpertApp.swift; sourceTree = "<group>"; };
 		1FF41DF92824DD3100755A79 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -441,6 +445,7 @@
 		1FB728BE2834A606007A6DA5 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				1FD1D9AE28733DC9008EB7AC /* RoutesConfirmView */,
 				1FF41DF72824DD3100755A79 /* flightexpertApp.swift */,
 				1FF41DF92824DD3100755A79 /* ContentView.swift */,
 				1F23A2BA286B642E007438C7 /* LoadingView */,
@@ -515,6 +520,15 @@
 				1FC7DD952865C66B00F808A5 /* SplashScreen.swift */,
 			);
 			path = SplashScreen;
+			sourceTree = "<group>";
+		};
+		1FD1D9AE28733DC9008EB7AC /* RoutesConfirmView */ = {
+			isa = PBXGroup;
+			children = (
+				1FD1D9AF28733EA8008EB7AC /* RoutesConfirmView.swift */,
+				1FD1D9B128736E69008EB7AC /* FlightDetailsCell.swift */,
+			);
+			path = RoutesConfirmView;
 			sourceTree = "<group>";
 		};
 		1FF41DEB2824DD3100755A79 = {
@@ -767,6 +781,7 @@
 				1FB97C53285621190099D690 /* DropDownView.swift in Sources */,
 				1F8FCA302831D66800508BE1 /* AppViewModel.swift in Sources */,
 				1FBAE03F28468AC90088269B /* RegisterRequest.swift in Sources */,
+				1FD1D9B028733EA8008EB7AC /* RoutesConfirmView.swift in Sources */,
 				1FBAE0432846992D0088269B /* LoginRequest.swift in Sources */,
 				1F8FCA2A2831C6AD00508BE1 /* SigninView.swift in Sources */,
 				1FB67AFF284870E40047C651 /* Segment.swift in Sources */,
@@ -774,6 +789,7 @@
 				1FB67B04284870E40047C651 /* MinMaxPrice.swift in Sources */,
 				1FB9918F283DB6E40051546E /* FlightView.swift in Sources */,
 				1FB67B01284870E40047C651 /* BookingComponents.swift in Sources */,
+				1FD1D9B228736E69008EB7AC /* FlightDetailsCell.swift in Sources */,
 				1F95F0B928502F0600BF85F0 /* FlightSearchModel.swift in Sources */,
 				1FB67AFE284870E40047C651 /* FlightSearchedDataModel.swift in Sources */,
 				1FB09D56284DAD87003EA711 /* FlightDetailsView.swift in Sources */,

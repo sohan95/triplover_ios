@@ -26,6 +26,7 @@ struct Direction : Codable, Hashable  {
     var uniqueTransID : String?
     var itemCodeRef : String?
     var segmentCodeRef: String?
+    var bookingComponents : [BookingComponent]?
     
 //    //For UI purpose
 //    var isSelected: Bool = false

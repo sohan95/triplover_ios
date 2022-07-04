@@ -294,13 +294,13 @@ struct FlightView: View {
                                 .fill(Color.white)
                             .padding([.leading, .trailing], 10)
                         )
-//                        .offset(y: 60)
+                        
                         Image("image_2")
                             .resizable()
                             .scaledToFit()
                             .frame(maxWidth: .infinity)
                             .padding(10)
-//                            .offset(y: 60)
+                        
                     }
                     .offset(y: 50)
                     .clipped()
@@ -495,4 +495,3 @@ extension View {
               .overlay(roundedRect.strokeBorder(content, lineWidth: width))
      }
  }
-
