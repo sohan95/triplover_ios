@@ -58,10 +58,35 @@ struct OriginFlightList: View {
                             }
                         }
                     }
+                    .offset(y: 64)
+                    .clipped()
                 }
                 .navigationTitle("Flight")
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationBarBackButtonHidden(true)
+                .toolbar(){
+                    ToolbarItem(placement: .principal) {
+                        
+                        HStack(spacing: 5){
+                            if let routes = flightSearchModel.searchFlighRequest!.routes {
+                                ForEach(0 ..< routes.count, id:\.self) { i in
+                                    Text("\(routes[i].origin) to \(routes[i].destination)").background(.gray)
+                                }
+                            }
+//                            if flightSearchModel.isMultiCity {
+//                                if let route = flightSearchModel.searchFlighRequest!.routes[0] {
+//                                    Text("\(route.origin) to \(route.destination)")
+//                                }
+//                                if let route1 = flightSearchModel.searchFlighRequest!.routes[1] {
+//                                    Text("\(route1.origin) to \(route1.destination)")
+//                                }
+//                                if let route2 = flightSearchModel.searchFlighRequest!.routes[2] {
+//                                    Text("\(route2.origin) to \(route2.destination)")
+//                                }
+//                            }
+                        }
+                    }
+                }
                 .navigationBarItems(leading: btnBack)
                 .onAppear() {
                     flightSearchModel.flightRouteType
