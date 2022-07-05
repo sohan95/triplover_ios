@@ -21,8 +21,26 @@ struct FlightDetailsCell: View {
                 .foregroundColor(.blue)
                 .padding(.bottom, 10)
                 HStack(spacing: 15) {
-                    Image(systemName: "airplane.departure")
-                        .foregroundColor(.red)
+                    AsyncImage(
+                        url:  URL(string: "\(ROOT_URL_THUMB)\(selected.platingCarrierCode!).png"),
+                        transaction: Transaction(animation: .easeInOut)
+                    ) { phase in
+                        switch phase {
+                        case .empty:
+                            ProgressView()
+                        case .success(let image):
+                            image
+                                .resizable()
+                                .transition(.scale(scale: 0.1, anchor: .center))
+                        case .failure:
+                            Image(systemName: "wifi.slash")
+                        @unknown default:
+                            EmptyView()
+                        }
+                    }
+                    .frame(width: 25, height: 25)
+                    .background(Color.gray)
+                    .clipShape(Circle())
                     VStack{
                         Text("\(selected.segments?[0].details?[0].departure ?? "")")
                         Text("\(selected.fromAirport!)")
@@ -34,7 +52,7 @@ struct FlightDetailsCell: View {
                     Text("\(selected.segments?[0].serviceClass ?? "")")
                 }
                 HStack(spacing: 15) {
-                    Image(systemName: "airplane.departure")
+                    Image(systemName: "person")
                         .foregroundColor(.gray)
                     Text("\(selected.platingCarrierCode!)-\(selected.segments?[0].flightNumber ?? "")")
                 }
@@ -44,7 +62,7 @@ struct FlightDetailsCell: View {
                     Text("\(selected.segments?[0].details?[0].travelTime ?? "")")
                 }
                 HStack(spacing: 15) {
-                    Image(systemName: "airplane.departure")
+                    Image(systemName: "airplane.arrival")
                         .foregroundColor(.gray)
                     VStack{
                         Text("\(selected.segments?[0].details?[0].arrival ?? "")")

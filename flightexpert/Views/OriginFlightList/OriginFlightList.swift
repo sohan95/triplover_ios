@@ -91,7 +91,7 @@ struct OriginFlightList: View {
                 }
                 .navigationBarItems(leading: btnBack)
                 .onAppear() {
-                    flightSearchModel.flightRouteType
+                    //flightSearchModel.flightRouteType
                     flightSearchModel.getForwardDirection()
                 }
 //                .onTapGesture {

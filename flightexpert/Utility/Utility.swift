@@ -48,5 +48,5 @@ let tabBarColor = Color(hex: "#6CB6F6")
 // Background Image
 let BackgroundImage = Image("home_background")
 let SplashScreenBg = Image("splash_screen")
-
+let ROOT_URL_THUMB = "https://tbbd-flight.s3.ap-southeast-1.amazonaws.com/airlines-logo/"
 
