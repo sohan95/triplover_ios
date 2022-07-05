@@ -23,31 +23,52 @@ struct ListRow: View {
             //:- Top
             HStack(spacing: 20) {
                 VStack {
-                    Image("biman-bd-icon")
-                        .resizable()
-                        .aspectRatio(1.0, contentMode: .fit)
-                        .frame(width: 40)
+                    
+                    AsyncImage(
+                        url:  URL(string: "\(ROOT_URL_THUMB)\(direction.platingCarrierCode!).png"),
+                        transaction: Transaction(animation: .easeInOut)
+                    ) { phase in
+                        switch phase {
+                        case .empty:
+                            ProgressView()
+                        case .success(let image):
+                            image
+                                .resizable()
+                                .transition(.scale(scale: 0.1, anchor: .center))
+                        case .failure:
+                            Image(systemName: "wifi.slash")
+                        @unknown default:
+                            EmptyView()
+                        }
+                    }
+                    .frame(width: 40, height: 40)
+                    .background(Color.gray)
+                    .clipShape(Circle())
 
-                    Text("Bangladesh Biman")
+//                    Text("Bangladesh Biman")
+//                        .font(.system(size: 12))
+                    Text(direction.platingCarrierName!)
                         .font(.system(size: 12))
-                    //Text(direction.platingCarrierName!)
-                        .font(.system(size: 14))
                 }
                 .frame( height: 60)
                 Spacer()
                 
                 VStack{
-                    Text("21:35")
-                    Text("DAC")
-                    //Text(direction.from!)
+//                    Text("21:35")
+                    Text("\(getTimeString(dateStr: direction.segments?[0].details?[0].departure ?? ""))")
+//                    Text("DAC")
+                    Text(direction.from!)
                 }
                 .frame(width:40)
                 .font(.system(size: 12))
                 
                 VStack {
                     HStack {
-                        Text("9 Hrs : 50 Mins").font(.system(size: 8))
-                            .lineLimit(1)
+                        //Text("9 Hrs : 50 Mins").font(.system(size: 8))
+                         //   .lineLimit(1)
+                        Text("\(direction.segments?[0].details?[0].travelTime ?? "")")
+                            .font(.system(size: 8))
+                                .lineLimit(1)
                         Image(systemName: "airplane.departure")
                             .foregroundColor(.red)
                     }
@@ -62,19 +83,19 @@ struct ListRow: View {
                                     .frame(width: 100, height: 2)
                     }
                     .frame(height:10)
-                    
-                    
-                    Text("No Stops").font(.system(size: 11))
-    //                            if direction.stops == 0 {
-    //                                Text("No Stops").font(.system(size: 11))
-    //                            } else {
-    //                                Text("direction.stop").font(.system(size: 11))
-    //                            }
+                    //Text("No Stops").font(.system(size: 11))
+                    if direction.stops == 0 {
+                        Text("No Stops").font(.system(size: 11))
+                    } else {
+                        Text("direction.stop").font(.system(size: 11))
+                    }
                     
                 }
                 VStack {
-                    Text("21:35")
-                    Text("CTT")//Text(direction.to!)
+//                    Text("21:35")
+                    //Text("CTT")
+                    Text("\(getTimeString(dateStr: direction.segments?[0].details?[0].arrival ?? ""))")
+                    Text(direction.to!)
                 }
                 .frame(width:40)
                 .font(.system(size: 13))
@@ -85,9 +106,13 @@ struct ListRow: View {
                 VStack{
                     HStack{
                         Text("BDT")
-                        Text("3335")
+                        //Text("3335")
+                        Text(": \((direction.bookingComponents?[0].basePrice)!.removeZerosFromEnd())")
+                            
                     }
+                    .font(.system(size: 14, weight: .medium))
                     Text("Refundable")
+                        .font(.system(size: 14, weight: .medium))
                 }
                 Spacer()
                 HStack {
@@ -155,6 +180,35 @@ struct ListRow: View {
             action(direction)
         }
         
+    }
+    
+    func getTimeString(dateStr: String) -> String {
+//        let string = "2022-07-30 18:00:00"
+
+        let dateFormatter = DateFormatter()
+        let tempLocale = dateFormatter.locale // save locale temporarily
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX") // set locale to reliable US_POSIX
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let date = dateFormatter.date(from: dateStr)!
+        dateFormatter.dateFormat = "HH:mm"
+        dateFormatter.locale = tempLocale // reset the locale
+        let dateString = dateFormatter.string(from: date)
+        print("EXACT_DATE : \(dateString)")
+        return dateString
+    }
+    
+    func getDateFromString(dateStr: String) -> Date {
+//        let isoDate = "2016-04-14T10:44:00+0000"
+//
+//          let dateFormatter = DateFormatter()
+//          dateFormatter.locale = Locale(identifier: "en_US_POSIX") // set locale to reliable US_POSIX
+//          dateFormatter.dateFormat = "h:mm a"
+//          let date = dateFormatter.date(from:isoDate)!
+        let dateFormatter = DateFormatter()
+
+        // Set Date Format
+        dateFormatter.dateFormat = "h:mm a"
+        return dateFormatter.date(from: dateStr)!
     }
     
 }

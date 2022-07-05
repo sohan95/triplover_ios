@@ -10,6 +10,7 @@ import SwiftUI
 struct RoutesConfirmView: View {
     @ObservedObject var flightSearchModel: FlightSearchModel
     @State var shouldScroll: Bool = true
+    @State var spaceValue: CGFloat = 100.0
     
     var body: some View {
         ZStack {
@@ -37,7 +38,7 @@ struct RoutesConfirmView: View {
                             Text("Price Details")
                                 .font(.system(size: 16, weight: .heavy, design: .rounded))
                                 .padding(.bottom,10)
-                            HStack(spacing: 100){
+                            HStack(spacing: spaceValue){
                                 VStack(alignment: .leading, spacing: 5) {
                                     Text("Base Price")
                                     Text("Tax")
@@ -56,12 +57,38 @@ struct RoutesConfirmView: View {
                             .font(.system(size: 14, weight: .semibold, design: .rounded))
                         }
                         .padding()
-                        Spacer()
+                        
+                        if flightSearchModel.isSelectBtnTapped {
+                            Button {
+                                self.ConfirmAction()
+                            } label: {
+                                HStack {
+                                    Text("CONFIRM")
+                                        .font(.system(size: 14, weight:.bold, design: .rounded))
+                                    Image(systemName: "chevron.right")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .font(.system(size: 10, weight:.semibold))
+                                }
+                                .frame(width: 120, height: 30)
+                                .foregroundColor(.white)
+                                .background(RoundedRectangle(cornerRadius: 7)
+                                .fill(blueGradient))
+                            }
+                            
+                        } else {
+                            Spacer()
+                        }
                     }
                     .frame(maxWidth:.infinity, minHeight: 150, maxHeight: 150)
                     .background(.secondary)
                     Spacer(minLength: 40)
                 }
+            }
+        }
+        .onAppear() {
+            if flightSearchModel.isSelectBtnTapped {
+                self.spaceValue = 60.0
             }
         }
     }
