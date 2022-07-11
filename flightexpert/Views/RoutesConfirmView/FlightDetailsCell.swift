@@ -8,71 +8,78 @@
 import SwiftUI
 
 struct FlightDetailsCell: View {
-    var selected:Direction
+    var direction: Direction
     
     var body: some View {
         
         HStack {
             VStack(alignment:.leading, spacing:10) {
-                HStack(spacing: 15) {
+                HStack(spacing: 20) {
                     Image(systemName: "airplane.departure")
-                    Text("\(selected.from!) - \(selected.to!)")
+                    Text("\(direction.from!) - \(direction.to!)")
                 }
                 .foregroundColor(.blue)
                 .padding(.bottom, 10)
                 HStack(spacing: 15) {
-                    AsyncImage(
-                        url:  URL(string: "\(ROOT_URL_THUMB)\(selected.platingCarrierCode!).png"),
-                        transaction: Transaction(animation: .easeInOut)
-                    ) { phase in
-                        switch phase {
-                        case .empty:
-                            ProgressView()
-                        case .success(let image):
-                            image
-                                .resizable()
-                                .transition(.scale(scale: 0.1, anchor: .center))
-                        case .failure:
-                            Image(systemName: "wifi.slash")
-                        @unknown default:
-                            EmptyView()
-                        }
-                    }
-                    .frame(width: 25, height: 25)
-                    .background(Color.gray)
-                    .clipShape(Circle())
-                    VStack{
-                        Text("\(selected.segments?[0].details?[0].departure ?? "")")
-                        Text("\(selected.fromAirport!)")
+//                    AsyncImage(
+//                        url:  URL(string: "\(ROOT_URL_THUMB)\(direction.platingCarrierCode!).png"),
+//                        transaction: Transaction(animation: .easeInOut)
+//                    ) { phase in
+//                        switch phase {
+//                        case .empty:
+//                            ProgressView()
+//                        case .success(let image):
+//                            image
+//                                .resizable()
+//                                .transition(.scale(scale: 0.1, anchor: .center))
+//                        case .failure:
+//                            Image(systemName: "wifi.slash")
+//                        @unknown default:
+//                            EmptyView()
+//                        }
+//                    }
+//                    .frame(width: 30, height: 30)
+//                    .background(Color.gray)
+//                    .clipShape(Circle())
+                    
+                    ImageUrlView(urlString: "\(ROOT_URL_THUMB)\(direction.platingCarrierCode!).png")
+                        .frame(width: 30, height: 30)
+                        .background(Color.gray)
+                        .clipShape(Circle())
+                    VStack(alignment: .leading, spacing: 2){
+                        Text("\(direction.segments?[0].details?[0].departure ?? "")")
+                        Text("\(direction.fromAirport!)")
                     }
                 }
-                HStack(spacing: 15) {
+                HStack(spacing: 20) {
                     Image(systemName: "airplane.departure")
                         .foregroundColor(.gray)
-                    Text("\(selected.segments?[0].serviceClass ?? "")")
+                    Text("\(direction.segments?[0].serviceClass ?? "")")
                 }
-                HStack(spacing: 15) {
+                HStack(spacing: 20) {
                     Image(systemName: "person")
                         .foregroundColor(.gray)
-                    Text("\(selected.platingCarrierCode!)-\(selected.segments?[0].flightNumber ?? "")")
+                    Text("\(direction.platingCarrierCode!)-\(direction.segments?[0].flightNumber ?? "")")
                 }
-                HStack(spacing: 15) {
+                HStack(spacing: 20) {
                     Image(systemName: "clock")
                         .foregroundColor(.gray)
-                    Text("\(selected.segments?[0].details?[0].travelTime ?? "")")
+                    Text("\(direction.segments?[0].details?[0].travelTime ?? "")")
                 }
-                HStack(spacing: 15) {
+                HStack(spacing: 20) {
                     Image(systemName: "airplane.arrival")
                         .foregroundColor(.gray)
-                    VStack{
-                        Text("\(selected.segments?[0].details?[0].arrival ?? "")")
-                        Text("\(selected.toAirport!)")
+                    VStack(alignment: .leading, spacing: 2){
+                        Text("\(direction.segments?[0].details?[0].arrival ?? "")")
+                        Text("\(direction.toAirport!)")
                     }
                 }
-                HStack(spacing: 15) {
+                HStack(spacing: 20) {
                     Image(systemName: "airplane.departure")
                         .foregroundColor(.gray)
-                    Text("\((selected.segments?[0].baggage?[0].amount)!.removeZerosFromEnd()) - \((selected.segments?[0].baggage?[0].units)!)")
+                    if let baggage = direction.segments?.first?.baggage?.first {
+                        Text("\((baggage.amount)!.removeZerosFromEnd()) - \((baggage.units)!)")
+                    }
                 }
                 
             }
@@ -81,7 +88,7 @@ struct FlightDetailsCell: View {
             .padding(20)
             Spacer()
         }
-        .font(.system(size: 13, weight: .medium, design: .rounded))
+        .font(.system(size: 15, weight: .medium, design: .rounded))
         .background(.white)
         .cornerRadius(10)
         .padding(.horizontal, 10)

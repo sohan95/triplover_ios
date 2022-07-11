@@ -50,3 +50,70 @@ let BackgroundImage = Image("home_background")
 let SplashScreenBg = Image("splash_screen")
 let ROOT_URL_THUMB = "https://tbbd-flight.s3.ap-southeast-1.amazonaws.com/airlines-logo/"
 
+func getTimeString(dateStr: String) -> String {
+//        let string = "2022-07-30 18:00:00"
+
+    let dateFormatter = DateFormatter()
+    let tempLocale = dateFormatter.locale // save locale temporarily
+    dateFormatter.locale = Locale(identifier: "en_US_POSIX") // set locale to reliable US_POSIX
+    dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+    let date = dateFormatter.date(from: dateStr)!
+    dateFormatter.dateFormat = "HH:mm"
+    dateFormatter.locale = tempLocale // reset the locale
+    let dateString = dateFormatter.string(from: date)
+    print("EXACT_DATE : \(dateString)")
+    return dateString
+}
+
+func getTimeStringWithTemplate(dateStr: String, template: String) -> String {
+//        let string = "2022-07-30 18:00:00"
+
+    let dateFormatter = DateFormatter()
+    let tempLocale = dateFormatter.locale // save locale temporarily
+    dateFormatter.locale = Locale(identifier: "en_US_POSIX") // set locale to reliable US_POSIX
+    dateFormatter.dateFormat = template
+    let date = dateFormatter.date(from: dateStr)!
+    dateFormatter.dateFormat = "HH:mm"
+    dateFormatter.locale = tempLocale // reset the locale
+    let dateString = dateFormatter.string(from: date)
+    print("EXACT_DATE : \(dateString)")
+    return dateString
+}
+
+func getDateStringWithTemplate(dateStr: String, template: String) -> String {
+//        let string = "2022-07-30 18:00:00"
+
+    let dateFormatter = DateFormatter()
+    let tempLocale = dateFormatter.locale // save locale temporarily
+    dateFormatter.locale = Locale(identifier: "en_US_POSIX") // set locale to reliable US_POSIX
+    dateFormatter.dateFormat = template
+    let date = dateFormatter.date(from: dateStr)!
+    dateFormatter.dateFormat = "MMM d, yyyy"
+    dateFormatter.locale = tempLocale // reset the locale
+    let dateString = dateFormatter.string(from: date)
+    print("EXACT_DATE : \(dateString)")
+    return dateString
+}
+
+func getDateString(dateStr: String) -> String {
+//        let string = "2022-07-30 18:00:00"
+
+    let dateFormatter = DateFormatter()
+    let tempLocale = dateFormatter.locale // save locale temporarily
+    dateFormatter.locale = Locale(identifier: "en_US_POSIX") // set locale to reliable US_POSIX
+    dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+    let date = dateFormatter.date(from: dateStr)!
+    dateFormatter.dateFormat = "MMM d, yyyy"
+    dateFormatter.locale = tempLocale // reset the locale
+    let dateString = dateFormatter.string(from: date)
+    print("EXACT_DATE : \(dateString)")
+    return dateString
+}
+
+//func getDateFromString(dateStr: String) -> Date {
+//    let dateFormatter = DateFormatter()
+//    // Set Date Format
+//    dateFormatter.dateFormat = "h:mm a"
+//    return dateFormatter.date(from: dateStr)!
+//}
+

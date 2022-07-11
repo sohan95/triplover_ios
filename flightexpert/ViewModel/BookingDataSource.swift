@@ -8,16 +8,16 @@
 import Foundation
 
 class BookingDataSource: ObservableObject {
-    @Published var bookingRequest:BookingRequest = BookingRequest()
+    //@Published var prepareBookingRequest:PrepareBookingRequest = PrepareBookingRequest()
     @Published var userDataList = [UserData]()
     
     @Published var bookingResponse: BookingResponse?
     @Published var isBooking: Bool = false
 
     
-    func postBookingData(requestBody:BookingRequest) {
+    func postBookingData(requestBody:PrepareBookingRequest) {
         self.isBooking = true
-        HttpUtility.shared.bookingService(bookingRequest: requestBody) { result in
+        HttpUtility.shared.prepareBooking(requestBody: requestBody) { result in
 
             DispatchQueue.main.async { [self] in
                 self.isBooking = false

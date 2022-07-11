@@ -290,6 +290,7 @@ struct UserFormView: View {
                                 TextField("Email", text: $passengerInfo.email)
                                     .padding(7)
                                     .background(Color.gray.opacity(0.3).cornerRadius(5))
+                                    .autocapitalization(.none)
                             }
                             
                             VStack(alignment: .leading) {

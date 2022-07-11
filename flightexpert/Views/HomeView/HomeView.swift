@@ -8,15 +8,19 @@
 import SwiftUI
 
 struct HomeView: View {
-    @EnvironmentObject var viewModel: AppViewModel
+    @EnvironmentObject var flightSearchModel: FlightSearchModel
     @State var showsAlert = false
     @State var selectedMenu: String = String()
     @State var selectedTab: String = String()
+    //@State private var selection: String? = nil
     let btnImgWidth: Double = 90.0
     let btnImgWidth2: Double = 20.0
     
     var body: some View {
         ZStack {
+            
+            //NavigationLink(destination:MyBooking(), tag: "MyBooking", selection: $selection) { EmptyView() }
+            
             VStack(spacing: 10) {
                 HStack {
                     NavigationLink {
@@ -126,6 +130,7 @@ struct HomeView: View {
             }
             .padding(.top, 120)
         }
+        .environmentObject(flightSearchModel)
         
     }
 }

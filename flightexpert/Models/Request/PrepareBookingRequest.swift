@@ -13,7 +13,7 @@ For support, please feel free to contact me at https://www.linkedin.com/in/syeda
 
 import Foundation
 
-struct BookingRequest : Codable {
+struct PrepareBookingRequest : Codable {
     struct PassengerInfoes : Codable {
         
         struct NameElement : Codable {

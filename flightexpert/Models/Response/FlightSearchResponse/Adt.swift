@@ -12,6 +12,7 @@ For support, please feel free to contact me at https://www.linkedin.com/in/syeda
 */
 
 import Foundation
+
 struct Adt : Codable {
 	let discountPrice : Double?
 	let ait : Double?

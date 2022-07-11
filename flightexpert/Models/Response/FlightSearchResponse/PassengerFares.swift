@@ -12,26 +12,41 @@ For support, please feel free to contact me at https://www.linkedin.com/in/syeda
 */
 
 import Foundation
+struct PassengerFare : Codable {
+    struct TaxesBreakdown : Codable {
+        var category : String?
+        var amount : Double
+    }
+    var discountPrice : Double
+    var ait : Double
+    var totalPrice : Double
+    var basePrice : Double
+    var equivalentBasePrice : Double
+    var taxes : Double
+    var serviceCharge : Double
+    var taxesBreakdown : [TaxesBreakdown]?
+}
+
 struct PassengerFares : Codable {
-	let adt : Adt?
-	let cnn : Cnn?
-	let inf : String?
-	let ins : String?
+	var adt : PassengerFare?
+    var cnn : PassengerFare?
+    var inf : PassengerFare?
+    var ins : PassengerFare?
 
-	enum CodingKeys: String, CodingKey {
-
-		case adt = "adt"
-		case cnn = "cnn"
-		case inf = "inf"
-		case ins = "ins"
-	}
-
-	init(from decoder: Decoder) throws {
-		let values = try decoder.container(keyedBy: CodingKeys.self)
-		adt = try values.decodeIfPresent(Adt.self, forKey: .adt)
-		cnn = try values.decodeIfPresent(Cnn.self, forKey: .cnn)
-		inf = try values.decodeIfPresent(String.self, forKey: .inf)
-		ins = try values.decodeIfPresent(String.self, forKey: .ins)
-	}
+//	enum CodingKeys: String, CodingKey {
+//
+//		case adt = "adt"
+//		case cnn = "cnn"
+//		case inf = "inf"
+//		case ins = "ins"
+//	}
+//
+//	init(from decoder: Decoder) throws {
+//		let values = try decoder.container(keyedBy: CodingKeys.self)
+//		adt = try values.decodeIfPresent(Adt.self, forKey: .adt)
+//		cnn = try values.decodeIfPresent(Cnn.self, forKey: .cnn)
+//		inf = try values.decodeIfPresent(String.self, forKey: .inf)
+//		ins = try values.decodeIfPresent(String.self, forKey: .ins)
+//	}
 
 }
