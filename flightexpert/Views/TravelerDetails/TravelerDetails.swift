@@ -9,8 +9,9 @@ import SwiftUI
 
 struct TravelerDetails: View {
     
-    @ObservedObject var flightSearchModel: FlightSearchModel
-    @StateObject var bookingDataSource = BookingDataSource()
+//    @ObservedObject var flightSearchModel: FlightSearchModel
+    //@StateObject var bookingDataSource = BookingDataSource()
+    @EnvironmentObject var flightSearchModel: FlightSearchModel
     
     @State var totalAdult: Int = 0
     @State var totalChild: Int = 0
@@ -74,7 +75,7 @@ struct TravelerDetails: View {
                         Spacer()
                         Button("Book and Continue") {
                             //Goto Pricing page
-                            BookAndContinue()
+                            PrepareBooking()
                         }
                         .font(.system(size: 16, weight:.bold, design: .monospaced))
                         .foregroundColor(.white)
@@ -98,7 +99,7 @@ struct TravelerDetails: View {
 //            }
             
             //initialize data
-            guard (flightSearchModel.rePriceResponse.item1?.passengerCounts .self) != nil else {
+            guard (flightSearchModel.rePriceResponse.item1?.passengerCounts) != nil else {
                 return
             }
             
@@ -137,30 +138,31 @@ struct TravelerDetails: View {
                 }
             }
         }
+        .environmentObject(flightSearchModel)
     }
     
-    func setPassengerInfo(userData: UserData) -> BookingRequest.PassengerInfoes {
-        let nameElement = BookingRequest.PassengerInfoes.NameElement(title: userData.title, firstName: userData.firstName, lastName: userData.lastName, middleName: userData.middleName)
-        let contactInfo = BookingRequest.PassengerInfoes.ContactInfo(email: userData.email, phone: userData.phone, phoneCountryCode: userData.phoneCountryCode, countryCode: userData.countryCode, cityName: userData.cityName)
-        let documentInfo = BookingRequest.PassengerInfoes.DocumentInfo(documentType: userData.documentType, documentNumber: userData.documentNumber, expireDate: getDateString(date: userData.expireDate), frequentFlyerNumber: userData.frequentFlyerNumber, issuingCountry: userData.issuingCountry, nationality: userData.nationality)
+    func setPassengerInfo(userData: UserData) -> PrepareBookingRequest.PassengerInfoes {
+        let nameElement = PrepareBookingRequest.PassengerInfoes.NameElement(title: userData.title, firstName: userData.firstName, lastName: userData.lastName, middleName: userData.middleName)
+        let contactInfo = PrepareBookingRequest.PassengerInfoes.ContactInfo(email: userData.email, phone: userData.phone, phoneCountryCode: userData.phoneCountryCode, countryCode: userData.countryCode, cityName: userData.cityName)
+        let documentInfo = PrepareBookingRequest.PassengerInfoes.DocumentInfo(documentType: userData.documentType, documentNumber: userData.documentNumber, expireDate: getDateString(date: userData.expireDate), frequentFlyerNumber: userData.frequentFlyerNumber, issuingCountry: userData.issuingCountry, nationality: userData.nationality)
         
-        let passengerInfo = BookingRequest.PassengerInfoes(nameElement: nameElement, contactInfo: contactInfo, documentInfo: documentInfo, passengerType: userData.passengerType, gender: userData.gender, dateOfBirth: getDateString(date: userData.dateOfBirth), passengerKey: userData.passengerKey, isLeadPassenger: userData.isLeadPassenger)
+        let passengerInfo = PrepareBookingRequest.PassengerInfoes(nameElement: nameElement, contactInfo: contactInfo, documentInfo: documentInfo, passengerType: userData.passengerType, gender: userData.gender, dateOfBirth: getDateString(date: userData.dateOfBirth), passengerKey: userData.passengerKey, isLeadPassenger: userData.isLeadPassenger)
         
         return passengerInfo
     }
     
-    func BookAndContinue() {
-        var passengerInfoes:[BookingRequest.PassengerInfoes] = []
+    func PrepareBooking() {
+        var passengerInfoes:[PrepareBookingRequest.PassengerInfoes] = []
         for userData in userDataArray {
             let passengerInfo = setPassengerInfo(userData: userData)
             passengerInfoes.append(passengerInfo)
         }
-        let bookingRequest = BookingRequest(passengerInfoes: passengerInfoes,
+        let prepareBookingRequest = PrepareBookingRequest(passengerInfoes: passengerInfoes,
                                             taxRedemptions: [], priceCodeRef: flightSearchModel.rePriceResponse.item1?.priceCodeRef, uniqueTransID: flightSearchModel.rePriceResponse.item1?.uniqueTransID, itemCodeRef: flightSearchModel.rePriceResponse.item1?.itemCodeRef)
         
-        print(bookingRequest)
+        print(prepareBookingRequest)
         
-        bookingDataSource.postBookingData(requestBody: bookingRequest)
+        flightSearchModel.prepareBooking(requestBody: prepareBookingRequest)
     }
     
     func getDateString(date:Date) -> String {
@@ -182,7 +184,7 @@ struct TravelerDetails: View {
 struct TravelerDetails_Previews: PreviewProvider {
     static var previews: some View {
 //        TravelerDetails()
-        TravelerDetails(flightSearchModel: FlightSearchModel())
+        TravelerDetails()
     }
 }
 

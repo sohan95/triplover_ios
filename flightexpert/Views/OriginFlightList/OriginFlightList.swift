@@ -7,19 +7,58 @@
 
 import SwiftUI
 
+struct Stack {
+    private var myArray: [Direction] = []
+    
+    mutating func push(_ element: Direction) {
+        myArray.append(element)
+    }
+    
+    mutating func pop() -> Direction? {
+        return myArray.popLast()
+    }
+    
+    func peek() -> Direction? {
+        guard let topElement = myArray.last else {
+            return nil
+        }
+        return topElement
+    }
+}
+
 struct OriginFlightList: View {
     var title:String
-    @ObservedObject var flightSearchModel: FlightSearchModel
-    
+    //@ObservedObject var flightSearchModel: FlightSearchModel
+    @EnvironmentObject var flightSearchModel: FlightSearchModel
 //    @State private var sheetMode: SheetMode = .none
-    
 //    @State private var isSelectBtnTapped: Bool = false
     @State private var selection: String? = nil
     @State private var popUpTitle: String = "Close"
+    @State var currentDirectionList: [Direction] = []
+    @State var currentDirection: Direction? = nil
     
     @Environment(\.presentationMode) var presentationMode
     var btnBack : some View { Button(action: {
-        self.presentationMode.wrappedValue.dismiss()
+            if flightSearchModel.isOneWay {
+                self.presentationMode.wrappedValue.dismiss()
+            } else if flightSearchModel.isRoundTrip {
+                if flightSearchModel.routeIndex == 0 {
+                    self.presentationMode.wrappedValue.dismiss()
+                } else if flightSearchModel.routeIndex == 1 {
+                    flightSearchModel.routeIndex = 0
+                    self.currentDirectionList = flightSearchModel.selectedDirectionList[flightSearchModel.routeIndex]
+                    self.currentDirection = flightSearchModel.getSelectedFlight(index: flightSearchModel.routeIndex)
+                }
+                
+            } else if flightSearchModel.isMultiCity {
+                if flightSearchModel.routeIndex == 0 {
+                    self.presentationMode.wrappedValue.dismiss()
+                } else if flightSearchModel.routeIndex > 0 {
+                    flightSearchModel.routeIndex -= 1
+                    self.currentDirectionList = flightSearchModel.selectedDirectionList[flightSearchModel.routeIndex]
+                    self.currentDirection = flightSearchModel.getSelectedFlight(index: flightSearchModel.routeIndex)
+                }
+            }
         }) {
             HStack {
             Image(systemName: "arrow.backward") // set image here
@@ -37,62 +76,70 @@ struct OriginFlightList: View {
                 .scaledToFill()
                 .edgesIgnoringSafeArea(.all)
             
-//            NavigationLink(destination:TravelerDetails(flightSearchModel: flightSearchModel), tag: "TravelerDetails", selection: $flightSearchModel.selection) { EmptyView() }
-//            NavigationLink(destination:SigninView(), tag: "SigninView", selection: $flightSearchModel.selection) { EmptyView() }
-            NavigationLink(destination:RoutesConfirmView(flightSearchModel: flightSearchModel), tag: "RoutesConfirmView", selection: $flightSearchModel.selection) { EmptyView() }
+            NavigationLink(destination:RoutesConfirmView(), tag: "RoutesConfirmView", selection: $selection) { EmptyView() }
             
-            if !flightSearchModel.isSearching {
+//            if !flightSearchModel.isSearching {
                 ScrollView {
                     VStack(spacing: 20) {
-                        ForEach(flightSearchModel.forwardDirections, id: \.self) {direction in
-                            ListRow(direction: direction, isSelectBtnTapped: $flightSearchModel.isSelectBtnTapped) { directionResult in
+                        ForEach(currentDirectionList, id: \.self) { direction in
+                            ListRow(direction: direction,
+                                    isSelectBtnTapped: $flightSearchModel.isSelectBtnTapped, selectedDirection:currentDirection) { directionResult in
                                 
-                                selectOriginFlight(direction: directionResult)
-                                //selectedDirectoin = directionResult
-                                //print(selectedDirectoin!)
-//                                if isSelectBtnTapped {
-//                                    popUpTitle = "Select"
-//                                } else {
-//                                    popUpTitle = "Close"
-//                                }
-                                flightSearchModel.selection = "RoutesConfirmView"
-                                //sheetMode = .half
+                                if flightSearchModel.isSelectBtnTapped {
+                                    selectFlightDirection(direction: directionResult)
+                                } else {
+                                    flightSearchModel.detailsDir = directionResult
+                                    selection = "RoutesConfirmView"
+                                }
                             }
                         }
+                        
                     }
                     .offset(y: 64)
-                    .clipped()
+//                    .clipped()
                 }
+                .frame(minHeight: 480, maxHeight:.infinity)
                 .navigationTitle("Flight")
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationBarBackButtonHidden(true)
                 .toolbar(){
                     ToolbarItem(placement: .principal) {
-                        
-                        HStack(spacing: 5){
-                            if let routes = flightSearchModel.searchFlighRequest!.routes {
-                                ForEach(0 ..< routes.count, id:\.self) { i in
-                                    Text("\(routes[i].origin) to \(routes[i].destination)").background(.gray)
+                        VStack {
+                            HStack(spacing: 5){
+                                if let routes = flightSearchModel.searchFlighRequest!.routes {
+                                    ForEach(0 ..< routes.count, id:\.self) { i in
+                                        HStack(spacing:3){
+                                            Text("\(routes[i].origin)")
+                                            Image(systemName: "airplane.departure")
+                                            Text("\(routes[i].destination)")
+                                        }
+                                        .font(.system(size: 11, weight: .heavy, design: .rounded))
+                                        .foregroundColor(.white)
+                                        .padding(5)
+                                        .background(self.flightSearchModel.routeIndex == i ? .black : Color.gray.opacity(0.5))
+                                        .cornerRadius(5)
+                                        
+                                            
+                                    }
                                 }
                             }
-//                            if flightSearchModel.isMultiCity {
-//                                if let route = flightSearchModel.searchFlighRequest!.routes[0] {
-//                                    Text("\(route.origin) to \(route.destination)")
-//                                }
-//                                if let route1 = flightSearchModel.searchFlighRequest!.routes[1] {
-//                                    Text("\(route1.origin) to \(route1.destination)")
-//                                }
-//                                if let route2 = flightSearchModel.searchFlighRequest!.routes[2] {
-//                                    Text("\(route2.origin) to \(route2.destination)")
-//                                }
-//                            }
+                            HStack{
+                                Spacer()
+                                Text("\(currentDirectionList.count) Flight/s found")
+                                    .font(.system(size: 10, weight: .semibold, design: .rounded))
+                                    .foregroundColor(.black)
+                                    .padding(.horizontal,10)
+                                    .padding(.vertical,5)
+                                    .background(.white)
+                                    .cornerRadius(5)
+                            }
                         }
+                        
                     }
                 }
                 .navigationBarItems(leading: btnBack)
                 .onAppear() {
-                    //flightSearchModel.flightRouteType
-                    flightSearchModel.getForwardDirection()
+                    updateOnAppear()
                 }
 //                .onTapGesture {
 //                    //sheetMode = .none
@@ -210,17 +257,88 @@ struct OriginFlightList: View {
                     
                 }
                  */
-            }
-            else {
-                LoadingView()
-            }
-            
+//            }
+//            else {
+//                LoadingView()
+//            }
         }
-        
+        .environmentObject(flightSearchModel)
     }
     
-    func selectOriginFlight(direction: Direction) {
-        flightSearchModel.setOrigin(direction: direction)
+    func updateOnAppear() {
+        if flightSearchModel.isOneWay {
+            flightSearchModel.routeIndex = 0
+            flightSearchModel.getForwardDirection()
+            self.currentDirectionList = flightSearchModel.selectedDirectionList[0]
+            self.currentDirection = flightSearchModel.getSelectedFlight(index: 0)
+            
+        } else if flightSearchModel.isRoundTrip {
+            if flightSearchModel.routeIndex == 0 {
+                flightSearchModel.getForwardDirection()
+                self.currentDirectionList = flightSearchModel.selectedDirectionList[0]
+                self.currentDirection = flightSearchModel.getSelectedFlight(index: 0)
+                
+            } else if flightSearchModel.routeIndex == 1 {
+                flightSearchModel.getFollowingDirection()
+                self.currentDirectionList = flightSearchModel.selectedDirectionList[1]
+                self.currentDirection = flightSearchModel.getSelectedFlight(index: 1)
+            }
+        } else if flightSearchModel.isMultiCity {
+            
+            if flightSearchModel.routeIndex == 0 {
+                flightSearchModel.getForwardDirection()
+                self.currentDirectionList = flightSearchModel.selectedDirectionList[0]
+                self.currentDirection = flightSearchModel.getSelectedFlight(index: 0)
+                
+            } else if flightSearchModel.routeIndex == 1 {
+                flightSearchModel.getFollowingDirection()
+                self.currentDirectionList = flightSearchModel.selectedDirectionList[1]
+                self.currentDirection = flightSearchModel.getSelectedFlight(index: 1)
+                
+            } else if flightSearchModel.routeIndex == 2 {
+                flightSearchModel.getFollowingDirection()
+                self.currentDirectionList = flightSearchModel.selectedDirectionList[2]
+                self.currentDirection = flightSearchModel.getSelectedFlight(index: 2)
+                
+            } else if flightSearchModel.routeIndex == 3 {
+                flightSearchModel.getFollowingDirection()
+                self.currentDirectionList = flightSearchModel.selectedDirectionList[3]
+                self.currentDirection = flightSearchModel.getSelectedFlight(index: 3)
+            }
+        }
+    }
+    
+//    func selectOriginFlight(direction: Direction) {
+//        flightSearchModel.setOrigin(direction: direction)
+//    }
+    
+    func selectFlightDirection(direction: Direction) {
+        // Set selected direction flight & update local selection
+        flightSearchModel.setSelectedFlightList(direction: direction)
+        
+        //Next steps
+        if flightSearchModel.isOneWay {
+            selection = "RoutesConfirmView"
+        } else if flightSearchModel.isRoundTrip {
+            if flightSearchModel.routeIndex == 0 {
+                flightSearchModel.routeIndex = 1
+                flightSearchModel.getFollowingDirection()
+                self.currentDirectionList = flightSearchModel.selectedDirectionList[1]
+                self.currentDirection = flightSearchModel.getSelectedFlight(index: 1)
+            } else if flightSearchModel.routeIndex == 1 {
+                selection = "RoutesConfirmView"
+            }
+        } else if flightSearchModel.isMultiCity {
+            if flightSearchModel.routeIndex == (flightSearchModel.searchFlighRequest?.routes.count)!-1 {
+                selection = "RoutesConfirmView"
+            } else if flightSearchModel.routeIndex < (flightSearchModel.searchFlighRequest?.routes.count)!-1 {
+                flightSearchModel.routeIndex += 1
+                flightSearchModel.getFollowingDirection()
+                self.currentDirectionList = flightSearchModel.selectedDirectionList[flightSearchModel.routeIndex]
+                self.currentDirection = flightSearchModel.getSelectedFlight(index: flightSearchModel.routeIndex)
+            }
+        }
+        
     }
     
 }
@@ -228,7 +346,7 @@ struct OriginFlightList: View {
 struct OriginFlightList_Previews: PreviewProvider {
     static var previews: some View {
        // OriginFlightList(
-        OriginFlightList(title: "Source", flightSearchModel: FlightSearchModel())
+        OriginFlightList(title: "Source")
     }
 }
 

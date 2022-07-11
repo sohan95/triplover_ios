@@ -9,6 +9,8 @@ import Foundation
 
 final class HttpUtility {
     static let shared = HttpUtility()
+    static let baseUrl = "http://52.221.202.198:83/api"
+    static let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImJzcnNvZnRiZEBnbWFpbC5jb20iLCJyb2xlIjoiQjJDIiwibmJmIjoxNjU2ODQzODc4LCJleHAiOjE2NTc0NDg2NzgsImlhdCI6MTY1Njg0Mzg3OH0.bqPW0mNAK7vRGpvBdUImdEmDqH2Z2MUL70EhrrrtjZs"
     private init(){}
     
     func postData<T:Decodable>(request: URLRequest, resultType:T.Type, completionHandler:@escaping(_ reuslt: T?)-> Void) {
@@ -25,7 +27,7 @@ final class HttpUtility {
 //    func login() {
 //        let params = ["email":"akash71khan@gmail.com", "password":"123456", "deviceId":"123456"] as Dictionary<String, String>
 //
-//        var request = URLRequest(url: URL(string: "http://52.221.202.198:83/api/User/B2CAppLogin")!)
+//        var request = URLRequest(url: URL(string: "\(HttpUtility.baseUrl)/User/B2CAppLogin")!)
 //        request.httpMethod = "POST"
 //        request.httpBody = try? JSONSerialization.data(withJSONObject: params, options: [])
 //        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -48,7 +50,7 @@ final class HttpUtility {
 //    func register() {
 //        let params = ["fullName": "akash1", "mobile": "01722599915", "email": "akash71khan@gmail.com", "password": "123456", "confirmPassword": "123456"] as Dictionary<String, String>
 //
-//        var request = URLRequest(url: URL(string: "http://52.221.202.198:83/api/User/B2CRegister")!)
+//        var request = URLRequest(url: URL(string: "\(HttpUtility.baseUrl)/User/B2CRegister")!)
 //        request.httpMethod = "POST"
 //        request.httpBody = try? JSONSerialization.data(withJSONObject: params, options: [])
 //        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -69,7 +71,7 @@ final class HttpUtility {
 //    }
     
     func loginService(loginRequest:LoginRequest, completionHandler:@escaping(_ result: LoginResponse?)->Void) {
-        var urlRequest = URLRequest(url: URL(string: "http://52.221.202.198:83/api/User/B2CAppLogin")!)
+        var urlRequest = URLRequest(url: URL(string: "\(HttpUtility.baseUrl)/User/B2CAppLogin")!)
         urlRequest.httpMethod = "post"
         urlRequest.addValue("application/json", forHTTPHeaderField: "content-type")
         urlRequest.httpBody = try? JSONEncoder().encode(loginRequest)
@@ -85,12 +87,16 @@ final class HttpUtility {
     }
     
     func registerService(registerRequest: RegisterRequest, completionHandler:@escaping(_ result: RegisterResponse?)->Void) {
-        var urlRequest = URLRequest(url: URL(string: "http://52.221.202.198:83/api/User/B2CRegister")!)
+        var urlRequest = URLRequest(url: URL(string: "\(HttpUtility.baseUrl)/User/B2CRegister")!)
         urlRequest.httpMethod = "post"
         urlRequest.addValue("application/json", forHTTPHeaderField: "content-type")
         urlRequest.httpBody = try? JSONEncoder().encode(registerRequest)
         
-        URLSession.shared.dataTask(with: urlRequest, completionHandler: { data, response, error -> Void in
+        let sessionConfig = URLSessionConfiguration.default
+        sessionConfig.timeoutIntervalForRequest = 300.0
+        sessionConfig.timeoutIntervalForResource = 300.0
+        let session = URLSession(configuration: sessionConfig)
+        session.dataTask(with: urlRequest, completionHandler: { data, response, error -> Void in
             if (error == nil && data != nil) {
                 
                 let responseData = try? JSONDecoder().decode(RegisterResponse.self, from: data!)
@@ -101,7 +107,7 @@ final class HttpUtility {
     }
     
 //    func searchFlightService(searchFlighRequest:SearchFlighRequest, completionHandler:@escaping(_ result: SearchedFlightResponse?)->Void) {
-//        var urlRequest = URLRequest(url: URL(string: "http://52.221.202.198:83/api/Search")!)
+//        var urlRequest = URLRequest(url: URL(string: "\(HttpUtility.baseUrl)/Search")!)
 //        urlRequest.httpMethod = "post"
 //        urlRequest.addValue("application/json", forHTTPHeaderField: "content-type")
 //        urlRequest.httpBody = try? JSONEncoder().encode(searchFlighRequest)
@@ -118,12 +124,17 @@ final class HttpUtility {
     
     func searchFlightService(searchFlighRequest:SearchFlighRequest, completionHandler:@escaping(_ result: FlightSearchedDataModel?)->Void) {
         
-        var urlRequest = URLRequest(url: URL(string: "http://52.221.202.198:83/api/Search")!)
+        var urlRequest = URLRequest(url: URL(string: "\(HttpUtility.baseUrl)/Search")!)
         urlRequest.httpMethod = "post"
         urlRequest.addValue("application/json", forHTTPHeaderField: "content-type")
         urlRequest.httpBody = try? JSONEncoder().encode(searchFlighRequest)
         
-        URLSession.shared.dataTask(with: urlRequest, completionHandler: { data, response, error -> Void in
+        let sessionConfig = URLSessionConfiguration.default
+        sessionConfig.timeoutIntervalForRequest = 300.0
+        sessionConfig.timeoutIntervalForResource = 300.0
+        let session = URLSession(configuration: sessionConfig)
+
+        session.dataTask(with: urlRequest, completionHandler: { data, response, error -> Void in
             if (error == nil && data != nil) {
                 
                 let responseData = try? JSONDecoder().decode(FlightSearchedDataModel.self, from: data!)
@@ -140,7 +151,7 @@ final class HttpUtility {
             return
         }
 
-        var urlRequest = URLRequest(url: URL(string: "http://52.221.202.198:83/api/RePrice")!)
+        var urlRequest = URLRequest(url: URL(string: "\(HttpUtility.baseUrl)/RePrice")!)
         urlRequest.httpMethod = "post"
         urlRequest.addValue("application/json", forHTTPHeaderField: "content-type")
         urlRequest.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
@@ -158,14 +169,21 @@ final class HttpUtility {
         print(String(data: myEventsJSONData, encoding: .utf8)!)
         
         
-        URLSession.shared.dataTask(with: urlRequest, completionHandler: { data, response, error -> Void in
+        let sessionConfig = URLSessionConfiguration.default
+        sessionConfig.timeoutIntervalForRequest = 300.0
+        sessionConfig.timeoutIntervalForResource = 300.0
+        let session = URLSession(configuration: sessionConfig)
+
+        session.dataTask(with: urlRequest, completionHandler: { data, response, error -> Void in
             if (error == nil && data != nil) {
                 
 //                let json = try? JSONSerialization.jsonObject(with: data!) as? Dictionary<String, AnyObject>
 //                print(json!)
-                do{
-                    let json = try JSONSerialization.jsonObject(with: data!, options: []) as? [String : Any]
-                }catch{ print("erroMsg") }
+                
+                
+//                do{
+//                    let json = try JSONSerialization.jsonObject(with: data!, options: []) as? [String : Any]
+//                }catch{ print("erroMsg") }
                 
 //                let formatter = DateFormatter()
 //                formatter.dateFormat = "yyyy-MM-dd"
@@ -177,19 +195,18 @@ final class HttpUtility {
 //                decoder.dateDecodingStrategy = .formatted(formatter)
                 
                 let responseData = try? decoder.decode(RePriceResponse.self, from: data!)
-                print(responseData!)
-//                let responseData = try? newJSONDecoder().decode(SearchedFlightResponse.self, from: data!)
+                //print(responseData!)
                 _ = completionHandler(responseData)
             }
         }).resume()
     }
     
-    func bookingService(bookingRequest:BookingRequest, completionHandler:@escaping(_ result: BookingResponse?)->Void) {
+    func prepareBooking(requestBody:PrepareBookingRequest, completionHandler:@escaping(_ result: BookingResponse?)->Void) {
         let token = UserDefaults.standard.string(forKey: "token")
         guard let token = token else {
             return
         }
-        var urlRequest = URLRequest(url: URL(string: "http://52.221.202.198:83/api/BookB2C/AppBookingLog")!)
+        var urlRequest = URLRequest(url: URL(string: "\(HttpUtility.baseUrl)/BookB2C/AppBookingLog")!)
         urlRequest.httpMethod = "post"
         urlRequest.addValue("application/json", forHTTPHeaderField: "content-type")
         urlRequest.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
@@ -199,13 +216,18 @@ final class HttpUtility {
 
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .formatted(formatter)
-        urlRequest.httpBody = try? encoder.encode(bookingRequest)
+        urlRequest.httpBody = try? encoder.encode(requestBody)
         
 //        let encoder3 = JSONEncoder()
-//        let myEventsJSONData = try! encoder3.encode(bookingRequest)
+//        let myEventsJSONData = try! encoder3.encode(requestBody)
 //        print(String(data: myEventsJSONData, encoding: .utf8)!)
         
-        URLSession.shared.dataTask(with: urlRequest, completionHandler: { data, response, error -> Void in
+        let sessionConfig = URLSessionConfiguration.default
+        sessionConfig.timeoutIntervalForRequest = 300.0
+        sessionConfig.timeoutIntervalForResource = 300.0
+        let session = URLSession(configuration: sessionConfig)
+
+        session.dataTask(with: urlRequest, completionHandler: { data, response, error -> Void in
             if (error == nil && data != nil) {
                 do {
                     let json = try JSONSerialization.jsonObject(with: data!) as! Dictionary<String, AnyObject>
@@ -223,12 +245,12 @@ final class HttpUtility {
         }).resume()
     }
     
-    func bookingConfirm(bookingRequest:BookingRequest, completionHandler:@escaping(_ result: BookingResponse?)->Void) {
+    func bookingConfirm(requestBody:BookingConfirmRequest, completionHandler:@escaping(_ result: BookingConfirmResponse?)->Void) {
         let token = UserDefaults.standard.string(forKey: "token")
         guard let token = token else {
             return
         }
-        var urlRequest = URLRequest(url: URL(string: "http://52.221.202.198:83/api/BookB2C/AppBookingLog")!)
+        var urlRequest = URLRequest(url: URL(string: "\(HttpUtility.baseUrl)/BookB2C/AppBookingLog")!)
         urlRequest.httpMethod = "post"
         urlRequest.addValue("application/json", forHTTPHeaderField: "content-type")
         urlRequest.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
@@ -238,13 +260,18 @@ final class HttpUtility {
 
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .formatted(formatter)
-        urlRequest.httpBody = try? encoder.encode(bookingRequest)
+        urlRequest.httpBody = try? encoder.encode(requestBody)
         
 //        let encoder3 = JSONEncoder()
 //        let myEventsJSONData = try! encoder3.encode(bookingRequest)
 //        print(String(data: myEventsJSONData, encoding: .utf8)!)
         
-        URLSession.shared.dataTask(with: urlRequest, completionHandler: { data, response, error -> Void in
+        let sessionConfig = URLSessionConfiguration.default
+        sessionConfig.timeoutIntervalForRequest = 300.0
+        sessionConfig.timeoutIntervalForResource = 300.0
+        let session = URLSession(configuration: sessionConfig)
+
+        session.dataTask(with: urlRequest, completionHandler: { data, response, error -> Void in
             if (error == nil && data != nil) {
                 do {
                     let json = try JSONSerialization.jsonObject(with: data!) as! Dictionary<String, AnyObject>
@@ -254,7 +281,98 @@ final class HttpUtility {
                 }
                 
                 let decoder = JSONDecoder()
-                let responseData = try? decoder.decode(BookingResponse.self, from: data!)
+                let responseData = try? decoder.decode(BookingConfirmResponse.self, from: data!)
+                print(responseData!)
+//                let responseData = try? newJSONDecoder().decode(SearchedFlightResponse.self, from: data!)
+                _ = completionHandler(responseData)
+            }
+        }).resume()
+    }
+    
+    func AirTicketing(requestBody:AirTicketingRequest, completionHandler:@escaping(_ result: [AirTicketingResponse]?)->Void) {
+        let token = UserDefaults.standard.string(forKey: "token")
+        guard let token = token else {
+            return
+        }
+        
+        var urlRequest = URLRequest(url: URL(string: "\(HttpUtility.baseUrl)/ReportB2C/AirTicketing")!)
+        urlRequest.httpMethod = "post"
+        urlRequest.addValue("application/json", forHTTPHeaderField: "content-type")
+        urlRequest.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        
+//        let formatter = DateFormatter()
+//        formatter.dateFormat = "yyyy-MM-dd"
+
+        let encoder = JSONEncoder()
+//        encoder.dateEncodingStrategy = .formatted(formatter)
+        urlRequest.httpBody = try? encoder.encode(requestBody)
+        
+//        let encoder3 = JSONEncoder()
+//        let myEventsJSONData = try! encoder3.encode(requestBody)
+//        print(String(data: myEventsJSONData, encoding: .utf8)!)
+        
+        let sessionConfig = URLSessionConfiguration.default
+        sessionConfig.timeoutIntervalForRequest = 300.0
+        sessionConfig.timeoutIntervalForResource = 300.0
+        let session = URLSession(configuration: sessionConfig)
+
+        session.dataTask(with: urlRequest, completionHandler: { data, response, error -> Void in
+            if (error == nil && data != nil) {
+
+                        
+//                do {
+////                    let json = try JSONSerialization.jsonObject(with: data!) as! Dictionary<String, AnyObject>
+//                    let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String: Any]
+//                    print(json)
+//                } catch {
+//                    print("error")
+//                }
+                
+//                NSString *responseString = [[NSString, alloc] initWithData:data encoding:NSUTF8StringEncoding];
+//
+//                 NSLog(@"Response: %@",responseString);
+//
+//
+//                 NSData *jsonData = [responseString dataUsingEncoding:NSUTF8StringEncoding];
+//
+//                 id json = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:nil];
+                
+                
+                let decoder = JSONDecoder()
+                let responseData = try? decoder.decode([AirTicketingResponse].self, from: data!)
+                print(responseData!)
+//                let responseData = try? newJSONDecoder().decode(SearchedFlightResponse.self, from: data!)
+                _ = completionHandler(responseData)
+            }
+        }).resume()
+    }
+    
+    func getAirTicketingDetails(ticketId:String, completionHandler:@escaping(_ result: AirTicketingDetailsResponse?)->Void) {
+        let token = UserDefaults.standard.string(forKey: "token")
+        guard let token = token else {
+            return
+        }
+        var urlRequest = URLRequest(url: URL(string: "\(HttpUtility.baseUrl)/ReportB2C/AirTicketingDetails/\(ticketId)")!)
+        urlRequest.httpMethod = "get"
+        urlRequest.addValue("application/json", forHTTPHeaderField: "content-type")
+        urlRequest.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        
+        let sessionConfig = URLSessionConfiguration.default
+        sessionConfig.timeoutIntervalForRequest = 300.0
+        sessionConfig.timeoutIntervalForResource = 300.0
+        let session = URLSession(configuration: sessionConfig)
+
+        session.dataTask(with: urlRequest, completionHandler: { data, response, error -> Void in
+            if (error == nil && data != nil) {
+//                do {
+//                    let json = try JSONSerialization.jsonObject(with: data!) as! Dictionary<String, AnyObject>
+//                    print(json)
+//                } catch {
+//                    print("error")
+//                }
+                
+                let decoder = JSONDecoder()
+                let responseData = try? decoder.decode(AirTicketingDetailsResponse.self, from: data!)
                 print(responseData!)
 //                let responseData = try? newJSONDecoder().decode(SearchedFlightResponse.self, from: data!)
                 _ = completionHandler(responseData)

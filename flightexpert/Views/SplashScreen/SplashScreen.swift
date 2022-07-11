@@ -61,9 +61,9 @@ struct SplashScreen: View {
     private let maxValue: Double = 20
     var body: some View {
         if isActive {
-            let viewModel = AppViewModel()
+            let flightSearchModel = FlightSearchModel()
             ContentView()
-                .environmentObject(viewModel)
+                .environmentObject(flightSearchModel)
         } else {
             ZStack {
                 SplashScreenBg

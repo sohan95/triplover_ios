@@ -8,10 +8,15 @@
 import SwiftUI
 
 struct RoutesConfirmView: View {
-    @ObservedObject var flightSearchModel: FlightSearchModel
+    //@ObservedObject var flightSearchModel: FlightSearchModel
+    @EnvironmentObject var flightSearchModel: FlightSearchModel
     @State var shouldScroll: Bool = true
     @State var spaceValue: CGFloat = 100.0
-    
+    @State var selectedFlightList: [Direction] = []
+    @State var isSearching: Bool = false
+    @State var selection: String? = nil
+    @State var showsAlert = false
+    @State var failedMsg:String = ""
     var body: some View {
         ZStack {
             BackgroundImage
@@ -19,12 +24,17 @@ struct RoutesConfirmView: View {
                 .scaledToFill()
                 .edgesIgnoringSafeArea(.all)
             
-            if let selected = self.flightSearchModel.originDir {
+            NavigationLink(destination:TravelerDetails(), tag: "TravelerDetails", selection: $selection) { EmptyView() }
+            NavigationLink(destination:SigninView(), tag: "SigninView", selection: $selection) { EmptyView() }
+            
+            if !isSearching {
+                
                 VStack() {
                     ScrollView(axes, showsIndicators: false) {
                         VStack(spacing:15) {
-                            ForEach(0 ..< 3, id:\.self) { i in
-                                FlightDetailsCell(selected: selected)
+                            ForEach(0 ..< self.selectedFlightList.count, id:\.self) { i in
+                                let direction: Direction = selectedFlightList[i]
+                                FlightDetailsCell(direction: direction)
                                     .padding(.vertical, 10)
                             }
                         }
@@ -46,12 +56,14 @@ struct RoutesConfirmView: View {
                                     Text("Total")
                                         .font(.system(size: 12, weight: .bold, design: .rounded))
                                 }
-                                VStack(alignment: .leading, spacing: 5) {
-                                    Text(": \((selected.bookingComponents?[0].basePrice)!.removeZerosFromEnd())")
-                                    Text(": \((selected.bookingComponents?[0].taxes)!.removeZerosFromEnd())")
-                                    Text(": \((selected.bookingComponents?[0].discountPrice)!.removeZerosFromEnd())")
-                                    Text(": \((selected.bookingComponents?[0].totalPrice)!.removeZerosFromEnd())")
-                                        .font(.system(size: 14, weight: .bold, design: .rounded))
+                                if let selected = selectedFlightList.first {
+                                    VStack(alignment: .leading, spacing: 5) {
+                                        Text(": \((selected.bookingComponents?.first?.basePrice)!.removeZerosFromEnd())")
+                                        Text(": \((selected.bookingComponents?.first?.taxes)!.removeZerosFromEnd())")
+                                        Text(": \((selected.bookingComponents?.first?.discountPrice)!.removeZerosFromEnd())")
+                                        Text(": \((selected.bookingComponents?.first?.totalPrice)!.removeZerosFromEnd())")
+                                            .font(.system(size: 14, weight: .bold, design: .rounded))
+                                    }
                                 }
                             }
                             .font(.system(size: 14, weight: .semibold, design: .rounded))
@@ -84,13 +96,37 @@ struct RoutesConfirmView: View {
                     .background(.secondary)
                     Spacer(minLength: 40)
                 }
+                .onAppear() {
+                    self.selectedFlightList.removeAll()
+                    if flightSearchModel.isSelectBtnTapped {
+                        self.spaceValue = 60.0
+                        
+                        if flightSearchModel.isOneWay {
+                            self.selectedFlightList.append(flightSearchModel.selectedFlightList.first!)
+                        } else if flightSearchModel.isRoundTrip {
+                            for index in flightSearchModel.selectedFlightList.indices where index < (flightSearchModel.searchFlighRequest?.routes.count)! {
+                                self.selectedFlightList.append(flightSearchModel.selectedFlightList[index])
+                            }
+                        } else if flightSearchModel.isMultiCity {
+                            for index in flightSearchModel.selectedFlightList.indices where index < (flightSearchModel.searchFlighRequest?.routes.count)! {
+                                self.selectedFlightList.append(flightSearchModel.selectedFlightList[index])
+                            }
+                        }
+                        
+                    } else {
+                        self.selectedFlightList.append(flightSearchModel.detailsDir!)
+                    }
+                }
+                .alert(isPresented: self.$showsAlert) {
+                    Alert(title: Text("Booking failed!"), message: Text(failedMsg), dismissButton: .default(Text("Try Again")))
+                }
+            } else {
+                LoadingView()
+                    .navigationBarBackButtonHidden(true)
             }
         }
-        .onAppear() {
-            if flightSearchModel.isSelectBtnTapped {
-                self.spaceValue = 60.0
-            }
-        }
+        .environmentObject(flightSearchModel)
+        
     }
     
     func ConfirmAction() {
@@ -99,8 +135,18 @@ struct RoutesConfirmView: View {
         if flightSearchModel.isSelectBtnTapped {
             let isSignin = UserDefaults.standard.bool(forKey: "isSignin")
             if isSignin {
-                self.rePriceService()
-//                flightSearchModel.selection = "UserForm"
+                var segmentCodeRefs:[String?] = []
+                
+                for flight in selectedFlightList {
+//                    let segmentCodeRefs:[String?] = [
+//                        flightSearchModel.originDir?.segmentCodeRef!]
+                    segmentCodeRefs.append(flight.segmentCodeRef)
+                }
+                
+                let rePriceRequest: RePriceRequest = RePriceRequest(uniqueTransID: (selectedFlightList.first?.uniqueTransID)!, itemCodeRef: (selectedFlightList.first?.itemCodeRef)!, taxRedemptions: [], segmentCodeRefs: segmentCodeRefs)
+                
+                self.rePriceStatus(requestBody: rePriceRequest)
+                
             } else {
                 flightSearchModel.selection = "SigninView"
                 //self.selection = "SigninView"
@@ -113,17 +159,26 @@ struct RoutesConfirmView: View {
         //back Action here
     }
     
-    func rePriceService() {
-        let segmentCodeRefs:[String?] = [
-            flightSearchModel.originDir?.segmentCodeRef!]
-        
-        let rePriceRequest: RePriceRequest = RePriceRequest(uniqueTransID: (flightSearchModel.originDir?.uniqueTransID)!, itemCodeRef: (flightSearchModel.originDir?.itemCodeRef)!, taxRedemptions: [], segmentCodeRefs: segmentCodeRefs)
-        
-        //flightSearchModel.isSearching = true
-        flightSearchModel.rePriceStatus(requestBody: rePriceRequest)
-    }
     private var axes: Axis.Set {
         return shouldScroll ? .vertical : []
+    }
+    
+    func rePriceStatus(requestBody: RePriceRequest) {
+        self.isSearching = true
+        HttpUtility.shared.rePriceService(rePriceRequest: requestBody) { result in
+            
+            DispatchQueue.main.async { [ self] in
+                //self.isSearchComplete = true
+                self.isSearching = false
+                guard (result) != nil else {
+                    self.failedMsg = "Error Found!"
+                    self.showsAlert.toggle()
+                    return
+                }
+                flightSearchModel.rePriceResponse = result!
+                self.selection = "TravelerDetails"
+            }
+        }
     }
 }
 
@@ -139,6 +194,6 @@ extension Double {
 
 struct RoutesConfirmView_Previews: PreviewProvider {
     static var previews: some View {
-        RoutesConfirmView(flightSearchModel: FlightSearchModel())
+        RoutesConfirmView()
     }
 }

@@ -26,7 +26,8 @@ struct SearchFlighRequest: Encodable {
 
 struct FlightView: View {
     
-    @StateObject var flightSearchModel = FlightSearchModel()
+//    @StateObject var flightSearchModel = FlightSearchModel()
+    @EnvironmentObject var flightSearchModel: FlightSearchModel
     @State private var sheetMode: SheetMode = .half
     @State var isSearching: Bool = false
     @State var isGotSearchData: String? = nil
@@ -97,7 +98,7 @@ struct FlightView: View {
                 .scaledToFill()
                 .ignoresSafeArea(.all, edges: .all)
             
-            NavigationLink(destination:OriginFlightList(title: "SourceToDestination",flightSearchModel: flightSearchModel), tag: "A", selection: $flightSearchModel.isGotSearchData) { EmptyView() }
+            NavigationLink(destination:OriginFlightList(title: "SourceToDestination"), tag: "A", selection: $flightSearchModel.isGotSearchData) { EmptyView() }
            
             if !flightSearchModel.isSearching {
                 VStack() {
@@ -305,6 +306,11 @@ struct FlightView: View {
                     .offset(y: 50)
                     .clipped()
                 }
+                .navigationBarBackButtonHidden(true)
+                .navigationBarItems(leading: btnBack)
+                .onAppear() {
+                    self.resetView()
+                }
                 
                 SearchOptionModal(isShowing:$showOptionModal,
                                   adults: $adults,
@@ -315,14 +321,10 @@ struct FlightView: View {
             }
             else {
                 LoadingView()
+                    .navigationBarBackButtonHidden(true)
             }
         }
-        .navigationBarBackButtonHidden(true)
-        .navigationBarItems(leading: btnBack)
-        .onAppear() {
-            self.resetView()
-        }
-        
+        .environmentObject(flightSearchModel)
     }
     
     private var axes: Axis.Set {

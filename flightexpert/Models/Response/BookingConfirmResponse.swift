@@ -15,7 +15,7 @@ import Foundation
 struct BookingConfirmResponse : Codable {
 
     struct Item1 : Codable {
-        struct TicketInfoes : Codable {
+        struct TicketInfo : Codable {
             struct PassengerInfo : Codable {
                 struct NameElement : Codable {
                     var title : String?
@@ -141,7 +141,7 @@ struct BookingConfirmResponse : Codable {
         }
         
         var warnings : [String]?
-        var ticketInfoes : [TicketInfoes]?
+        var ticketInfoes : [TicketInfo]?
         var flightInfo : FlightInfo?
         var pnr : String?
         var status : String?

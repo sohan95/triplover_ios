@@ -9,7 +9,6 @@ import SwiftUI
 
 struct SignoutView: View {
     @Binding var isShowing: Bool
-    @EnvironmentObject var viewModel: AppViewModel
     
     var body: some View {
         VStack {

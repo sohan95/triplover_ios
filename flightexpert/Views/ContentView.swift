@@ -13,7 +13,7 @@ let backgroundGradient = LinearGradient(
 
 struct ContentView: View {
     
-    @EnvironmentObject var viewModel: AppViewModel
+    @EnvironmentObject var flightSearchModel: FlightSearchModel
     
     var body: some View {
         NavigationView {
@@ -26,7 +26,7 @@ struct ContentView: View {
                 HomeView()
                     
             }
-            .environmentObject(viewModel)
+            .environmentObject(flightSearchModel)
             .navigationBarTitleDisplayMode(.inline)
         }
     }
