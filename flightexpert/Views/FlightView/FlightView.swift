@@ -98,7 +98,7 @@ struct FlightView: View {
                 .scaledToFill()
                 .ignoresSafeArea(.all, edges: .all)
             
-            NavigationLink(destination:OriginFlightList(title: "SourceToDestination"), tag: "A", selection: $flightSearchModel.isGotSearchData) { EmptyView() }
+            NavigationLink(destination:OriginFlightList(), tag: "A", selection: $flightSearchModel.isGotSearchData) { EmptyView() }
            
             if !flightSearchModel.isSearching {
                 VStack() {
@@ -156,7 +156,7 @@ struct FlightView: View {
                                                     }
                                                     DatePicker("", selection: $routeDate[0], in: Date()..., displayedComponents: .date)
                                                         .labelsHidden()
-                                                        .accentColor(.red)
+//                                                        .accentColor(.red)
                                                         .background(.white)
                                                         .opacity(0.05)
                                                 }
@@ -278,10 +278,10 @@ struct FlightView: View {
                                             Text("GO!")
                                             .font(.system(size: 24, weight:.heavy))
                                             .foregroundColor(.white)
+                                            .frame(minWidth:0, maxWidth: .infinity, minHeight: 80, maxHeight: 80)
+                                            .background(RoundedRectangle(cornerRadius: 15)
+                                                .fill(blueGradient))
                                         }
-                                        .frame(minWidth:0, maxWidth: .infinity, minHeight: 80, maxHeight: 80)
-                                        .background(RoundedRectangle(cornerRadius: 15)
-                                            .fill(blueGradient))
                                     }
                                     .foregroundColor(.gray)
                                     .padding(.horizontal, 15)
@@ -305,6 +305,7 @@ struct FlightView: View {
                     }
                     .offset(y: 50)
                     .clipped()
+                    
                 }
                 .navigationBarBackButtonHidden(true)
                 .navigationBarItems(leading: btnBack)

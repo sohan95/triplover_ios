@@ -21,28 +21,8 @@ struct FlightDetailsCell: View {
                 .foregroundColor(.blue)
                 .padding(.bottom, 10)
                 HStack(spacing: 15) {
-//                    AsyncImage(
-//                        url:  URL(string: "\(ROOT_URL_THUMB)\(direction.platingCarrierCode!).png"),
-//                        transaction: Transaction(animation: .easeInOut)
-//                    ) { phase in
-//                        switch phase {
-//                        case .empty:
-//                            ProgressView()
-//                        case .success(let image):
-//                            image
-//                                .resizable()
-//                                .transition(.scale(scale: 0.1, anchor: .center))
-//                        case .failure:
-//                            Image(systemName: "wifi.slash")
-//                        @unknown default:
-//                            EmptyView()
-//                        }
-//                    }
-//                    .frame(width: 30, height: 30)
-//                    .background(Color.gray)
-//                    .clipShape(Circle())
                     
-                    ImageUrlView(urlString: "\(ROOT_URL_THUMB)\(direction.platingCarrierCode!).png")
+                    ImageUrlView(urlString: "\(ROOT_URL_THUMB)\(direction.platingCarrierCode!).png", sizeVal: 30)
                         .frame(width: 30, height: 30)
                         .background(Color.gray)
                         .clipShape(Circle())

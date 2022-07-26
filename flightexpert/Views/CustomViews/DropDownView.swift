@@ -32,12 +32,18 @@ struct DropDownView: View {
                         .foregroundColor(Color.gray.opacity(0.5))
                         .font(Font.system(size: 15, weight: .bold))
                 }
-                .padding(7)
-                .background(Color.gray.opacity(0.3).cornerRadius(5))
+//                .padding(7)
+//                .background(Color.gray.opacity(0.3).cornerRadius(5))
 //                .padding(.horizontal)
 //                Rectangle()
 //                    .fill(Color.orange)
 //                    .frame(height: 2)
+                
+                .padding([.horizontal], 10)
+                .frame(height: 35)
+                .textFieldStyle(PlainTextFieldStyle())
+                .cornerRadius(5)
+                .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.gray.opacity(0.5)))
             }
         }
     }

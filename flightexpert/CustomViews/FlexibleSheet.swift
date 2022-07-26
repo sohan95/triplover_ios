@@ -27,7 +27,7 @@ struct FlexibleSheet<Content: View>: View {
             case .quater:
                 return UIScreen.main.bounds.height - 200
             case .semi:
-                return UIScreen.main.bounds.height/3
+                return UIScreen.main.bounds.height - 280
             case .half:
                 return UIScreen.main.bounds.height/2
             case .full:
@@ -38,6 +38,8 @@ struct FlexibleSheet<Content: View>: View {
     init(sheetMode:Binding<SheetMode>, @ViewBuilder content:@escaping ()-> Content) {
         self.content = content
         self.sheetMode = sheetMode
+        print("\(UIScreen.main.bounds.height): offset=\(calculateOffset())")
+        
     }
     
     var body: some View {
@@ -46,6 +48,7 @@ struct FlexibleSheet<Content: View>: View {
             .animation(.spring())
             .ignoresSafeArea(.all)
     }
+     
 }
 
 struct FlexibleSheetView_Previews: PreviewProvider {

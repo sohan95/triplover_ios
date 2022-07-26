@@ -16,12 +16,18 @@ struct SearchOptionModal: View {
     var doneAction : () -> ()
     
     @State private var selectedClass: Int = 0
-//    @State private var selectedClass: String = "Economy"
-    var cabinClassList: [String] = ["Economy" ,"PremiumEconomy", "Business", "First", "PremiumFirst"]
+    var cabinClassList: [String] = ["Economy" ,"Premium", "Business", "First Class"]
     
-    @State var selectedAdultNumber: Int = 0
+    @State var selectedAdultNumber: Int = 1
     @State var selectedChildNumber: Int = 0
     @State var selectedInfantNumber: Int = 0
+    
+    @State var maxAdult: Int = 8
+    @State var maxChild: Int = 1
+    @State var maxInfants: Int = 0
+    
+    var totalPassenger: Int = 9
+    
     
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -35,6 +41,7 @@ struct SearchOptionModal: View {
                     }
                 
                 VStack {
+                    //header
                     HStack() {
                         Text("")
                             .frame(width:60)
@@ -50,26 +57,15 @@ struct SearchOptionModal: View {
                         } label: {
                             Text("Cancel")
                                 .font(.body)
-                                .foregroundColor(.red)
+                                .foregroundColor(Color(hex: "#FF5733"))
                         }
+                        .padding(.horizontal,10)
                     }
                     .frame(maxWidth:.infinity, maxHeight:40)
                     .background(Color.gray)
                     
                     VStack(spacing:10){
                         HStack(spacing: 10) {
-//                            VStack(alignment:.leading, spacing: 5){
-//                                Text("Class")
-//                                Picker("Red", selection: $selectedClass) {
-//                                    ForEach(cabinClassList, id: \.self) {
-//                                        Text($0)
-//                                    }
-//                                }
-//                                Text("Click to change")
-//                            }
-//                            .frame(minWidth:0, maxWidth: .infinity,maxHeight: 80)
-//                            .background(.white)
-//                            .addBorder(Color.gray, width: 2, cornerRadius: 10)
                             Menu {
                                 Picker(selection: $selectedClass,
                                 label: EmptyView()) {
@@ -78,77 +74,65 @@ struct SearchOptionModal: View {
                                         Text(self.cabinClassList[$0])
                                     }
                                 }
+
                             } label: {
-                                VStack(alignment:.leading, spacing: 5){
-                                    Text("Class")
-                                    Text(self.cabinClassList[selectedClass])
-                                    Text("Click to change")
-                                }
-                                .padding(5)
+                                MenuButtonView(title1: "Class", title2: self.cabinClassList[selectedClass])
                             }
-                            .frame(minWidth:0, maxWidth: .infinity, maxHeight: 80)
-                            .background(.white)
-                            .addBorder(Color.gray, width: 2, cornerRadius: 10)
-                            Menu {
-                                Picker(selection: $selectedAdultNumber,
-                                label: EmptyView()) {
-                                    ForEach(0..<10) {
-                                        Text("\($0) Adults")
-                                    }
-                                }
-                            } label: {
-                                VStack(alignment:.leading, spacing: 5){
-                                    Text("ADULT (12+)")
-                                    Text("\(selectedAdultNumber) Traveler")
-                                    Text("Click to change")
-                                }
-                                .padding(5)
+                            MenuButton(title1: "ADULT (12+)", title2: "\(selectedAdultNumber) Traveler", maxNumber: $maxAdult, selectedNumber: $selectedAdultNumber) {
+                                
+                                self.maxChild = totalPassenger - selectedAdultNumber
+                                self.maxAdult = totalPassenger - selectedChildNumber
+                                self.maxInfants = selectedAdultNumber
+                                
+                                print("maxAdult=\(maxAdult)maxChild=\(maxChild)maxInfants=\(maxInfants)")
+                                print("selectedAdultNumber=\(selectedAdultNumber)  selectedChildNumber=\(selectedChildNumber)")
                             }
-                            .frame(minWidth:0, maxWidth: .infinity, maxHeight: 80)
-                            .background(.white)
-                            .addBorder(Color.gray, width: 2, cornerRadius: 10)
+                            
+//                            Menu {
+//                                Picker(selection: $selectedAdultNumber,
+//                                label: EmptyView()) {
+//                                    ForEach(0..<maxAdult+1) {
+//                                        Text("\($0) Adults")
+//                                    }
+//                                }.onReceive([self.$selectedAdultNumber].publisher.first()) { value in
+//                                    print("\(selectedAdultNumber)")
+//                                    self.updateAdults()
+//                                }
+//                            } label: {
+//                                MenuButtonView(title1: "ADULT (12+)", title2:"\(selectedAdultNumber) Traveler")
+//                            }
                         }
                         .foregroundColor(.gray)
                         .padding(.horizontal, 15)
                         
                         HStack(spacing: 10) {
-                            Menu {
-                                Picker(selection: $selectedChildNumber,
-                                label: EmptyView()) {
-                                    ForEach(0..<8) {
-                                        Text("\($0) Children")
-                                    }
-                                }
-                            } label: {
-                                VStack(alignment:.leading, spacing: 5){
-                                    Text("CHILD (0 - 2)")
-                                    Text("\(selectedChildNumber) Traveler")
-                                    Text("Click to change")
-                                }
-                                .padding(5)
+                            MenuButton(title1: "CHILD (2 - 12)", title2: "\(selectedChildNumber) Traveler", maxNumber: $maxChild, selectedNumber: $selectedChildNumber) {
+                                self.updateChilds()
                             }
-                            .frame(minWidth:0, maxWidth: .infinity,maxHeight: 80)
-                            .background(.white)
-                            .addBorder(Color.gray, width: 2, cornerRadius: 10)
+//                            Menu {
+//                                Picker(selection: $selectedChildNumber,
+//                                label: EmptyView()) {
+//                                    ForEach(0..<maxChild+1) {
+//                                        Text("\($0) Children")
+//                                    }
+//                                }.onReceive([self.$selectedChildNumber].publisher.first()) { value in
+//                                    print("\($selectedChildNumber)")
+//                                    self.updateChilds()
+//                                }
+//                            } label: {
+//                                MenuButtonView(title1: "CHILD (2 - 12)", title2:"\(selectedChildNumber) Traveler")
+//                            }
 
                             Menu {
                                 Picker(selection: $selectedInfantNumber,
                                 label: EmptyView()) {
-                                    ForEach(0..<5) {
+                                    ForEach(0..<maxInfants+1) {
                                         Text("\($0) Infants")
                                     }
                                 }
                             } label: {
-                                VStack(alignment:.leading, spacing: 5){
-                                    Text("INFANT (0 - 2)")
-                                    Text("\(selectedInfantNumber) Traveler")
-                                    Text("Click to change")
-                                }
-                                .padding(5)
+                                MenuButtonView(title1: "INFANTS (0 - 2)", title2:"\(selectedInfantNumber) Traveler")
                             }
-                            .frame(minWidth:0, maxWidth: .infinity,maxHeight: 80)
-                            .background(.white)
-                            .addBorder(Color.gray, width: 2, cornerRadius: 10)
                         }
                         .foregroundColor(.gray)
                         .padding(.horizontal, 15)
@@ -184,11 +168,89 @@ struct SearchOptionModal: View {
         .frame(maxWidth:.infinity, maxHeight: .infinity, alignment: .bottom)
         .ignoresSafeArea()
         .animation(.easeInOut)
+        .onAppear(){
+            maxAdult = 9
+            maxChild = totalPassenger-selectedAdultNumber
+            maxInfants = selectedAdultNumber
+            
+            print("maxAdult=\(maxAdult)maxChild=\(maxChild)maxInfants=\(maxInfants)")
+            
+        }
+    }
+    
+    func updateAdults() {
+        self.maxChild = totalPassenger - selectedAdultNumber
+        self.maxAdult = totalPassenger - selectedChildNumber
+        self.maxInfants = selectedAdultNumber
+        
+        print("maxAdult=\(maxAdult)maxChild=\(maxChild)maxInfants=\(maxInfants)")
+        print("selectedAdultNumber=\(selectedAdultNumber)  selectedChildNumber=\(selectedChildNumber)")
+    }
+    
+    func updateChilds() {
+        self.maxAdult = totalPassenger-selectedChildNumber
+        self.maxInfants = selectedAdultNumber
+        self.maxChild = totalPassenger - selectedAdultNumber
+        print("maxAdult=\(maxAdult)maxChild=\(maxChild)maxInfants=\(maxInfants)")
+        print("selectedAdultNumber=\(selectedAdultNumber)  maxChild=\(selectedChildNumber)")
+    }
+
+}
+
+struct MenuButtonView: View {
+
+    var title1:String
+    var title2:String
+
+    var body: some View {
+        VStack(alignment:.leading, spacing: 5){
+            Text(title1)
+                .font(.system(size: 14, weight: .medium, design: .rounded))
+            Text(title2)
+                .font(.system(size: 16, weight: .bold, design: .rounded))
+            Text("Click to change")
+                .font(.system(size: 12, weight: .regular, design: .rounded))
+        }
+        .frame(minWidth:0, maxWidth: .infinity,minHeight: 80, maxHeight: 80)
+        .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(.gray.opacity(0.5), lineWidth: 2)
+            )
     }
 }
 
-struct SearchOptionModal_Previews: PreviewProvider {
+struct MenuButton: View {
+
+    var title1:String
+    var title2:String
+    @Binding var maxNumber:Int
+    @Binding var selectedNumber:Int
+    var doneAction : () -> ()
+    typealias Action = (Int) -> Void
+    var action: Action?
+
+    var body: some View {
+        Menu {
+            Picker(selection: $selectedNumber,
+            label: EmptyView()) {
+                ForEach(0..<maxNumber+1) {
+                    Text("\($0) Adults")
+                }
+            }.onReceive([self.$selectedNumber].publisher.first()) { value in
+                print("\(value)")
+                self.doneAction()
+//                if let action = action {
+//                    action(value)
+//                }
+            }
+        } label: {
+            MenuButtonView(title1: "ADULT (12+)", title2:"\(selectedNumber) Traveler")
+        }
+    }
+}
+
+struct MenuButtonView_Previews: PreviewProvider {
     static var previews: some View {
-        FlightView()
+        MenuButtonView(title1:"Class", title2: "Economy")
     }
 }

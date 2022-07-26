@@ -156,7 +156,8 @@ class CountryViewModel: NSObject, ObservableObject {
 
 struct UserFormView: View {
     //var userTitle: String = "ADULT # 1"
-    @Binding var passengerInfo: UserData
+    @Binding var userData: UserData
+    var isDomestic: Bool
     
     //For CountryCode Picker
     @State private var phoneCountryCode = ""
@@ -172,99 +173,150 @@ struct UserFormView: View {
             VStack {
                 ScrollView {
                     HStack {
-                        Text(passengerInfo.userType)
-                            .font(.system(size: 20, weight:.bold, design: .monospaced))
-                            .foregroundColor(.white)
+                        Text(userData.userType)
+                            .font(.system(size: 20, weight:.regular, design: .rounded))
+                            .foregroundColor(.red.opacity(0.7))
                             .padding()
                         
                         Spacer()
                     }
-                    .frame(maxWidth:.infinity, minHeight: 50)
-                    .background(.black)
+                    .frame(maxWidth:.infinity, minHeight: 50, maxHeight: 50)
+                    .background(.gray.opacity(0.2))
                     
                     
-                    VStack{
+                    VStack(alignment: .leading, spacing: 10){
                         HStack {//Row-1
-                            VStack(alignment: .leading) {
-                                Text("Title")
-                                DropDownView(value:$passengerInfo.title, placeholder: "Select title", dropDownList: ["MR", "MRS"])
-                            }
+//                            VStack(alignment: .leading) {
+//                                Text("Title")
+//                                DropDownView(value:$userData.title, placeholder: "Select title", dropDownList: ["MR", "MRS"])
+//                            }
                             
-                            VStack(alignment: .leading) {
+                            VStack(alignment: .leading, spacing: 5) {
                                 Text("First Name")
-                                TextField("First Name", text: $passengerInfo.firstName)
-                                    .padding(7)
-                                    .background(Color.gray.opacity(0.3).cornerRadius(5))
+                                TextField("First Name", text: $userData.firstName)
+//                                    .frame(height: 50)
+//                                    .textFieldStyle(.roundedBorder)
+                                    .padding([.horizontal], 10)
+                                    .frame(height: 35)
+                                    .textFieldStyle(PlainTextFieldStyle())
+                                    .cornerRadius(5)
+                                    .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.gray.opacity(0.5)))
+                                    
+                                    
+//                                    .background(Color.gray.opacity(0.3).cornerRadius(5))
                             }
+//                            .padding(.horizontal, 10)
                         }
                         HStack {//Row-2
                             VStack(alignment: .leading) {
                                 Text("Last Name")
-                                TextField("Last Name", text: $passengerInfo.lastName)
-                                    .padding(7)
-                                    .background(Color.gray.opacity(0.3).cornerRadius(5))
-                            }
-                            VStack(alignment: .leading) {
-                                Text("Date of Birth")
-                                DatePicker("", selection: $passengerInfo.dateOfBirth, in: ...Date(), displayedComponents: .date)
-                                    .frame(maxWidth:.infinity)
-                                    .accentColor(.orange)
-                                    .background(Color.gray.opacity(0.3).cornerRadius(5))
-                                    .labelsHidden()
-                                    .foregroundColor(.red)
+                                TextField("Last Name", text: $userData.lastName)
+                                    .padding([.horizontal], 10)
+                                    .frame(height: 35)
+                                    .textFieldStyle(PlainTextFieldStyle())
+                                    .cornerRadius(5)
+                                    .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.gray.opacity(0.5)))
                             }
                         }
                         HStack {//Row-3
                             VStack(alignment: .leading) {
-                                Text("Nationality")
-//                                DropDownView(value:$passengerInfo.nationality, placeholder: "Nationality", dropDownList: ["BD", "IND"])
-                                CustomPickerTextView(presentPicker: $presentPicker,
-                                                     fieldString: $passengerInfo.nationality,
-                                                     placeholder: "Nationality",
-                                                     tag: $tag,
-                                                     selectedTag: 1)
-                            }
-                            VStack(alignment: .leading) {
-                                Text("Gender")
-                                DropDownView(value: $passengerInfo.gender, placeholder: "Female", dropDownList: ["Male", "Female"])
+                                Text("Date of Birth")
+                                ZStack {
+                                    Text("\(userData.dateOfBirth.formatted(date: .long, time: .omitted))")
+                                        .font(.system(size: 13, weight: .semibold, design: .rounded))
+                                        .foregroundColor(.black)
+                                    DatePicker("", selection: $userData.dateOfBirth, in: Date()..., displayedComponents: .date)
+                                        .labelsHidden()
+                                        .background(.white)
+                                        .opacity(0.05)
+                                }
+                                .padding([.horizontal], 10)
+                                .frame(height: 35)
+                                .frame(maxWidth:.infinity)
+                                .textFieldStyle(PlainTextFieldStyle())
+                                .cornerRadius(5)
+                                .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.gray.opacity(0.5)))
                             }
                             
-//                            VStack(alignment: .leading) {
-//                                Text("Document Type")
-//                                DropDownView(value: $passengerInfo.documentType, placeholder: "passport", dropDownList: ["passport"])
-//                            }
+                            VStack(alignment: .leading) {
+                                Text("Gender")
+                                DropDownView(value: $userData.gender, placeholder: "Female", dropDownList: ["Male", "Female"])
+                            }
                         }
-//                        HStack {//Row-4
-//                            VStack(alignment: .leading) {
-//                                Text("Document Number*")
-//                                TextField("AAA123456", text: $passengerInfo.documentNumber)
-//                                    .padding(7)
-//                                    .background(Color.gray.opacity(0.3).cornerRadius(5))
-//                            }
-//
-//                            VStack(alignment: .leading) {
-//                                Text("Issued In")
-//                                TextField("Dhaka", text: $passengerInfo.issuingCountry)
-//                                    .padding(7)
-//                                    .background(Color.gray.opacity(0.3).cornerRadius(5))
-//                            }
-//                        }
-//                        HStack {//Row-5
-//                            VStack(alignment: .leading) {
-//                                Text("Expires No*")
-//                                DatePicker("", selection: $passengerInfo.expireDate, in: Date()..., displayedComponents: .date)
-//                                    .frame(maxWidth:.infinity)
-//                                    .accentColor(.orange)
-//                                    .background(Color.gray.opacity(0.3).cornerRadius(5))
-//                                    .labelsHidden()
-//                                    .foregroundColor(.red)
-//                            }
-//
-//                            VStack(alignment: .leading) {
-//                                Text("Gender")
-//                                DropDownView(value: $passengerInfo.gender, placeholder: "Female", dropDownList: ["Male", "Female"])
-//                            }
-//                        }
+                        if isDomestic == false {
+                            HStack {//Row-4
+                                VStack(alignment: .leading) {
+                                    Text("Document Type")
+                                    DropDownView(value: $userData.documentType, placeholder: "passport", dropDownList: ["passport"])
+                                }
+                                
+                                VStack(alignment: .leading) {
+                                    Text("Nationality")
+    //                                DropDownView(value:$userData.nationality, placeholder: "Nationality", dropDownList: ["BD", "IND"])
+                                    CustomPickerTextView(presentPicker: $presentPicker,
+                                                         fieldString: $userData.nationality,
+                                                         placeholder: "Nationality",
+                                                         tag: $tag,
+                                                         selectedTag: 1)
+                                }
+                            }
+                            HStack {//Row-5
+                                VStack(alignment: .leading) {
+                                    Text("Passport Number*")
+                                    TextField("AAA123456", text: $userData.documentNumber)
+    //                                    .padding(7)
+    //                                    .background(Color.gray.opacity(0.3).cornerRadius(5))
+                                        .padding([.horizontal], 10)
+                                        .frame(height: 35)
+                                        .textFieldStyle(PlainTextFieldStyle())
+                                        .cornerRadius(5)
+                                        .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.gray.opacity(0.5)))
+                                }
+
+                                
+                            }
+                            HStack {//Row-6
+                                VStack(alignment: .leading) {
+                                    Text("Issued In")
+                                    TextField("Dhaka", text: $userData.issuingCountry)
+                                        .padding([.horizontal], 10)
+                                        .frame(height: 35)
+                                        .textFieldStyle(PlainTextFieldStyle())
+                                        .cornerRadius(5)
+                                        .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.gray.opacity(0.5)))
+                                }
+                                
+                                VStack(alignment: .leading) {
+                                    Text("Expires No*")
+                                    ZStack {
+                                        Text("\(userData.expireDate.formatted(date: .long, time: .omitted))")
+                                            .font(.system(size: 13, weight: .semibold, design: .rounded))
+                                            .foregroundColor(.black)
+                                        DatePicker("", selection: $userData.expireDate, in: Date()..., displayedComponents: .date)
+                                            .labelsHidden()
+                                            .background(.white)
+                                            .opacity(0.05)
+                                    }
+                                    .padding([.horizontal], 10)
+                                    .frame(height: 35)
+                                    .frame(maxWidth:.infinity)
+                                    .textFieldStyle(PlainTextFieldStyle())
+                                    .cornerRadius(5)
+                                    .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.gray.opacity(0.5)))
+                                    
+    //                                DatePicker("", selection: $userData.expireDate, in: Date()..., displayedComponents: .date)
+    //                                    .frame(maxWidth:.infinity)
+    ////                                    .accentColor(.orange)
+    ////                                    .background(Color.gray.opacity(0.3).cornerRadius(5))
+    //                                    .labelsHidden()
+    //                                    .padding([.horizontal], 10)
+    //                                    .frame(height: 35)
+    //                                    .textFieldStyle(PlainTextFieldStyle())
+    //                                    .cornerRadius(5)
+    //                                    .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.gray.opacity(0.5)))
+                                }
+                            }
+                        }
                         
                     }
                     .frame(minWidth: 0, maxWidth: .infinity)
@@ -274,8 +326,8 @@ struct UserFormView: View {
                     
                     HStack(alignment: .center) {
                         Text("contact".uppercased())
-                            .font(.system(size: 16, weight:.bold, design: .monospaced))
-                            .foregroundColor(.black)
+                            .font(.system(size: 16, weight:.semibold, design: .rounded))
+                            .foregroundColor(.black.opacity(0.7))
                             .padding()
                         Spacer()
                     }
@@ -283,44 +335,60 @@ struct UserFormView: View {
                     .frame(height: 40.0)
                     .background(.gray.opacity(0.3))
                     
-                    VStack {
+                    VStack(alignment: .leading, spacing: 5) {
                         HStack {//Row-1
                             VStack(alignment: .leading) {
                                 Text("Email")
-                                TextField("Email", text: $passengerInfo.email)
-                                    .padding(7)
-                                    .background(Color.gray.opacity(0.3).cornerRadius(5))
-                                    .autocapitalization(.none)
-                            }
-                            
-                            VStack(alignment: .leading) {
-                                Text("City Name")
-                                TextField("Dhaka", text: $passengerInfo.cityName)
-                                    .padding(7)
-                                    .background(Color.gray.opacity(0.3).cornerRadius(5))
-                            }
-                            
-                            VStack(alignment: .leading) {
-                                Text("Country Code")
-                                TextField("BD", text: $passengerInfo.countryCode)
-                                    .padding(7)
-                                    .background(Color.gray.opacity(0.3).cornerRadius(5))
+                                TextField("Email", text: $userData.email)
+                                    .padding([.horizontal], 10)
+                                    .frame(height: 35)
+                                    .textFieldStyle(PlainTextFieldStyle())
+                                    .cornerRadius(5)
+                                    .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.gray.opacity(0.5)))
                             }
                         }
-                        HStack {//Row-2
+                        
+                        if isDomestic == false {
+                            HStack {//Row-2
+                                VStack(alignment: .leading) {
+                                    Text("City Name")
+                                    TextField("Dhaka", text: $userData.cityName)
+                                        .padding([.horizontal], 10)
+                                        .frame(height: 35)
+                                        .textFieldStyle(PlainTextFieldStyle())
+                                        .cornerRadius(5)
+                                        .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.gray.opacity(0.5)))
+                                }
+
+                                VStack(alignment: .leading) {
+                                    Text("Country Code")
+                                    TextField("BD", text: $userData.countryCode)
+                                        .padding([.horizontal], 10)
+                                        .frame(height: 35)
+                                        .textFieldStyle(PlainTextFieldStyle())
+                                        .cornerRadius(5)
+                                        .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.gray.opacity(0.5)))
+                                }
+                            }
+                        }
+                        
+                        HStack {//Row-3
                             VStack(alignment: .leading) {
                                 Text("Phone Code")
                                 CustomPickerTextView(presentPicker: $presentPicker,
-                                                     fieldString: $passengerInfo.phoneCountryCode,
+                                                     fieldString: $userData.phoneCountryCode,
                                                      placeholder: "phoneCountryCode",
                                                      tag: $tag,
                                                      selectedTag: 2)
                             }
                             VStack(alignment: .leading) {
                                 Text("Phone")
-                                TextField("Phone", text: $passengerInfo.phone)
-                                    .padding(7)
-                                    .background(Color.gray.opacity(0.3).cornerRadius(5))
+                                TextField("Phone", text: $userData.phone)
+                                    .padding([.horizontal], 10)
+                                    .frame(height: 35)
+                                    .textFieldStyle(PlainTextFieldStyle())
+                                    .cornerRadius(5)
+                                    .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.gray.opacity(0.5)))
                             }
                             
                         }
@@ -331,18 +399,19 @@ struct UserFormView: View {
                     
                 }
             }
+            .font(.system(size: 13, weight: .regular, design: .rounded))
             
             if presentPicker {
                 if tag == 1 {
                     CustomPickerView(items: countriesVM.countries,
-                                     pickerField: $passengerInfo.nationality,
+                                     pickerField: $userData.nationality,
                                      presentPicker: $presentPicker,
                     isCountryCode: true)
                         .zIndex(1.0)
                 }
                 if tag == 2 {
                     CustomPickerView(items: countriesVM.countries,
-                                     pickerField: $passengerInfo.phoneCountryCode,
+                                     pickerField: $userData.phoneCountryCode,
                                      presentPicker: $presentPicker,
                                      isCountryCode: false)
                         .zIndex(1.0)
@@ -390,7 +459,6 @@ struct UserFormView: View {
 
 struct UserFormView_Previews: PreviewProvider {
     static var previews: some View {
-        let u = UserData()
-        UserFormView(passengerInfo: .constant(u))
+        UserFormView(userData: .constant(UserData()), isDomestic: false)
     }
 }

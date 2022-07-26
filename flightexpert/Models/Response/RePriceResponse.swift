@@ -25,6 +25,12 @@ struct RePriceResponse : Codable {
                     var travelTime : String?
                     var equipment : String?
                 }
+                
+                struct Baggage : Codable {
+                    let units : String?
+                    let amount : Double
+                }
+                
                 var from : String?
                 var fromAirport : String?
                 var to : String?
@@ -39,10 +45,10 @@ struct RePriceResponse : Codable {
                 var serviceClass : String?
                 var plane : [String]?
                 var duration : [String]?
-                var techStops : [Int]
+                var techStops : [String]?
                 var bookingClass : String?
                 var bookingCount : String?
-                var baggage : [String]?
+                var baggage : [Baggage]?
                 var fareBasisCode : String?
                 var airlineCode : String?
             }

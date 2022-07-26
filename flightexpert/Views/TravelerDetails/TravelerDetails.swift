@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import Combine
+import SSLCommerzSDK
 
 struct TravelerDetails: View {
     
@@ -18,6 +20,8 @@ struct TravelerDetails: View {
     @State var totalInfant: Int = 0
     @State var userDataArray = [UserData]()
     @State var isAgree: Bool = false
+    @State var isShowSSLView = false
+    @State var showSSLCz: String? = nil
 
     @Environment(\.presentationMode) var presentationMode
     var btnBack : some View { Button(action: {
@@ -33,27 +37,22 @@ struct TravelerDetails: View {
     
     var body: some View {
         ZStack {
-            Color.white
-
+            BackgroundImage
+                .resizable()
+                .scaledToFill()
+                .ignoresSafeArea(.all, edges: .all)
+            
+            NavigationLink(destination:VCRepresented(), tag: "VCRepresented", selection: $showSSLCz) { EmptyView() }
             VStack {
                 ScrollView {
                     ForEach(self.userDataArray.indices, id: \.self) { i in
-                        UserFormView(passengerInfo: self.$userDataArray[i])
+                        UserFormView(userData: self.$userDataArray[i], isDomestic: false)
                     }
-//                    ForEach((1...totalUserCount), id: \.self) {
-//
-//                        UserFormView(userTitle: "USER # \($0)", passengerInfo: $userDataArray[$0])
-////                    }
-//                    VStack {
-//
-//                        UserFormView(userTitle: "USER # 1", passengerInfo:$userData1)
-////                        UserFormView(userTitle: "USER # 2", passengerInfo: $userData2)
-////                        UserFormView(userTitle: "USER # 2", passengerInfo: $userData2)
-////                        UserFormView(userTitle: "USER # 2", passengerInfo: $userData2)
-//                    }
                 }
+                .offset(y: 64)
+                .clipped()
                 
-                VStack {
+                VStack(alignment: .center, spacing: 10) {
                     HStack(spacing: -10) {
 
                         Toggle("I agree to the", isOn: $isAgree)
@@ -71,23 +70,39 @@ struct TravelerDetails: View {
                     }
 
 
-                    HStack {
-                        Spacer()
-                        Button("Book and Continue") {
-                            //Goto Pricing page
-                            PrepareBooking()
-                        }
-                        .font(.system(size: 16, weight:.bold, design: .monospaced))
+//                    HStack {
+//                        Spacer()
+//                        Button("Book and Continue") {
+//                            //Goto Pricing page
+//                            PrepareBooking()
+//                        }
+//                        .font(.system(size: 16, weight:.bold, design: .monospaced))
+//                        .foregroundColor(.white)
+//                        Spacer()
+//                    }
+//                    .frame(maxWidth:.infinity)
+//                    .frame(height: 40)
+//                    .background(.black)
+                    Button {
+                        //Goto Pricing page
+                        PrepareBooking()
+                    } label: {
+                        Text("Book and Continue")
+                            .font(.system(size: 20, weight:.bold, design: .rounded))
                         .foregroundColor(.white)
-                        Spacer()
+                        .frame(minWidth:0, maxWidth: .infinity, minHeight: 40, maxHeight: 40)
+                        .background(RoundedRectangle(cornerRadius: 10)
+                            .fill(blueGradient))
                     }
-                    .frame(maxWidth:.infinity)
-                    .frame(height: 50)
-                    .background(.black)
                 }
+                .frame(height: 100)
+                .padding(.horizontal,10)
+                .padding(.bottom, 64)
+                
+                
             }
         }
-        .navigationTitle("Traveler Details")
+        .navigationTitle("Passenger Details")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(leading: btnBack)
@@ -162,7 +177,28 @@ struct TravelerDetails: View {
         
         print(prepareBookingRequest)
         
-        flightSearchModel.prepareBooking(requestBody: prepareBookingRequest)
+        self.prepareBooking(requestBody: prepareBookingRequest)
+    }
+    
+    func prepareBooking(requestBody:PrepareBookingRequest) {
+        flightSearchModel.isBooking = true
+        HttpUtility.shared.prepareBooking(requestBody: requestBody) { result in
+
+            DispatchQueue.main.async { [self] in
+                flightSearchModel.isBooking = false
+                
+                guard let result = result else {
+                    fatalError("There must be a problem decoding the data...")
+                }
+                
+                flightSearchModel.bookingResponse = result
+                print(result)
+                
+                //call for openSSLCZ
+                showSSLCz = "VCRepresented"
+                
+            }
+        }
     }
     
     func getDateString(date:Date) -> String {
@@ -189,8 +225,26 @@ struct TravelerDetails_Previews: PreviewProvider {
 }
 
 
-//struct TravelerDetails_Previews: PreviewProvider {
-//    static var previews: some View {
-//        UserFormView(title: "UserFormView", flightSearchModel: FlightSearchModel())
-//    }
-//}
+enum LinkAction {
+    case takePhoto
+}
+
+class VCLink : ObservableObject {
+    @Published var action : LinkAction?
+    @Published var name : String = ""
+    @Published var amount : String?
+
+    func takePhoto() {
+        action = .takePhoto
+    }
+}
+
+struct VCRepresented : UIViewControllerRepresentable {
+    func makeUIViewController(context: Context) -> SSLCmzViewController {
+        return SSLCmzViewController()
+    }
+    
+    func updateUIViewController(_ uiViewController: SSLCmzViewController, context: Context) {
+
+    }
+}

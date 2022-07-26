@@ -40,12 +40,11 @@ struct SignupView: View {
                 VStack {
                     VStack(spacing:10) {
                         Text("Create Account!")
-                            .fontWeight(.medium)
-                            .font(.system(size: 25, weight: .heavy, design: .rounded))
+                            .font(.system(size: 16, weight: .bold, design: .rounded))
                             .foregroundColor(Color.black)
                         Text("Let's continue your journey")
                             .fontWeight(.medium)
-                            .font(.system(size: 14,design: .rounded))
+                            .font(.system(size: 10, weight: .regular, design: .rounded))
                             .foregroundColor(Color.black)
                     }
                     
@@ -58,7 +57,7 @@ struct SignupView: View {
                         SignupTextField(placeholder:"Phone Number", text: $mobile)
                     }
                     .padding(.horizontal, 30)
-                    .padding(.vertical, 10)
+                    .padding(.vertical, 5)
                     
                     
                     
@@ -69,7 +68,7 @@ struct SignupView: View {
                                 .scaledToFit()
                                 .frame(width:10)
                             Text("Password must be 8 chareacters")
-                                .font(.system(size: 13))
+                                .font(.system(size: 10, weight: .regular, design: .rounded))
                         }
                         HStack {
                             Image("bullet-icon")
@@ -77,7 +76,7 @@ struct SignupView: View {
                                 .scaledToFit()
                                 .frame(width:10)
                             Text("Password must have 1 upper case(AB) & lower case latter (ab)")
-                                .font(.system(size: 13))
+                                .font(.system(size: 10, weight: .regular, design: .rounded))
                                 .multilineTextAlignment(.leading)
                                 .lineLimit(2)
                         }
@@ -87,18 +86,20 @@ struct SignupView: View {
                                 .scaledToFit()
                                 .frame(width:10)
                             Text("Password must have one number")
-                                .font(.system(size: 13))
+                                .font(.system(size: 10, weight: .regular, design: .rounded))
                         }
                         HStack {
                             CheckBoxView(checked: $checked)
                             VStack(alignment: .leading, spacing: 2){
-                                Text("Element that requires checkmark!")
+                                Text("By creating this account you are agree to our")
+                                    .font(.system(size: 10, weight: .regular, design: .rounded))
+                                
                                 NavigationLink {
-                                    SigninView()
+                                    //SigninView()
                                 } label: {
                                     Text("Terms & Conditions")
                                         .underline()
-                                        .font(.system(size: 14, weight:.bold))
+                                        .font(.system(size: 11, weight: .semibold, design: .rounded))
                                 }
                                 
                             }
@@ -115,39 +116,41 @@ struct SignupView: View {
                     }, label: {
                         Text("Create Account")
                             .frame(maxWidth:.infinity)
+                            .font(.system(size: 13, weight: .bold, design: .rounded))
                             .padding([.top, .bottom], 10)
                             .background(blueGradient)
                             .foregroundColor(Color.white)
-                            .cornerRadius(7.5)
+                            .cornerRadius(15)
                     })
                     .padding(.horizontal, 30)
                     
                     HStack {
                         Text("Already have an account?")
+                            .font(.system(size: 10, weight: .regular, design: .rounded))
                         NavigationLink {
                             SigninView()
                         } label: {
                             Text("Login")
                                 .underline()
-                                .font(.system(size: 14, weight:.bold))
+                                .font(.system(size: 12, weight: .bold, design: .rounded))
                         }
                     }
                     .foregroundColor(.black)
                     .font(.system(size: 14, weight: .medium, design: .monospaced))
                 }
-                .frame(minHeight: 600, maxHeight: .infinity)
+                .frame(minHeight: 0, maxHeight: .infinity)
                 .background(
                     RoundedRectangle(cornerRadius: 10)
                         .fill(Color.gray.opacity(0.3)
                     )
-                    .padding([.leading, .trailing], 20)
-                    .padding(.top, 100)
+                    .padding([.leading, .trailing], 10)
+                    .padding(.top, 80)
                 )
                 
                 Image("app_name_header")
                     .resizable()
                     .scaledToFit()
-                    .frame(height: 40)
+                    .frame(height: 30)
                     .padding(.bottom, 64)
                     .padding(.top, 20)
             }

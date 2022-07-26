@@ -16,43 +16,38 @@ struct SelectionRow: View {
     
     
     var body: some View {
-        ZStack {
-            Color.white
-            HStack {
-                VStack(spacing:10) {
-                    HStack() {
-                        Image(systemName: "airplane.departure")
-                            .foregroundColor(.accentColor)
-                        Text("\(airport.name) (\(airport.iata))")
-                            .font(.headline)
-                    }
-                    HStack {
-                        Text("\(airport.city), ")
-                        Text(airport.country)
-                    }
-                    .padding(.leading)
-                }
+        HStack {
+            VStack(alignment: .leading, spacing: 10) {
+                HStack() {
+                    Image(systemName: "airplane.departure")
+                        .foregroundColor(.gray)
+                    Text("\(airport.name) (\(airport.iata))")
+                }.font(.system(size: 14, weight: .bold, design: .rounded))
                 
-                
-                Spacer()
-                if airport.iata == selectedAirport?.iata {
-                    Image(systemName: "checkmark")
-                        .foregroundColor(.accentColor)
-                        .padding()
-                }
+                Text("\(airport.city), \(airport.country)")
+                .font(.system(size: 11, weight: .regular, design: .rounded))
+                .foregroundColor(.gray)
             }
-            .contentShape(Rectangle())
-            .onTapGesture {
-                // tap
-                if airport.iata == selectedAirport?.iata {
-                    selectedAirport = nil
-                } else {
-                    selectedAirport = airport
-                    
-                    // action
-                    if let action = action {
-                        action(airport)
-                    }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            
+            Spacer()
+            if airport.iata == selectedAirport?.iata {
+                Image(systemName: "checkmark")
+                    .foregroundColor(.accentColor)
+                    .padding()
+            }
+        }
+        .padding(5)
+        .onTapGesture {
+            // tap
+            if airport.iata == selectedAirport?.iata {
+                selectedAirport = nil
+            } else {
+                selectedAirport = airport
+                
+                // action
+                if let action = action {
+                    action(airport)
                 }
             }
         }

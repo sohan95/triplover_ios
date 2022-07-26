@@ -59,11 +59,12 @@ struct SecureInputView: View {
                     .accentColor(.black)
             }
         }
+        .font(.system(size: 11, weight: .regular, design: .rounded))
         .disableAutocorrection(true)
         .autocapitalization(.none)
-        .padding(10)
+        .padding(8)
         .background(Color(.secondarySystemBackground))
-        .cornerRadius(5)
+        .cornerRadius(4)
     }
 }
 
@@ -75,11 +76,12 @@ struct SignupTextField: View {
     
     var body: some View {
         TextField(placeholder, text: $text, onEditingChanged: editingChanged, onCommit: commit)
+        .font(.system(size: 11, weight: .regular, design: .rounded))
         .disableAutocorrection(true)
         .autocapitalization(.none)
-        .padding(10)
+        .padding(8)
         .background(Color(.secondarySystemBackground))
-        .cornerRadius(5)
+        .cornerRadius(4)
     }
 }
 
