@@ -47,10 +47,6 @@ struct BookedFlightDetails: View {
                             FlightDetails(directions:(details.flightInfo?.directions)!)
 //                            FlightDetails()
                             
-                            Line()
-                               .stroke(style: StrokeStyle(lineWidth: 2, dash: [3]))
-                               .frame(height: 1)
-                            
                             Text("Fare Details")
                                 .frame(maxWidth:.infinity,alignment: .leading)
                                 .padding(10)
@@ -175,9 +171,14 @@ struct PassengerInfo: View {
 struct FlightDetails: View {
     var directions : [[AirTicketingDetailsResponse.FlightInfo.Direction]]
     var body: some View {
-        VStack{
+        VStack(alignment: .leading, spacing: 0){
             ForEach(self.directions, id:\.self) { direction in
-                FlightDetailView(direction: direction.first!)
+                VStack(alignment: .leading, spacing: 5){
+                    FlightDetailView(direction: direction.first!)
+                    Line()
+                       .stroke(style: StrokeStyle(lineWidth: 2, dash: [3]))
+                       .frame(height: 1)
+                }
             }
         }
     }
@@ -189,8 +190,8 @@ struct FlightDetailView:View {
         HStack(alignment: .bottom) {
             VStack(alignment:.leading){
                 HStack{
-                    ImageUrlView(urlString: "\(ROOT_URL_THUMB)\(direction.platingCarrierCode! ).png")
-                    .frame(width: 40, height: 40)
+                    ImageUrlView(urlString: "\(ROOT_URL_THUMB)\(direction.platingCarrierCode! ).png", sizeVal: 60)
+                    .frame(width: 60, height: 60)
                     .scaledToFit()
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
@@ -241,8 +242,8 @@ struct FlightDetailView:View {
                 }
             }
             .frame(maxWidth: .infinity)
-            Divider().frame(width:1)
-                .background(.gray.opacity(0.5))
+            Divider().frame(maxWidth: 1.5, minHeight: 90, maxHeight: 90)
+            .background(.gray.opacity(0.3))
             
             VStack(alignment: .leading, spacing: 5){
                 HStack(alignment: .top){
@@ -278,7 +279,7 @@ struct FlightDetailView:View {
             .frame(maxWidth: .infinity)
             .font(.system(size: 10, weight: .regular, design: .rounded))
         }
-        .frame(maxWidth: .infinity, minHeight: 100, maxHeight: 100)
+        .frame(maxWidth: .infinity, minHeight: 90, maxHeight: 90)
     }
     
 }

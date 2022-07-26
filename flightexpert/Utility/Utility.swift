@@ -83,6 +83,9 @@ func getTimeStringWithTemplate(dateStr: String, template: String) -> String {
 func getDateStringWithTemplate(dateStr: String, template: String) -> String {
 //        let string = "2022-07-30 18:00:00"
 
+    if dateStr.isEmpty {
+        return ""
+    }
     let dateFormatter = DateFormatter()
     let tempLocale = dateFormatter.locale // save locale temporarily
     dateFormatter.locale = Locale(identifier: "en_US_POSIX") // set locale to reliable US_POSIX
@@ -116,4 +119,13 @@ func getDateString(dateStr: String) -> String {
 //    dateFormatter.dateFormat = "h:mm a"
 //    return dateFormatter.date(from: dateStr)!
 //}
+
+func getDateFromString(dateStr:String) -> Date {
+    let dateFormatter = DateFormatter()
+    let tempLocale = dateFormatter.locale // save locale temporarily
+    dateFormatter.locale = Locale(identifier: "en_US_POSIX") // set locale to reliable US_POSIX
+    dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+    let date = dateFormatter.date(from: dateStr)!
+    return date
+}
 

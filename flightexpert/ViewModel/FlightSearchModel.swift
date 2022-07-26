@@ -40,6 +40,14 @@ class FlightSearchModel: ObservableObject {
     @Published var searchFlighRequest: SearchFlighRequest?
     @Published  var routeIndex: Int = 0
     
+    // Filter by total Price
+    @Published var maxPrice: Double = 0.0
+    @Published var minPrice: Double = 0.0
+    @Published var minMaxPrice: MinMaxPrice = MinMaxPrice(minPrice: 200.0, maxPrice: 10000.0)
+    
+    // Filter by airlines
+    @Published var airlineList: [String] = []
+    
     var flightRouteTypes = ["One-Way" ,"Round-Trip", "Multi-City"]
     
     var isOneWay: Bool {
@@ -109,15 +117,71 @@ class FlightSearchModel: ObservableObject {
         self.routeIndex = 0
         self.selectedDirectionList.removeAll()
         
+        //var airlineList:[String] = [] //platingCarrierName
+        var airlineSet = Set<String>()
+        
         for airResponse in self.airSearchResponses {
             let directionList = airResponse.directions![0].map { direction -> Direction in
                 var tempDir: Direction = direction
                 tempDir.uniqueTransID = airResponse.uniqueTransID
                 tempDir.itemCodeRef = airResponse.itemCodeRef
+                tempDir.totalPrice = airResponse.totalPrice!
+                
+                tempDir.platingCarrierName = airResponse.platingCarrierName
                 
                 tempDir.bookingComponents = airResponse.bookingComponents
                 
                 tempDir.segmentCodeRef = direction.segments![0].segmentCodeRef
+                tempDir.departure = direction.segments![0].departure
+                
+                return tempDir
+            }
+            directions.append(contentsOf: directionList)
+            
+            //For All filter categories collection
+            // for airline
+            
+            if let airline = airResponse.platingCarrierName {
+                airlineSet.insert(airline)
+                print("airline=\(airline)")
+            }
+            
+        }
+        
+        print(directions)
+        
+        //airlineList
+        self.airlineList = Array(airlineSet)
+//        // max-min filter:
+//        let directionMax = directions.max { $0.totalPrice! < $1.totalPrice! }
+//        self.maxPrice = (directionMax?.totalPrice)!
+//
+//        let directionMin = directions.min { $0.totalPrice! < $1.totalPrice! }
+//        self.minPrice = (directionMin?.totalPrice)!
+        
+        print("maxPrice=\(self.maxPrice)___minPrice=\(self.minPrice)")
+        print("maxPrice=\(self.maxPrice)___minPrice=\(self.minPrice)")
+        
+        self.forwardDirections = directions
+        self.selectedDirectionList.insert(directions, at: self.routeIndex)
+    }
+    
+    func getForwardDirection2() {
+        var directions: [Direction] = []
+        self.routeIndex = 0
+        self.selectedDirectionList.removeAll()
+        
+        for airResponse in self.airSearchResponses {
+            let directionList = airResponse.directions![0].map { direction -> Direction in
+                var tempDir: Direction = direction
+                tempDir.uniqueTransID = airResponse.uniqueTransID
+                tempDir.itemCodeRef = airResponse.itemCodeRef
+                tempDir.totalPrice = airResponse.totalPrice!
+                
+                tempDir.bookingComponents = airResponse.bookingComponents
+                
+                tempDir.segmentCodeRef = direction.segments![0].segmentCodeRef
+                tempDir.departure = direction.segments![0].departure
                 return tempDir
             }
             directions.append(contentsOf: directionList)

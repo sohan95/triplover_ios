@@ -13,19 +13,19 @@ For support, please feel free to contact me at https://www.linkedin.com/in/syeda
 
 import Foundation
 struct MinMaxPrice : Codable {
-	let minPrice : Double?
-	let maxPrice : Double?
+	var minPrice : Double
+	var maxPrice : Double
 
-	enum CodingKeys: String, CodingKey {
-
-		case minPrice = "minPrice"
-		case maxPrice = "maxPrice"
-	}
-
-	init(from decoder: Decoder) throws {
-		let values = try decoder.container(keyedBy: CodingKeys.self)
-		minPrice = try values.decodeIfPresent(Double.self, forKey: .minPrice)
-		maxPrice = try values.decodeIfPresent(Double.self, forKey: .maxPrice)
-	}
+//	enum CodingKeys: String, CodingKey {
+//
+//		case minPrice = "minPrice"
+//		case maxPrice = "maxPrice"
+//	}
+//
+//	init(from decoder: Decoder) throws {
+//		let values = try decoder.container(keyedBy: CodingKeys.self)
+//		minPrice = try values.decodeIfPresent(Double.self, forKey: .minPrice)
+//		maxPrice = try values.decodeIfPresent(Double.self, forKey: .maxPrice)
+//	}
 
 }

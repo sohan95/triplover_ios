@@ -150,6 +150,7 @@ final class HttpUtility {
         guard let token = token else {
             return
         }
+        print("token=\(token)")
 
         var urlRequest = URLRequest(url: URL(string: "\(HttpUtility.baseUrl)/RePrice")!)
         urlRequest.httpMethod = "post"
@@ -195,6 +196,7 @@ final class HttpUtility {
 //                decoder.dateDecodingStrategy = .formatted(formatter)
                 
                 let responseData = try? decoder.decode(RePriceResponse.self, from: data!)
+                
                 //print(responseData!)
                 _ = completionHandler(responseData)
             }
@@ -245,7 +247,7 @@ final class HttpUtility {
         }).resume()
     }
     
-    func bookingConfirm(requestBody:BookingConfirmRequest, completionHandler:@escaping(_ result: BookingConfirmResponse?)->Void) {
+    func bookingConfirm(requestBody:SSLComerzResponse, completionHandler:@escaping(_ result: BookingConfirmResponse?)->Void) {
         let token = UserDefaults.standard.string(forKey: "token")
         guard let token = token else {
             return

@@ -30,7 +30,7 @@ struct MyBooking: View {
                 VStack {
                     Spacer()
                     ScrollView {
-                        VStack(spacing: 20) {
+                        VStack(spacing: 5) {
                             ForEach(currentBookingList, id: \.self) { bookedFlight in
                                 BookedFlight(flight: bookedFlight) { bookedFlight in
                                     selectedBookedFlight = bookedFlight
@@ -55,8 +55,8 @@ struct MyBooking: View {
                                     .scaledToFit()
                                     .frame(width: btnImgWidth2)
                                 Text("Home")
-                                    .padding(.top, -5)
-                                    .font(.system(size: 12, weight: .bold))
+                                    .padding(.top, -2)
+                                    .font(.system(size: 11, weight: .semibold))
                             }
                         }
                         
@@ -68,8 +68,8 @@ struct MyBooking: View {
                                     .scaledToFit()
                                     .frame(width: btnImgWidth2)
                                 Text("My Booking")
-                                    .padding(.top, -5)
-                                    .font(.system(size: 12, weight: .bold))
+                                    .padding(.top, -2)
+                                    .font(.system(size: 11, weight: .semibold))
                             }
                         }
                         
@@ -82,8 +82,8 @@ struct MyBooking: View {
                                     .scaledToFit()
                                     .frame(width: btnImgWidth2)
                                 Text("Login")
-                                    .padding(.top, -5)
-                                    .font(.system(size: 12, weight: .bold))
+                                    .padding(.top, -2)
+                                    .font(.system(size: 11, weight: .semibold))
                             }
                             
                         }
@@ -91,15 +91,14 @@ struct MyBooking: View {
                     .frame(maxWidth: .infinity, maxHeight: 60)
                     .background(Color("colorPrimary"))
                     .accentColor(.white)
-                    .padding(.bottom, 64)
+                    .padding(.bottom, 44)
                 }
-                
-                
             } else {
                 LoadingView()
                     .navigationBarBackButtonHidden(true)
             }
-        }.onAppear() {
+        }
+        .onAppear() {
             getAllAirTicketList()
         }
     }

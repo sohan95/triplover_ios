@@ -7,6 +7,10 @@
 
 import SwiftUI
 
+var sortCategoryList = ["Price Low","Price High","Time ASC","Time DESC"]
+//var airlineList:[String] = ["Biman Bangladesh", "Novo Air", "US Bangla",]
+var stopsList:[String] = ["Non-Stop", "1 Stop", "2 or More Stops"]
+
 struct Stack {
     private var myArray: [Direction] = []
     
@@ -27,38 +31,54 @@ struct Stack {
 }
 
 struct OriginFlightList: View {
-    var title:String
     //@ObservedObject var flightSearchModel: FlightSearchModel
     @EnvironmentObject var flightSearchModel: FlightSearchModel
-//    @State private var sheetMode: SheetMode = .none
+    @State private var sheetMode: SheetMode = .none
+    
 //    @State private var isSelectBtnTapped: Bool = false
     @State private var selection: String? = nil
     @State private var popUpTitle: String = "Close"
     @State var currentDirectionList: [Direction] = []
     @State var currentDirection: Direction? = nil
     
+    //For Filter
+    @State var show = false
+    @State var selectedSortCategory = ""
+
+    @State var isFilterShown = false
+    @State var selectedStop: String = "";
+    @State var selectedAirline: String = "";
+    
+    @State var filterTypeIndex: Int = 2
+    @State var selectedFilterItem: [String] = []
+    
+    @State var selectedMinMaxPrice: MinMaxPrice = MinMaxPrice(minPrice: 0.0, maxPrice: 0.0)
+    
     @Environment(\.presentationMode) var presentationMode
     var btnBack : some View { Button(action: {
-            if flightSearchModel.isOneWay {
-                self.presentationMode.wrappedValue.dismiss()
-            } else if flightSearchModel.isRoundTrip {
-                if flightSearchModel.routeIndex == 0 {
+            if isFilterShown == false  && show == false {
+                if flightSearchModel.isOneWay {
                     self.presentationMode.wrappedValue.dismiss()
-                } else if flightSearchModel.routeIndex == 1 {
-                    flightSearchModel.routeIndex = 0
-                    self.currentDirectionList = flightSearchModel.selectedDirectionList[flightSearchModel.routeIndex]
-                    self.currentDirection = flightSearchModel.getSelectedFlight(index: flightSearchModel.routeIndex)
-                }
-                
-            } else if flightSearchModel.isMultiCity {
-                if flightSearchModel.routeIndex == 0 {
-                    self.presentationMode.wrappedValue.dismiss()
-                } else if flightSearchModel.routeIndex > 0 {
-                    flightSearchModel.routeIndex -= 1
-                    self.currentDirectionList = flightSearchModel.selectedDirectionList[flightSearchModel.routeIndex]
-                    self.currentDirection = flightSearchModel.getSelectedFlight(index: flightSearchModel.routeIndex)
+                } else if flightSearchModel.isRoundTrip {
+                    if flightSearchModel.routeIndex == 0 {
+                        self.presentationMode.wrappedValue.dismiss()
+                    } else if flightSearchModel.routeIndex == 1 {
+                        flightSearchModel.routeIndex = 0
+                        self.currentDirectionList = flightSearchModel.selectedDirectionList[flightSearchModel.routeIndex]
+                        self.currentDirection = flightSearchModel.getSelectedFlight(index: flightSearchModel.routeIndex)
+                    }
+                    
+                } else if flightSearchModel.isMultiCity {
+                    if flightSearchModel.routeIndex == 0 {
+                        self.presentationMode.wrappedValue.dismiss()
+                    } else if flightSearchModel.routeIndex > 0 {
+                        flightSearchModel.routeIndex -= 1
+                        self.currentDirectionList = flightSearchModel.selectedDirectionList[flightSearchModel.routeIndex]
+                        self.currentDirection = flightSearchModel.getSelectedFlight(index: flightSearchModel.routeIndex)
+                    }
                 }
             }
+            
         }) {
             HStack {
             Image(systemName: "arrow.backward") // set image here
@@ -77,8 +97,20 @@ struct OriginFlightList: View {
                 .edgesIgnoringSafeArea(.all)
             
             NavigationLink(destination:RoutesConfirmView(), tag: "RoutesConfirmView", selection: $selection) { EmptyView() }
-            
-//            if !flightSearchModel.isSearching {
+        
+            VStack(spacing:1) {
+                HStack{
+                    Spacer()
+                    Text("\(currentDirectionList.count) Flight/s found")
+                        .font(.system(size: 16, weight: .semibold, design: .rounded))
+                        .foregroundColor(.black)
+                        .padding(.horizontal,10)
+                        .padding(.vertical,5)
+                        .background(.white)
+                        .cornerRadius(5)
+                }
+                .padding(.top,5)
+                
                 ScrollView {
                     VStack(spacing: 20) {
                         ForEach(currentDirectionList, id: \.self) { direction in
@@ -88,23 +120,18 @@ struct OriginFlightList: View {
                                 if flightSearchModel.isSelectBtnTapped {
                                     selectFlightDirection(direction: directionResult)
                                 } else {
-                                    flightSearchModel.detailsDir = directionResult
-                                    selection = "RoutesConfirmView"
+                                    self.gotoDetailsView(direction: directionResult)
                                 }
                             }
                         }
-                        
                     }
-                    .offset(y: 64)
-//                    .clipped()
                 }
-                .frame(minHeight: 480, maxHeight:.infinity)
-                .navigationTitle("Flight")
+                .frame(minWidth:0, maxWidth: .infinity, minHeight:0, maxHeight: .infinity)
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationBarBackButtonHidden(true)
                 .toolbar(){
                     ToolbarItem(placement: .principal) {
-                        VStack {
+                        VStack (alignment: .center) {
                             HStack(spacing: 5){
                                 if let routes = flightSearchModel.searchFlighRequest!.routes {
                                     ForEach(0 ..< routes.count, id:\.self) { i in
@@ -113,25 +140,13 @@ struct OriginFlightList: View {
                                             Image(systemName: "airplane.departure")
                                             Text("\(routes[i].destination)")
                                         }
-                                        .font(.system(size: 11, weight: .heavy, design: .rounded))
+                                        .font(.system(size: 13, weight: .bold, design: .rounded))
                                         .foregroundColor(.white)
-                                        .padding(5)
+                                        .padding(7.5)
                                         .background(self.flightSearchModel.routeIndex == i ? .black : Color.gray.opacity(0.5))
                                         .cornerRadius(5)
-                                        
-                                            
                                     }
                                 }
-                            }
-                            HStack{
-                                Spacer()
-                                Text("\(currentDirectionList.count) Flight/s found")
-                                    .font(.system(size: 10, weight: .semibold, design: .rounded))
-                                    .foregroundColor(.black)
-                                    .padding(.horizontal,10)
-                                    .padding(.vertical,5)
-                                    .background(.white)
-                                    .cornerRadius(5)
                             }
                         }
                         
@@ -141,131 +156,96 @@ struct OriginFlightList: View {
                 .onAppear() {
                     updateOnAppear()
                 }
-//                .onTapGesture {
-//                    //sheetMode = .none
-//                }
-                /*
-                FlexibleSheet(sheetMode: $sheetMode) {
-                    ZStack {
-                        backgroundGradient
-                            .ignoresSafeArea()
-                        
-                        if let selected = self.flightSearchModel.originDir {
-                            VStack(spacing:10) {
-                                HStack(spacing: 10) {
-                                    Button("Bag Details"){
-                                        print("Show Bag Details")
-                                    }.foregroundColor(.white)
-                                    .frame(minWidth: 0, maxWidth: .infinity)
-                                    Divider()
-                                        .frame(width: 1, height: 20, alignment: .bottom)
-                                        .background(.white)
-                                    Button("Price Details"){
-                                        print("Show Price Details")
-                                        
-                                    }.foregroundColor(.white)
-                                        
-                                        .frame(minWidth: 0, maxWidth: .infinity)
-                                    
-                                    Divider()
-                                        .frame(width: 1, height: 20, alignment: .bottom)
-                                        .background(.white)
-                                    Button {
-                                        ConfirmAction()
-                                    } label: {
-                                        Text(self.popUpTitle)
-                                            .frame(width:50)
-                                    }.frame(minWidth: 0, maxWidth: .infinity)
-                                }
-                                .frame(maxWidth:.infinity, maxHeight:20)
-        //                        .background(.blue)
-                                .foregroundColor(.white)
-                                .font(.system(size: 14, weight: .bold))
+                
+                //Bottom: Button Option View
+                VStack{
+                    VStack {
+                        Button {
+                            //Flight Details
+                        } label: {
+                            Text("FLIGHT DETAILS")
+                                .frame(minWidth:0, maxWidth: .infinity)
                                 .padding(10)
-                                
-                                VStack {
-                                    VStack(spacing: 20){
-                                        Spacer()
-                                        HStack {
-                                            Image(systemName: "airplane")
-                                                .resizable()
-                                                .frame(width: CGFloat(30), height: CGFloat(30), alignment: .center)
-                                        }
-                                        .frame(minWidth: 0, maxWidth: .infinity)
-                                        .background(.secondary)
-                                        
-                                        Spacer()
-                                        HStack(alignment:.bottom, spacing: 10) {
-                                            VStack(alignment: .leading) {
-                                                //
-                                                Text(selected.platingCarrierName!)
-                                                Text("\(selected.platingCarrierCode!)-\(selected.segments?[0].flightNumber ?? ""), \(selected.segments?[0].serviceClass ?? "")")
-                                            }
-                                            .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                                            .background(.secondary)
-                                            Divider()
-                                                .frame(width: 1, height: 40, alignment: .center)
-                                                .background(.black)
-                                            VStack(alignment: .leading) {
-                                                Text("\(selected.from!) - \(selected.to!)")
-                                                Text("\(selected.segments?[0].details?[0].travelTime ?? "")")
-                                            }
-                                            .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                                            .background(.secondary)
-                                        }
-                                        .padding(10)
-                                        
-                                    }
-                                    .frame(maxWidth:.infinity)
-                                    .frame(height:150)
-                                    .background(.white)
-                                    .clipShape(RoundedRectangle(cornerRadius: 5.0))
+                                .background(Color("colorPrimary"))
+                                .foregroundColor(.white)
+                                .cornerRadius(15)
+                            
+                        }
+                        
+                        HStack{
+                            Button {
+                                //sheetMode = .semi
+                                self.isFilterShown.toggle()
+                            } label: {
+                                Text("Filter")
+                                    .frame(minWidth:0, maxWidth: .infinity)
                                     .padding(10)
-                                    
-                                    HStack{
-                                        
-                                        VStack(alignment: .leading){
-                                            Text("\(selected.segments?[0].details?[0].departure ?? "")")
-                                            Text("2022-06-06")
-                                            Text("[\(selected.from!)]")
-                                            Text("Terminal:\(selected.fromAirport!)")
-                                        }
-                                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                                        VStack(alignment: .leading){
-                                            Text("\(selected.segments?[0].details?[0].arrival ?? "")")
-                                            Text("2022-06-06")
-                                            Text("[\(selected.to!)]")
-                                            Text("Terminal:\(selected.toAirport!)")
-                                                
-                                        }
-                                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                                        
-                                    }
-                                    .foregroundColor(Color.white)
-                                    .padding(10)
-                                    Spacer()
-                                }
-                                .frame(maxWidth:.infinity, maxHeight: 280)
-                                .padding(.bottom,10)
-                                .background(.secondary)
-                                Spacer()
+                                    .background(Color("colorPrimary"))
+                                    .foregroundColor(.white)
+                                    .cornerRadius(15)
                             }
-                            .padding(.horizontal, 10)
-                            .background(.secondary)
+                            
+                            
+                            Button {
+                                show.toggle()
+                            } label: {
+                                Text("Sort By")
+                                    .frame(minWidth:0, maxWidth: .infinity)
+                                    .padding(10)
+                                    .background(Color("colorPrimary"))
+                                    .foregroundColor(.white)
+                                    .cornerRadius(15)
+                            }
+                            
                         }
                     }
-                    
+                    .padding(.horizontal,10)
+                    Spacer()
                 }
-                 */
-//            }
-//            else {
-//                LoadingView()
-//            }
+                .frame(minWidth:0, maxWidth: .infinity, minHeight:0, maxHeight: 210)
+                
+            }
+            .offset(y: 64)
+            .onTapGesture {
+                sheetMode = .none
+            }
+            
+            // Sort By option popup
+            VStack{
+                Spacer()
+                RadioButtonsPopup(selected: $selectedSortCategory, show: self.$show) {
+                    doSelectedSorting()
+                }
+                .offset(y: self.show ? (UIApplication.shared.windows.last?.safeAreaInsets.bottom)! + 15 : UIScreen.main.bounds.height)
+                
+            }.background(Color(UIColor.label.withAlphaComponent(self.show ? 0.3 : 0)).edgesIgnoringSafeArea(.all))
+            
+               
+            // Filter Option View
+            if isFilterShown {
+                FilterBottomPopup(selectedStop: $selectedStop, selectedAirline: $selectedAirline, selectedMinMaxPrice: $selectedMinMaxPrice, minMaxPrice: flightSearchModel.minMaxPrice) { isApply in
+                    self.isFilterShown.toggle()
+                    self.updateOnAppear()
+                    if isApply {
+                        doFilterAction()
+                    }
+                }
+            }
         }
         .environmentObject(flightSearchModel)
     }
     
     func updateOnAppear() {
+        if isFilterShown {
+            return
+        }
+        
+//        if let selectedMinMaxPrice = flightSearchModel.minMaxPrice {
+//            let checkit = selectedMinMaxPrice
+//            self.selectedMinMaxPrice = selectedMinMaxPrice
+//        }
+        
+        
         if flightSearchModel.isOneWay {
             flightSearchModel.routeIndex = 0
             flightSearchModel.getForwardDirection()
@@ -307,12 +287,19 @@ struct OriginFlightList: View {
             }
         }
     }
+    func gotoDetailsView(direction: Direction) {
+        if isFilterShown {
+            return
+        }
+        flightSearchModel.detailsDir = direction
+        selection = "RoutesConfirmView"
+    }
     
-//    func selectOriginFlight(direction: Direction) {
-//        flightSearchModel.setOrigin(direction: direction)
-//    }
     
     func selectFlightDirection(direction: Direction) {
+        if isFilterShown {
+            return
+        }
         // Set selected direction flight & update local selection
         flightSearchModel.setSelectedFlightList(direction: direction)
         
@@ -341,12 +328,75 @@ struct OriginFlightList: View {
         
     }
     
+    func doSelectedSorting() {
+        //["Price Low","Price High","Time ASC","Time DESC"]
+        if self.selectedSortCategory == "Price Low" {
+            currentDirectionList = currentDirectionList.sorted(by: { $0.totalPrice! < $1.totalPrice! })
+        }
+        else if self.selectedSortCategory == "Price High" {
+            currentDirectionList = currentDirectionList.sorted(by: { $0.totalPrice! > $1.totalPrice! })
+        } else if self.selectedSortCategory == "Time ASC" {
+            //getDateFromStringAndFormate
+            currentDirectionList = currentDirectionList.sorted(by: { getDateFromString(dateStr:$0.departure!).compare(getDateFromString(dateStr:$1.departure!)) == .orderedAscending })
+        } else if self.selectedSortCategory == "Time DESC" {
+            currentDirectionList = currentDirectionList.sorted(by: { getDateFromString(dateStr:$0.departure!).compare(getDateFromString(dateStr:$1.departure!)) == .orderedDescending })
+        }
+        self.show.toggle()
+    }
+    
+    func getStopFilter() -> Int {
+        if self.selectedStop == stopsList[0] {
+            return 0
+        } else if self.selectedStop == stopsList[1] {
+            return 1
+        } else if self.selectedStop == stopsList[2] {
+            return 2
+        } else {
+            return -1
+        }
+    }
+    
+    func doFilterAction() {
+        print("Do filter Action")
+        
+        //Filter-by-Airline
+        var filteredArray: [Direction] = []
+        if selectedAirline.count > 0 {
+            filteredArray = currentDirectionList.filter { $0.platingCarrierName!.localizedCaseInsensitiveContains(selectedAirline) }
+
+            //currentDirectionList = filteredArray
+        }
+        
+    
+        //Filter-by-Stops
+        if selectedStop.count > 0 {
+            let stopFilter: Int = getStopFilter()
+            if stopFilter < 2 {
+                filteredArray = filteredArray.filter { $0.stops == stopFilter }
+            } else {
+                filteredArray = filteredArray.filter { $0.stops >= stopFilter }
+            }
+        }
+        
+        //Filter-by-TotalPrice-Range
+//        if selectedMinMaxPrice.maxPrice != flightSearchModel.minMaxPrice.maxPrice &&
+//            selectedMinMaxPrice.minPrice != flightSearchModel.minMaxPrice.minPrice {
+//            filteredArray = filteredArray.filter { ($0.totalPrice! >= selectedMinMaxPrice.minPrice &&
+//                                                    $0.totalPrice! <= selectedMinMaxPrice.maxPrice)
+//            }
+//        }
+        
+        currentDirectionList = filteredArray
+        
+        
+    }
+    
 }
 
 struct OriginFlightList_Previews: PreviewProvider {
     static var previews: some View {
        // OriginFlightList(
-        OriginFlightList(title: "Source")
+        OriginFlightList()
     }
 }
 

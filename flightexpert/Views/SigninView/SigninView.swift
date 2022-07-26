@@ -10,8 +10,8 @@ import SwiftUI
 struct SigninView: View {
     var from: String = String()
     @State var isLoggedin: Bool = false
-    @State var userEmail: String = String()
-    @State var userPassword: String = String()
+    @State var userEmail: String = "apptestuser@triplover.com" //String()
+    @State var userPassword: String = "Asdf123@" // String()
     @Environment(\.presentationMode) var presentationMode
     
     let defaults = UserDefaults.standard
@@ -40,11 +40,11 @@ struct SigninView: View {
                         VStack {
                             Text("Welcome!")
                                 .fontWeight(.medium)
-                                .font(.system(size: 30, weight: .heavy, design: .rounded))
+                                .font(.system(size: 20, weight: .heavy, design: .rounded))
                                 .foregroundColor(Color.black)
                             Text("Let's continue your journey")
                                 .fontWeight(.medium)
-                                .font(.system(size: 14,design: .rounded))
+                                .font(.system(size: 13, weight: .regular, design: .rounded))
                                 .foregroundColor(Color.black)
                         }
                         
@@ -54,6 +54,8 @@ struct SigninView: View {
                                     .foregroundColor(.black)
                                     .padding(15)
                                 TextField("Email", text: $userEmail)
+                                    .foregroundColor(Color.gray)
+                                    .font(.system(size: 13, weight: .regular, design: .rounded))
                             }
                             .disableAutocorrection(true)
                             .autocapitalization(.none)
@@ -66,6 +68,8 @@ struct SigninView: View {
                                     .foregroundColor(.black)
                                     .padding(15)
                                 SecureField("Password", text: $userPassword)
+                                    .foregroundColor(Color.gray)
+                                    .font(.system(size: 13, weight: .regular, design: .rounded))
                             }
                             .disableAutocorrection(true)
                             .autocapitalization(.none)
@@ -77,48 +81,49 @@ struct SigninView: View {
                         Button(action: {
                             self.loginAction()
                         }, label: {
-                            Text("Login")
+                            Text("LOG IN")
                                 .frame(maxWidth:.infinity)
                                 .padding([.top, .bottom], 10)
                                 .background(blueGradient)
                                 .foregroundColor(Color.white)
-                                .cornerRadius(7.5) 
+                                .cornerRadius(7.5)
+                                .font(.system(size: 13, weight: .bold, design: .rounded))
                         })
                         
     //                    .alert(isPresented: $isLoggedin, content: {
     //                        Alert(title: Text("Login Success"), message: Text("Right now you can book any fligh!"), dismissButton: .cancel(Text("Ok")))
     //                    })
-                        Text("Forgot Password")
-                            .padding()
+//                        Text("Forgot Password")
+//                            .padding()
                         HStack {
                             Text("Don't have an account?")
+                                .font(.system(size: 10, weight: .regular, design: .rounded))
                             NavigationLink {
                                 SignupView()
                             } label: {
                                 Text("Create New")
                                     .underline()
-                                    .font(.system(size: 14, weight:.bold))
+                                    .font(.system(size: 12, weight: .bold, design: .rounded))
                             }
                         }
                         .foregroundColor(.black)
-                        .font(.system(size: 14, weight: .medium, design: .monospaced))
     //                    .padding([.top,.bottom])
                     }
                     .padding(30)
                 }
-                .frame(minHeight: 600, maxHeight: .infinity)
+                .frame(minHeight: 0, maxHeight: .infinity)
                 .background(
                     RoundedRectangle(cornerRadius: 10)
                         .fill(Color.gray.opacity(0.3)
                     )
-                    .padding([.leading, .trailing], 20)
+                    .padding([.leading, .trailing], 10)
                     .padding(.top, 100)
                 )
                 
                 Image("app_name_header")
                     .resizable()
                     .scaledToFit()
-                    .frame(height: 40)
+                    .frame(height: 30)
                     .padding(.bottom, 64)
                     .padding(.top, 20)
             }

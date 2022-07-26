@@ -20,22 +20,29 @@ struct AirportList: View {
     @State var searching = false
     
     var body: some View {
-        VStack(alignment: .leading) {
-            SearchBar(searchText: $searchText, searching: $searching)
-            List {
-                ForEach(airportList.filter({ (airport: AirportData) -> Bool in
-                    return airport.iata.hasPrefix(searchText) ||
-                    airport.name.hasPrefix(searchText) ||
-                    airport.city.hasPrefix(searchText) || searchText == ""
-                }), id: \.self) { airport in
-                    //Text(airport.iata)
-                    SelectionRow(airport: airport, selectedAirport: $selectedAirport) {airport in
-                        print(airport)
-                        DismissSheet()
+        ZStack {
+            Color.clear
+            
+            VStack(alignment: .leading, spacing: 0) {
+                SearchBar(searchText: $searchText, searching: $searching)
+                List {
+                    ForEach(airportList.filter({ (airport: AirportData) -> Bool in
+                        return airport.iata.hasPrefix(searchText) ||
+                        airport.name.hasPrefix(searchText) ||
+                        airport.city.hasPrefix(searchText) || searchText == ""
+                    }), id: \.self) { airport in
+                        //Text(airport.iata)
+                        SelectionRow(airport: airport, selectedAirport: $selectedAirport) {airport in
+                            print(airport)
+                            DismissSheet()
+                        }
+                        
                     }
+                    
+                    .padding(.vertical, 10)
                 }
+//                .listStyle(GroupedListStyle())
             }
-            .listStyle(GroupedListStyle())
         }
     }
     
