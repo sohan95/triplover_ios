@@ -15,7 +15,6 @@ struct BookedFlight: View {
     var body: some View {
         
         HStack {
-            
             VStack(alignment: .leading, spacing:0) {
                 Text(flight.paxName ?? "")
                     .font(.system(size: 11, weight: .medium, design: .rounded))
@@ -33,15 +32,9 @@ struct BookedFlight: View {
             }
             .font(.system(size: 9, weight: .regular, design: .rounded))
             Spacer()
-            Button {
-                if let action = action {
-                    action(flight)
-                }
-            } label: {
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 13, weight: .semibold, design: .rounded))
-                    .foregroundColor(.black)
-            }
+            Image(systemName: "chevron.right")
+                .font(.system(size: 13, weight: .semibold, design: .rounded))
+                .foregroundColor(.black)
 
         }
         .frame(minWidth: 0, maxWidth: .infinity)
@@ -52,6 +45,11 @@ struct BookedFlight: View {
                 .shadow(color: .gray, radius: 1, x: 0, y: 1)
         )
         .padding(.horizontal,10)
+        .onTapGesture {
+            if let action = action {
+                action(flight)
+            }
+        }
     }
 }
 
@@ -69,98 +67,107 @@ struct ListRow: View {
     
     var body: some View {
         
-        VStack(alignment: .leading, spacing:10) {
+        VStack(alignment: .leading, spacing:0) {
             //:- Top
-            VStack {
+            VStack(alignment: .leading, spacing: 5) {
                 HStack(alignment: .center) {
                     //Icon & Name
-                    VStack(alignment: .leading, spacing:0) {
-                        VStack(alignment: .center) {
-                            ImageUrlView(urlString: "\(ROOT_URL_THUMB)\(direction.platingCarrierCode!).png",sizeVal: 60)
-        //                    .frame(width: 60, height: 80)
-        //                    .scaledToFit()
-        //                    .background(Color.clear)
-        //                    .clipShape(Circle())
-                        }
-                        .frame(minWidth: 60, maxWidth: .infinity)
+                    VStack(alignment: .center, spacing:0) {
+                        ImageUrlView(urlString: "\(ROOT_URL_THUMB)\(direction.platingCarrierCode!).png",sizeVal: 50)
+//                        .frame(minWidth: 50, maxWidth: .infinity)
 
                         Text(direction.platingCarrierName!)
-                            
-                            .font(.system(size: 13, weight: .medium, design: .rounded))
+                            .font(.system(size: 10, weight: .medium, design: .rounded))
                             .lineLimit(1)
                             .minimumScaleFactor(0.8)
                     }
-    //                .frame(width: 140)
+                    .frame(width: 110)
 //                    .background(.gray)
-                    .padding(.leading,5)
+//                    .padding(.leading, 5)
                     
-                    Spacer()
+//                    Spacer()
                     
                     //Transition
-                    HStack(spacing:10) {
+                    HStack(spacing:5) {
                         VStack(alignment: .leading, spacing: 5){
                             Text("\(getTimeString(dateStr: direction.segments?[0].details?[0].departure ?? ""))")
                             Text(direction.from!)
                         }
-                        .frame(width:40)
-                        .font(.system(size: 11))
+                        .frame(width:35)
+//                        .background(.green)
+                        .font(.system(size: 11, weight: .semibold, design: .rounded))
                         
                         VStack(alignment: .center, spacing: 0) {
                             HStack(alignment:.bottom, spacing: 10) {
                                 Spacer()
                                 Text("\(direction.segments?[0].details?[0].travelTime ?? "")")
-                                    .font(.system(size: 10))
+                                    .font(.system(size: 9, weight: .medium, design: .rounded))
                                         .lineLimit(1)
+                                        .padding(.trailing, 10)
                                 Image(systemName: "airplane.departure")
                                     .foregroundColor(.red)
+                                    .font(.system(size: 10, weight: .semibold, design: .rounded))
                             }
-                            .frame(width:120)
+                            .frame(width: 100)
                             
                             HStack(spacing:0) {
                                 Circle()
                                     .fill(.red)
-                                    .frame(width: 10, height: 10)
+                                    .frame(width: 8, height: 8)
                                     
-                                RoundedRectangle(cornerRadius: 5)
+                                RoundedRectangle(cornerRadius: 0.5)
                                             .fill(Color.red)
-                                            .frame(width: 100, height: 2)
+                                            .frame(width: 82, height: 1.5)
                             }
-                            .frame(width: 100, height: 10)
+                            .frame(width: 90, height: 10)
                             
                             HStack(alignment:.top) {
                                 if direction.stops == 0 {
-                                    Text("No Stops").font(.system(size: 10))
+                                    Text("No Stops").font(.system(size: 9, weight: .medium, design: .rounded))
                                 } else {
-                                    Text("direction.stop").font(.system(size: 10))
+                                    Text("direction.stop").font(.system(size: 9, weight: .medium, design: .rounded))
                                 }
                             }
                             
                         }
+//                        .background(.yellow)
                         
                         VStack {
                             Text("\(getTimeString(dateStr: direction.segments?[0].details?[0].arrival ?? ""))")
                             Text(direction.to!)
                         }
-                        .frame(width:40)
-                        .font(.system(size: 13))
+                        .frame(width:35)
+//                        .background(.green)
+                        .font(.system(size: 11, weight: .semibold, design: .rounded))
                     }
+                    .frame(minWidth:0, maxWidth: .infinity)
 //                    .background(.blue)
-                    .padding(.trailing, 5)
+//                    .padding(.trailing, 5)
                     
                 }
-                .frame(minWidth:0, maxWidth: .infinity, minHeight:100,maxHeight: 100)
+                .frame(minWidth:0, maxWidth: .infinity)
+//                .background(.blue)
+                
             }
+            .frame(minWidth:0, maxWidth: .infinity, minHeight:80,maxHeight: 80)
+//            .background(.red)
+            .padding(.horizontal,5)
             
             
             //Spacer()
             //:- Bottom
             HStack {
-                VStack(alignment: .leading, spacing: 10){
-                    Text("BDT \((direction.bookingComponents?[0].basePrice)!.removeZerosFromEnd())")
-                    .font(.system(size: 14, weight: .medium))
+                VStack(alignment: .leading, spacing: 5){
+                    HStack(spacing: 5){
+                        Text("BDT")
+                        Text("\((direction.bookingComponents?[0].basePrice)!.removeZerosFromEnd())")
+                            .foregroundColor(.red.opacity(0.7))
+                    }
+                    .font(.system(size: 11, weight: .bold, design: .rounded))
+                    
                     Text("Refundable")
-                        .font(.system(size: 14, weight: .medium))
-                        .foregroundColor(.yellow)
+                        .font(.system(size: 11, weight: .medium, design: .rounded))
+                        .foregroundColor(.yellow.opacity(0.8))
                 }
                 Spacer()
                 HStack {
@@ -169,31 +176,31 @@ struct ListRow: View {
                     } label: {
                         Text("Flight Details")
                             .underline()
-                            .font(.system(size: 12, weight: .bold))
+                            .font(.system(size: 11, weight: .medium, design: .rounded))
                     }
                     
                     Button {
                         FlightSelectAction()
                     } label: {
                         Text("Select")
-                            .padding(.horizontal,10)
+                            .padding(.horizontal, 5)
                     }
                     .buttonStyle(.borderedProminent)
                     .tint(selectedDirection?.id == direction.id ? .blue : .orange)
-                    .font(.system(size: 14, weight:.heavy))
+                    .font(.system(size: 12, weight: .bold, design: .rounded))
                 }
             }
-            .padding()
-            .frame(minWidth:0, maxWidth: .infinity, minHeight:60,maxHeight: 60)
+            .padding(10)
+            .frame(minWidth:0, maxWidth: .infinity, minHeight:50,maxHeight: 50)
             .background(RoundedCorners(color: Color("LightGray").opacity(0.3), tl: 0, tr: 0, bl: 5, br: 5))
         }
-        .frame(minWidth:0, maxWidth: .infinity, minHeight:160,maxHeight: 160)
+        .frame(minWidth:0, maxWidth: .infinity, minHeight:130,maxHeight: 130)
         .background(
             RoundedRectangle(cornerRadius: 5)
                 .fill(Color.white)
                 .shadow(color: .gray.opacity(0.5), radius: 2, x: 0, y: 2)
         )
-        .padding(.horizontal,10)
+        .padding(.horizontal,5)
     }
     
     func FlightDetailsAction() {

@@ -40,11 +40,11 @@ struct SignupView: View {
                 VStack {
                     VStack(spacing:10) {
                         Text("Create Account!")
-                            .font(.system(size: 16, weight: .bold, design: .rounded))
+                            .font(.system(size: 18, weight: .bold, design: .rounded))
                             .foregroundColor(Color.black)
                         Text("Let's continue your journey")
                             .fontWeight(.medium)
-                            .font(.system(size: 10, weight: .regular, design: .rounded))
+                            .font(.system(size: 11, weight: .regular, design: .rounded))
                             .foregroundColor(Color.black)
                     }
                     
@@ -116,13 +116,14 @@ struct SignupView: View {
                     }, label: {
                         Text("Create Account")
                             .frame(maxWidth:.infinity)
-                            .font(.system(size: 13, weight: .bold, design: .rounded))
+                            .font(.system(size: 15, weight: .bold, design: .rounded))
                             .padding([.top, .bottom], 10)
-                            .background(blueGradient)
+                            .background(orangeGradient)
                             .foregroundColor(Color.white)
                             .cornerRadius(15)
                     })
                     .padding(.horizontal, 30)
+                    .padding(.top, 20)
                     
                     HStack {
                         Text("Already have an account?")

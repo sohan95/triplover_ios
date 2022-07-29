@@ -6,8 +6,8 @@
 //
 
 import SwiftUI
-import Combine
-import SSLCommerzSDK
+//import Combine
+//import SSLCommerzSDK
 
 struct TravelerDetails: View {
     
@@ -221,30 +221,5 @@ struct TravelerDetails_Previews: PreviewProvider {
     static var previews: some View {
 //        TravelerDetails()
         TravelerDetails()
-    }
-}
-
-
-enum LinkAction {
-    case takePhoto
-}
-
-class VCLink : ObservableObject {
-    @Published var action : LinkAction?
-    @Published var name : String = ""
-    @Published var amount : String?
-
-    func takePhoto() {
-        action = .takePhoto
-    }
-}
-
-struct VCRepresented : UIViewControllerRepresentable {
-    func makeUIViewController(context: Context) -> SSLCmzViewController {
-        return SSLCmzViewController()
-    }
-    
-    func updateUIViewController(_ uiViewController: SSLCmzViewController, context: Context) {
-
     }
 }

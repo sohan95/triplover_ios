@@ -80,7 +80,7 @@ final class HttpUtility {
             if (error == nil && data != nil) {
                 
                 let responseData = try? JSONDecoder().decode(LoginResponse.self, from: data!)
-                print(responseData!)
+                //print(responseData!)
                 _ = completionHandler(responseData)
             }
         }).resume()
@@ -100,7 +100,7 @@ final class HttpUtility {
             if (error == nil && data != nil) {
                 
                 let responseData = try? JSONDecoder().decode(RegisterResponse.self, from: data!)
-                print(responseData!)
+                //print(responseData!)
                 _ = completionHandler(responseData)
             }
         }).resume()
@@ -138,8 +138,8 @@ final class HttpUtility {
             if (error == nil && data != nil) {
                 
                 let responseData = try? JSONDecoder().decode(FlightSearchedDataModel.self, from: data!)
-                print(responseData!)
-//                let responseData = try? newJSONDecoder().decode(SearchedFlightResponse.self, from: data!)
+                // print(responseData!)
+                // let responseData = try? newJSONDecoder().decode(SearchedFlightResponse.self, from: data!)
                 _ = completionHandler(responseData)
             }
         }).resume()
@@ -240,7 +240,7 @@ final class HttpUtility {
                 
                 let decoder = JSONDecoder()
                 let responseData = try? decoder.decode(BookingResponse.self, from: data!)
-                print(responseData!)
+                //print(responseData!)
 //                let responseData = try? newJSONDecoder().decode(SearchedFlightResponse.self, from: data!)
                 _ = completionHandler(responseData)
             }
@@ -284,7 +284,7 @@ final class HttpUtility {
                 
                 let decoder = JSONDecoder()
                 let responseData = try? decoder.decode(BookingConfirmResponse.self, from: data!)
-                print(responseData!)
+                //print(responseData!)
 //                let responseData = try? newJSONDecoder().decode(SearchedFlightResponse.self, from: data!)
                 _ = completionHandler(responseData)
             }
@@ -342,7 +342,7 @@ final class HttpUtility {
                 
                 let decoder = JSONDecoder()
                 let responseData = try? decoder.decode([AirTicketingResponse].self, from: data!)
-                print(responseData!)
+                //print(responseData!)
 //                let responseData = try? newJSONDecoder().decode(SearchedFlightResponse.self, from: data!)
                 _ = completionHandler(responseData)
             }
@@ -375,7 +375,7 @@ final class HttpUtility {
                 
                 let decoder = JSONDecoder()
                 let responseData = try? decoder.decode(AirTicketingDetailsResponse.self, from: data!)
-                print(responseData!)
+                // print(responseData!)
 //                let responseData = try? newJSONDecoder().decode(SearchedFlightResponse.self, from: data!)
                 _ = completionHandler(responseData)
             }

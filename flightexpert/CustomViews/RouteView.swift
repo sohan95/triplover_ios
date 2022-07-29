@@ -157,40 +157,4 @@ struct RandomModel: Identifiable {
 //    }
 //}
 
-struct RoutePointButton: View {
-    @State var selectedModel: RandomModel? = nil
-    @Binding var source: AirportData
-    
-    var body: some View {
-        Button {
-            selectedModel = RandomModel(title:"source", iata: source.iata)
-        } label: {
-            VStack(alignment:.leading, spacing: 5){
-                Text("From")
-                    .font(.system(size: 14, weight: .medium, design: .rounded))
-                Text(source.iata)
-                    .font(.system(size: 16, weight: .heavy, design: .rounded))
-                    .foregroundColor(.black)
-                Text("Click to search")
-                    .font(.system(size: 12, weight: .medium, design: .rounded))
-            }
-            .padding(5)
-        }
-        .frame(minWidth:0, maxWidth: .infinity,minHeight: 80, maxHeight: 80)
-        .background(.white)
-        .addBorder(Color.gray, width: 2, cornerRadius: 10)
-        .sheet(item: $selectedModel) { model in
-            AirportList() { airport in
-                source = airport
-                print("source=\(airport)")
-            }
-        }
-    }
-}
 
-struct RoutePointButton_Previews: PreviewProvider {
-    static var previews: some View {
-        let source = AirportData(name: "Aasiaat", city: "Aasiaat", country:"Greenland", iata: "JEG")
-        RoutePointButton(source: .constant(source))
-    }
-}

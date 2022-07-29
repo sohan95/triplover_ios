@@ -39,6 +39,9 @@ let blueGradient = LinearGradient(
     colors: [Color(hex: "#474998"),Color(hex: "#2c99d5")],
     startPoint: .leading, endPoint: .trailing)
 
+//let orangeGradient = LinearGradient(
+//    colors: [Color(hex: "#F16B2E"),Color(hex: "#DDB756")],
+//    startPoint: .leading, endPoint: .trailing)
 let orangeGradient = LinearGradient(
     colors: [Color(hex: "#F16B2E"),Color(hex: "#DDB756")],
     startPoint: .leading, endPoint: .trailing)
