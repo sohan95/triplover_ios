@@ -14,10 +14,22 @@ struct BookedFlightDetails: View {
     
     @State var airTicketingDetails: AirTicketingDetailsResponse? = nil
     @State var isLoading:Bool = true
+    @State var showErrorAlert = false
+    
+    @Environment(\.presentationMode) var presentationMode
+    var btnBack : some View { Button(action: {
+        self.presentationMode.wrappedValue.dismiss()
+        }) {
+            HStack {
+            Image(systemName: "arrow.backward") // set image here
+                .aspectRatio(contentMode: .fit)
+                .foregroundColor(.black)
+            }
+        }
+    }
     
     var body: some View {
         ZStack {
-            
             if !isLoading {
                 if let details = airTicketingDetails {
                     VStack {
@@ -25,23 +37,25 @@ struct BookedFlightDetails: View {
                             Image("app_name_header")
                             Spacer()
                         }
-                        .padding(20)
-                        VStack(alignment:.leading, spacing: 5) {
-                            HStack{
-                                //Text("Issue Date: Jul 03, 2022")
-//                                Text("Issue Date: \(details.issueDate ?? "issueDate")")
-                                Text("Issue Date: \(getDateStringWithTemplate(dateStr:details.issueDate ?? "", template: "yyyy-MM-dd'T'HH:mm:ss.SSS"))").lineLimit(1)
-                                
+                        .padding(.bottom,20)
+                        VStack(alignment:.leading, spacing: 10) {
+                            HStack(spacing:5){
+                                Text("Issue Date:")
+                                    .font(.system(size: 10, weight: .medium, design: .rounded))
+                                Text("\(getDateStringWithTemplate(dateStr:details.issueDate ?? "", template: "yyyy-MM-dd'T'HH:mm:ss.SSS"))")
+                                    .font(.system(size: 10, weight: .bold, design: .rounded))
+//                                Text("Issue Date: \(getDateStringWithTemplate(dateStr:details.issueDate ?? "", template: "yyyy-MM-dd'T'HH:mm:ss.SSS"))").lineLimit(1)
                                 
                                 Spacer()
                             }
     //                        PassengerInfo()
                             PassengerInfo(ticketInfoes:details.ticketInfoes!)
                             Text("Flight Details")
-                                .frame(maxWidth:.infinity,alignment: .leading)
-                                .padding(10)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .font(.system(size: 11, weight: .bold, design: .rounded))
+                                .padding(5)
                                 .background(.gray.opacity(0.4))
-                                .padding(.vertical,10)
+                                
                             
                             //Text((details.flightInfo?.directions?[0].first?.fromAirport)!)
                             FlightDetails(directions:(details.flightInfo?.directions)!)
@@ -49,11 +63,12 @@ struct BookedFlightDetails: View {
                             
                             Text("Fare Details")
                                 .frame(maxWidth:.infinity,alignment: .leading)
-                                .padding(10)
+                                .font(.system(size: 11, weight: .bold, design: .rounded))
+                                .padding(5)
                                 .background(.gray.opacity(0.4))
-                                .padding(.vertical,10)
+//                                .padding(.vertical,10)
                             
-                            VStack(alignment: .trailing, spacing:2) {
+                            VStack(alignment: .trailing, spacing:1) {
     //                            FareDetails(passengerFares: airTicketingDetails?.flightInfo?.passengerFares)
     //                            FareTotal(bookingComponents: (airTicketingDetails?.flightInfo?.bookingComponents!)!)
                                 FareDetailsList(passengerFares: (details.flightInfo?.passengerFares)!, passengerCounts: (details.flightInfo?.passengerCounts)!)
@@ -65,25 +80,49 @@ struct BookedFlightDetails: View {
                         
                     }
                     .background(.white)
-                    .padding()
-//                    .navigationTitle(selectedBookedFlight?.paxName ?? "")
-                    .navigationBarTitleDisplayMode(.inline)
-                    .navigationBarBackButtonHidden(false)
+                    .padding(10)
                 }
             }
+//            else {
+//                LoadingView()
+//                    .navigationBarBackButtonHidden(true)
+//            }
             else {
-                LoadingView()
-                    .navigationBarBackButtonHidden(true)
+                ZStack {
+                    SplashScreenBg
+                        .resizable()
+                        .scaledToFill()
+                        .edgesIgnoringSafeArea(.all)
+                    VStack {
+                        Spacer()
+                        ProgressBar(isActive: $isLoading)
+                            .frame(height: 3)
+                            
+                    }
+                    .padding(.bottom, 44)
+                    
+                }
+                
             }
         }
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
+        .navigationBarItems(leading: btnBack)
         .onAppear() {
             getAirTicketingDetails()
+        }
+        .alert(isPresented: $showErrorAlert) {
+            Alert(title: Text(""), message: Text("No Data Found!"),
+                  dismissButton: .default(Text("Close"), action: {
+                self.presentationMode.wrappedValue.dismiss()
+            }))
         }
     }
     
     func getAirTicketingDetails() {
         self.isLoading = true
         guard let ticketId = self.selectedBookedFlight?.uniqueTransID else {
+            self.showErrorAlert.toggle()
             return
         }
         
@@ -92,12 +131,11 @@ struct BookedFlightDetails: View {
                 self.isLoading = false
                 
                 guard let result = result else {
-                    fatalError("There must be a problem decoding the data...")
+                    self.showErrorAlert.toggle()
+                    return
                 }
-                
                 airTicketingDetails = result
-                
-                print(result)
+                //print(result)
             }
         })
     }
@@ -129,6 +167,7 @@ struct PassengerInfo: View {
                 cell(text: "Type", alignment: .center)
                 cell(text: "Ticket Number", alignment: .center)
             }.frame(maxWidth: .infinity, alignment: .trailing)
+                
             
             ForEach(self.ticketInfoes, id:\.self) { ticketInfo in
                 HStack(alignment: .center, spacing:2){
@@ -145,7 +184,7 @@ struct PassengerInfo: View {
         HStack {
             VStack {
                 Text(text)
-                    .font(.system(size: 10, weight: .regular, design: .rounded))
+                    .font(.system(size: 10, weight: .semibold, design: .rounded))
                     .frame(maxWidth: .infinity, alignment: alignment)
             }
             Spacer()
@@ -158,7 +197,7 @@ struct PassengerInfo: View {
         HStack {
             VStack {
                 Text(text)
-                    .font(Font.system(size: 10).italic())
+                    .font(.system(size: 10, weight: .regular, design: .rounded).italic())
                     .frame(maxWidth: .infinity, alignment: alignment)
             }
             Spacer()
@@ -190,13 +229,13 @@ struct FlightDetailView:View {
         HStack(alignment: .bottom) {
             VStack(alignment:.leading){
                 HStack{
-                    ImageUrlView(urlString: "\(ROOT_URL_THUMB)\(direction.platingCarrierCode! ).png", sizeVal: 60)
-                    .frame(width: 60, height: 60)
+                    ImageUrlView(urlString: "\(ROOT_URL_THUMB)\(direction.platingCarrierCode! ).png", sizeVal: 40)
+                    .frame(width: 40, height: 40)
                     .scaledToFit()
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
                     Text(direction.platingCarrierName ?? "")
-                        .font(.system(size: 14, weight: .bold, design: .rounded))
+                        .font(.system(size: 10, weight: .medium, design: .rounded))
                         .lineLimit(1)
                         .minimumScaleFactor(0.5)
                 }
@@ -241,7 +280,9 @@ struct FlightDetailView:View {
                     .frame(maxWidth: .infinity)
                 }
             }
-            .frame(maxWidth: .infinity)
+            .frame(minWidth:0, maxWidth: .infinity)
+            .font(.system(size: 10, weight: .regular, design: .rounded))
+            
             Divider().frame(maxWidth: 1.5, minHeight: 90, maxHeight: 90)
             .background(.gray.opacity(0.3))
             
@@ -276,8 +317,9 @@ struct FlightDetailView:View {
                     Text("044A34L")
                 }
             }
-            .frame(maxWidth: .infinity)
-            .font(.system(size: 10, weight: .regular, design: .rounded))
+            .font(.system(size: 9, weight: .regular, design: .rounded))
+            .frame(minWidth:0, maxWidth: .infinity)
+            
         }
         .frame(maxWidth: .infinity, minHeight: 90, maxHeight: 90)
     }
@@ -290,17 +332,18 @@ struct FareDetails: View {
     var passengerFare: AirTicketingDetailsResponse.FlightInfo.PassengerFares.PassengerFare
     
     var body: some View {
-        HStack(alignment: .center, spacing:2) {
-            HStack(alignment: .center, spacing:2){
+        HStack(alignment: .center, spacing:1) {
+            HStack(alignment: .center, spacing:1){
                 cell(text: "\(type)", alignment: .center)
                 cell(text: "\(passengerFare.basePrice)", alignment: .center)
                 cell(text: "\(passengerFare.taxes)", alignment: .center)
+                    .frame(width: 40)
             }.frame(maxWidth: .infinity, alignment: .trailing)
-            HStack(spacing:2){
+            HStack(spacing:1){
                 cell(text: "0", alignment: .trailing)
                 cell(text: "\(count)", alignment: .trailing)
                 cell(text: "\(passengerFare.totalPrice)", alignment: .trailing)
-                    .frame(width: 90)
+                    .frame(width: 70)
             }.frame(maxWidth: .infinity, alignment: .trailing)
         }
     }
@@ -309,7 +352,7 @@ struct FareDetails: View {
         HStack {
             VStack {
                 Text(text)
-                    .font(.system(size: 10, weight: .regular, design: .rounded))
+                    .font(.system(size: 9, weight: .regular, design: .rounded))
                     .frame(maxWidth: .infinity, alignment: alignment)
             }
             Spacer()
@@ -324,19 +367,20 @@ struct FareDetailsList: View {
     var passengerCounts: AirTicketingDetailsResponse.FlightInfo.PassengerCounts
     
     var body: some View {
-        VStack(spacing:2){
+        VStack(spacing:1) {
             
-            HStack(alignment: .center, spacing:2) {
-                HStack(alignment: .center, spacing:2){
+            HStack(alignment: .center, spacing: 1) {
+                HStack(alignment: .center, spacing:1) {
                     cell(text: "Pax Type", alignment: .center)
                     cell(text: "Base Fare", alignment: .center)
                     cell(text: "Tax", alignment: .center)
+                        .frame(width: 40)
                 }.frame(maxWidth: .infinity, alignment: .trailing)
-                HStack(spacing:2){
+                HStack(spacing: 1){
                     cell(text: "Fees", alignment: .trailing)
                     cell(text: "Person", alignment: .trailing)
                     cell(text: "Total", alignment: .trailing)
-                        .frame(width: 90)
+                        .frame(width: 70)
                 }.frame(maxWidth: .infinity, alignment: .trailing)
             }
             
@@ -373,7 +417,7 @@ struct FareDetailsList: View {
         HStack {
             VStack {
                 Text(text)
-                    .font(.system(size: 10, weight: .regular, design: .rounded))
+                    .font(.system(size: 9, weight: .regular, design: .rounded))
                     .frame(maxWidth: .infinity, alignment: alignment)
             }
             Spacer()
@@ -387,40 +431,40 @@ struct FareTotal: View {
     var bookingComponent: AirTicketingDetailsResponse.FlightInfo.BookingComponent
     
     var body: some View {
-        VStack(alignment: .trailing, spacing:2) {
-            HStack(spacing:2) {
+        VStack(alignment: .trailing, spacing:1) {
+            HStack(spacing:1) {
                 Spacer().frame(maxWidth: .infinity)
-                HStack(spacing:2) {
+                HStack(spacing:1) {
                     cell(text: "Total", alignment: .trailing)
                     cell(text: "\(bookingComponent.totalPrice)", alignment: .trailing)
-                        .frame(width: 90)
+                        .frame(width: 70)
                 }.frame(maxWidth: .infinity)
             }
             
-            HStack(spacing:2) {
+            HStack(spacing:1) {
                 Spacer().frame(maxWidth: .infinity)
-                HStack(spacing:2) {
+                HStack(spacing:1) {
                     cell(text: "(-)Discount", alignment: .trailing)
                     cell(text: "\(bookingComponent.discountPrice)", alignment: .trailing)
-                        .frame(width: 90)
+                        .frame(width: 70)
                 }.frame(maxWidth: .infinity)
             }
             
-            HStack(spacing:2) {
+            HStack(spacing:1) {
                 Spacer().frame(maxWidth: .infinity)
-                HStack(spacing:2) {
+                HStack(spacing:1) {
                     cell(text: "(+)AIT", alignment: .trailing)
                     cell(text: "\(bookingComponent.ait)", alignment: .trailing)
-                        .frame(width: 90)
+                        .frame(width: 70)
                 }.frame(maxWidth: .infinity)
             }
             
-            HStack(spacing:2) {
+            HStack(spacing:1) {
                 Spacer().frame(maxWidth: .infinity)
-                HStack(spacing:2) {
+                HStack(spacing:1) {
                     cell(text: "Grand Total", alignment: .trailing)
                     cell(text: "\(bookingComponent.basePrice)", alignment: .trailing)
-                        .frame(width: 90)
+                        .frame(width: 70)
                 }.frame(maxWidth: .infinity)
             }
         }

@@ -102,17 +102,17 @@ struct OriginFlightList: View {
                 HStack{
                     Spacer()
                     Text("\(currentDirectionList.count) Flight/s found")
-                        .font(.system(size: 16, weight: .semibold, design: .rounded))
+                        .font(.system(size: 11, weight: .medium, design: .rounded))
                         .foregroundColor(.black)
-                        .padding(.horizontal,10)
-                        .padding(.vertical,5)
+//                        .padding(.horizontal,5)
+                        .padding(7)
                         .background(.white)
-                        .cornerRadius(5)
+                        .cornerRadius(4)
                 }
                 .padding(.top,5)
                 
                 ScrollView {
-                    VStack(spacing: 20) {
+                    VStack(spacing: 10) {
                         ForEach(currentDirectionList, id: \.self) { direction in
                             ListRow(direction: direction,
                                     isSelectBtnTapped: $flightSearchModel.isSelectBtnTapped, selectedDirection:currentDirection) { directionResult in
@@ -138,13 +138,16 @@ struct OriginFlightList: View {
                                         HStack(spacing:3){
                                             Text("\(routes[i].origin)")
                                             Image(systemName: "airplane.departure")
+                                                .resizable()
+                                                .scaledToFit()
+                                                .frame(width: 10, height: 10, alignment: .center)
                                             Text("\(routes[i].destination)")
                                         }
-                                        .font(.system(size: 13, weight: .bold, design: .rounded))
+                                        .font(.system(size: 10, weight: .semibold, design: .rounded))
                                         .foregroundColor(.white)
-                                        .padding(7.5)
-                                        .background(self.flightSearchModel.routeIndex == i ? .black : Color.gray.opacity(0.5))
-                                        .cornerRadius(5)
+                                        .padding(7)
+                                        .background(self.flightSearchModel.routeIndex == i ? Color("button-bg-color") : Color.gray.opacity(0.4))
+                                        .cornerRadius(4)
                                     }
                                 }
                             }
@@ -163,12 +166,19 @@ struct OriginFlightList: View {
                         Button {
                             //Flight Details
                         } label: {
-                            Text("FLIGHT DETAILS")
-                                .frame(minWidth:0, maxWidth: .infinity)
-                                .padding(10)
-                                .background(Color("colorPrimary"))
-                                .foregroundColor(.white)
-                                .cornerRadius(15)
+                            HStack{
+                                Spacer()
+                                Text("FLIGHT DETAILS")
+                                Spacer()
+                                Image(systemName: "arrowtriangle.down.fill")
+                                    .frame(width: 10, height: 5)
+                            }
+                            .frame(minWidth:0, maxWidth: .infinity)
+                            .font(.system(size: 12, weight: .bold, design: .rounded))
+                            .padding(12)
+                            .background(blueGradient)
+                            .foregroundColor(.white)
+                            .cornerRadius(15)
                             
                         }
                         
@@ -177,10 +187,11 @@ struct OriginFlightList: View {
                                 //sheetMode = .semi
                                 self.isFilterShown.toggle()
                             } label: {
-                                Text("Filter")
+                                Label("Filter", systemImage: "line.3.horizontal.decrease")
                                     .frame(minWidth:0, maxWidth: .infinity)
+                                    .font(.system(size: 11, weight: .semibold, design: .rounded))
                                     .padding(10)
-                                    .background(Color("colorPrimary"))
+                                    .background(blueGradient)
                                     .foregroundColor(.white)
                                     .cornerRadius(15)
                             }
@@ -189,10 +200,11 @@ struct OriginFlightList: View {
                             Button {
                                 show.toggle()
                             } label: {
-                                Text("Sort By")
+                                Label("Sort By", systemImage: "line.3.horizontal.decrease")
                                     .frame(minWidth:0, maxWidth: .infinity)
+                                    .font(.system(size: 11, weight: .semibold, design: .rounded))
                                     .padding(10)
-                                    .background(Color("colorPrimary"))
+                                    .background(blueGradient)
                                     .foregroundColor(.white)
                                     .cornerRadius(15)
                             }

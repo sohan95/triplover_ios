@@ -19,13 +19,13 @@ struct LoadingView: View {
                 .scaledToFill()
                 .edgesIgnoringSafeArea(.all)
             
-            Color(.systemBackground)
-                .ignoresSafeArea()
-                .opacity(0.5)
-
-            ProgressView()
-                .progressViewStyle(CircularProgressViewStyle(tint: .red))
-                .scaleEffect(3)
+//            Color(.systemBackground)
+//                .ignoresSafeArea()
+//                .opacity(0.5)
+//
+//            ProgressView()
+//                .progressViewStyle(CircularProgressViewStyle(tint: .red))
+//                .scaleEffect(3)
             
         }
     }

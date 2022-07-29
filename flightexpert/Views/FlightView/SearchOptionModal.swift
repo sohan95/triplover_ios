@@ -48,7 +48,7 @@ struct SearchOptionModal: View {
                         Spacer()
                         
                         Text("Traveler, Class")
-                            .font(.system(size: 18))
+                            .font(.system(size: 15, weight: .medium, design: .rounded))
                             .foregroundColor(.black)
                         Spacer()
                         Button {
@@ -56,15 +56,16 @@ struct SearchOptionModal: View {
                             isShowing = false
                         } label: {
                             Text("Cancel")
-                                .font(.body)
+                                .font(.system(size: 13, weight: .bold, design: .rounded))
                                 .foregroundColor(Color(hex: "#FF5733"))
                         }
                         .padding(.horizontal,10)
                     }
                     .frame(maxWidth:.infinity, maxHeight:40)
-                    .background(Color.gray)
+                    .background(Color.gray.opacity(0.4))
                     
-                    VStack(spacing:10){
+                    // First Row-button
+                    VStack(alignment: .leading, spacing:10){
                         HStack(spacing: 10) {
                             Menu {
                                 Picker(selection: $selectedClass,
@@ -72,12 +73,14 @@ struct SearchOptionModal: View {
                                     ForEach(0..<cabinClassList.count) {
                                         //Text("\($0) Adults")
                                         Text(self.cabinClassList[$0])
+                                        .font(.system(size: 11, weight: .medium, design: .rounded))
                                     }
                                 }
 
                             } label: {
-                                MenuButtonView(title1: "Class", title2: self.cabinClassList[selectedClass])
+                                MenuButtonView(title1: "CLASS", title2: self.cabinClassList[selectedClass])
                             }
+                            
                             MenuButton(title1: "ADULT (12+)", title2: "\(selectedAdultNumber) Traveler", maxNumber: $maxAdult, selectedNumber: $selectedAdultNumber) {
                                 
                                 self.maxChild = totalPassenger - selectedAdultNumber
@@ -158,7 +161,7 @@ struct SearchOptionModal: View {
                     
                     Spacer()
                 }
-                .frame(height: 350)
+                .frame(height: 320)
                 .frame(maxWidth: .infinity)
                 .background(Color.white)
                 .transition(.move(edge: .bottom))
@@ -203,18 +206,20 @@ struct MenuButtonView: View {
     var title2:String
 
     var body: some View {
-        VStack(alignment:.leading, spacing: 5){
+        VStack(alignment:.leading, spacing: 5) {
             Text(title1)
-                .font(.system(size: 14, weight: .medium, design: .rounded))
+                .font(.system(size: 11, weight: .medium, design: .rounded))
             Text(title2)
-                .font(.system(size: 16, weight: .bold, design: .rounded))
+                .font(.system(size: 13, weight: .bold, design: .rounded))
             Text("Click to change")
-                .font(.system(size: 12, weight: .regular, design: .rounded))
+                .font(.system(size: 10, weight: .regular, design: .rounded))
         }
-        .frame(minWidth:0, maxWidth: .infinity,minHeight: 80, maxHeight: 80)
+        .frame(minWidth:0, maxWidth: .infinity, minHeight: 75, maxHeight: 75, alignment: .leading)
+        .padding(.leading, 10)
+        .background(.white)
         .overlay(
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(.gray.opacity(0.5), lineWidth: 2)
+                RoundedRectangle(cornerRadius: 5)
+                    .stroke(.gray.opacity(0.5), lineWidth: 0.7)
             )
     }
 }
@@ -244,7 +249,7 @@ struct MenuButton: View {
 //                }
             }
         } label: {
-            MenuButtonView(title1: "ADULT (12+)", title2:"\(selectedNumber) Traveler")
+            MenuButtonView(title1: title1, title2:"\(selectedNumber) Traveler")
         }
     }
 }

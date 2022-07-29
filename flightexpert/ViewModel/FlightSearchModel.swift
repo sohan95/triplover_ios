@@ -217,7 +217,9 @@ class FlightSearchModel: ObservableObject {
         self.selectedDirectionList.insert(directions, at: self.routeIndex)
 //        print("Sohan=\(directions[0])")
     }
+    
     // APIs Call
+    /*
     func getAirSearchResponses(requestBody:SearchFlighRequest) {
         self.isSearching = true
         HttpUtility.shared.searchFlightService(searchFlighRequest: requestBody) { result in
@@ -226,6 +228,7 @@ class FlightSearchModel: ObservableObject {
                 self.isSearchComplete = true
                 self.isSearching = false
                 guard (result?.item1?.airSearchResponses) != nil else {
+                    
                     return
                 }
 
@@ -248,6 +251,7 @@ class FlightSearchModel: ObservableObject {
             }
         }
     }
+    */
     
     func prepareBooking(requestBody:PrepareBookingRequest) {
         self.isBooking = true

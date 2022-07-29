@@ -34,7 +34,7 @@ struct FilterBottomPopup: View {
             VStack {
                 Spacer()
                 VStack(alignment: .leading, spacing:10) {
-                    //Header Buttons
+                    // Header Buttons
                     HStack(spacing: 5) {
                         Button {
                             print("Price")
@@ -68,10 +68,11 @@ struct FilterBottomPopup: View {
                                 .cornerRadius(5)
                         }
                     }
-                    .frame(maxWidth:.infinity, maxHeight:35)
+                    .frame(maxWidth:.infinity, maxHeight: 35)
                     .foregroundColor(.white)
-                    .font(.system(size: 16, weight: .bold))
+                    .font(.system(size: 12, weight: .semibold, design: .rounded))
                     .padding(.vertical, 10)
+                    
                     VStack(alignment: .leading) {
                         VStack(alignment: .leading, spacing: 15) {
                             if filterTypeIndex == 0 { // For stops
@@ -142,16 +143,16 @@ struct FilterBottomPopup: View {
                                         self.selectedStop = item
                                         //self.doneAction()
                                     }) {
-                                        HStack(alignment:.bottom, spacing: 20) {
+                                        HStack(alignment:.bottom, spacing: 15) {
                                             ZStack(alignment: .center){
-                                                Circle().stroke(self.selectedStop == item ? Color.black : Color.gray, lineWidth: 2).frame(width: 22, height: 22)
+                                                Rectangle().stroke(self.selectedStop == item ? Color.black : Color.gray, lineWidth: 2).frame(width: 16, height: 16)
 
                                                 if self.selectedStop == item {
-                                                    Circle().fill(Color.black).frame(width: 15, height: 15)
+                                                    Rectangle().fill(Color.black).frame(width: 10, height: 10)
                                                 }
                                             }
                                             Text(item)
-                                                .font(.system(size: 16, weight: .regular, design: .rounded))
+                                                .font(.system(size: 11, weight: .medium, design: .rounded))
 
                                         }
                                         .foregroundColor(.black)
@@ -166,16 +167,16 @@ struct FilterBottomPopup: View {
                                         self.selectedAirline = item
                                         //self.doneAction()
                                     }) {
-                                        HStack(alignment:.bottom, spacing: 20) {
+                                        HStack(alignment:.bottom, spacing: 15) {
                                             ZStack(alignment: .center){
-                                                Circle().stroke(self.selectedAirline == item ? Color.black : Color.gray, lineWidth: 2).frame(width: 22, height: 22)
+                                                Rectangle().stroke(self.selectedAirline == item ? Color.black : Color.gray, lineWidth: 1).frame(width: 16, height: 16)
 
                                                 if self.selectedAirline == item {
-                                                    Circle().fill(Color.black).frame(width: 15, height: 15)
+                                                    Rectangle().fill(Color.black).frame(width: 10, height: 10)
                                                 }
                                             }
                                             Text(item)
-                                                .font(.system(size: 15, weight: .regular, design: .rounded))
+                                                .font(.system(size: 11, weight: .medium, design: .rounded))
 
                                         }
                                         .foregroundColor(.black)
@@ -217,7 +218,7 @@ struct FilterBottomPopup: View {
                         }
                         .frame(maxWidth:.infinity, minHeight: 35, maxHeight:35)
                         .foregroundColor(.white)
-                        .font(.system(size: 16, weight: .bold))
+                        .font(.system(size: 11, weight: .medium, design: .rounded))
                         .padding(.vertical,40)
 //                        .background(.orange)
                         Spacer()
@@ -225,7 +226,7 @@ struct FilterBottomPopup: View {
                     .frame(maxWidth:.infinity, maxHeight: 230)
                     Spacer()
                 }
-                .font(.system(size: 16, weight: .bold))
+                .font(.system(size: 12, weight: .semibold, design: .rounded))
                 .padding(.horizontal, 10)
                 .frame(maxWidth:.infinity, maxHeight: 330)
                 .background(.white)

@@ -14,6 +14,10 @@ struct SigninView: View {
     @State var userPassword: String = "Asdf123@" // String()
     @Environment(\.presentationMode) var presentationMode
     
+    @State var showErrorAlert = false
+    @State var errorMsg = ""
+    private let loginValidation = LoginValidation()
+    
     let defaults = UserDefaults.standard
     
     var btnBack : some View { Button(action: {
@@ -132,16 +136,33 @@ struct SigninView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(leading: btnBack)
+        .alert(isPresented: $showErrorAlert) {
+            Alert(title: Text("Failed!"), message: Text(errorMsg), dismissButton: .default(Text("Close")))
+        }
         
     }
+
     
     func loginAction() {
+        
+        let result = loginValidation.validateUserInputs(userEmail: userEmail, userPassword: userPassword)
+        if(result.success == false){
+            self.errorMsg = result.errorMessage ?? "error occured"
+            self.showErrorAlert.toggle()
+            return
+        }
+        
         let deviceId = UUID().uuidString
         let loginRequest = LoginRequest(email: userEmail, password: userPassword, deviceId: deviceId)
         
         HttpUtility.shared.loginService(loginRequest: loginRequest) { result in
             DispatchQueue.main.async {
                 //Save token in localStorage
+                guard result != nil else {
+                    self.errorMsg = "Sorry, Login failed. Try again."
+                    self.showErrorAlert.toggle()
+                    return
+                }
                 defaults.set(userEmail, forKey: "userEmail")
                 defaults.set(result?.token, forKey:"token")
                 defaults.set(true, forKey: "isSignin")

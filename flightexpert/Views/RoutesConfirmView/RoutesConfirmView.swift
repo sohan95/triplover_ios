@@ -17,6 +17,19 @@ struct RoutesConfirmView: View {
     @State var selection: String? = nil
     @State var showsAlert = false
     @State var failedMsg:String = ""
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    
+    var btnBack : some View { Button(action: {
+        self.presentationMode.wrappedValue.dismiss()
+        }) {
+            HStack {
+            Image(systemName: "arrow.backward") // set image here
+                .aspectRatio(contentMode: .fit)
+                .foregroundColor(.black)
+            }
+        }
+    }
+    
     var body: some View {
         ZStack {
             BackgroundImage
@@ -30,6 +43,22 @@ struct RoutesConfirmView: View {
             if !isSearching {
                 
                 VStack() {
+                    HStack{
+                        Spacer()
+                        Button {
+                            self.presentationMode.wrappedValue.dismiss()
+                        } label: {
+                            HStack {
+                                Text("HIDE")
+                                    .font(.system(size: 11, weight:.bold, design: .rounded))
+                                
+                            }
+                            .frame(width: 60, height: 30)
+                            .foregroundColor(.white)
+                            .background(RoundedRectangle(cornerRadius: 7)
+                            .fill(blueGradient))
+                        }
+                    }
                     ScrollView(axes, showsIndicators: false) {
                         VStack(spacing:15) {
                             ForEach(0 ..< self.selectedFlightList.count, id:\.self) { i in
@@ -39,9 +68,6 @@ struct RoutesConfirmView: View {
                             }
                         }
                     }
-                    .offset(y: 60)
-                    .clipped()
-                    
                     Spacer()
                     HStack {
                         VStack(alignment:.leading, spacing: 5){
@@ -76,11 +102,11 @@ struct RoutesConfirmView: View {
                             } label: {
                                 HStack {
                                     Text("CONFIRM")
-                                        .font(.system(size: 14, weight:.bold, design: .rounded))
+                                        .font(.system(size: 11, weight:.bold, design: .rounded))
                                     Image(systemName: "chevron.right")
                                         .resizable()
                                         .scaledToFit()
-                                        .font(.system(size: 10, weight:.semibold))
+                                        .font(.system(size: 5, weight:.semibold))
                                 }
                                 .frame(width: 120, height: 30)
                                 .foregroundColor(.white)
@@ -96,6 +122,8 @@ struct RoutesConfirmView: View {
                     .background(.secondary)
                     Spacer(minLength: 40)
                 }
+                .offset(y: 60)
+                .clipped()
                 .onAppear() {
                     self.selectedFlightList.removeAll()
                     if flightSearchModel.isSelectBtnTapped {
@@ -125,6 +153,9 @@ struct RoutesConfirmView: View {
                     .navigationBarBackButtonHidden(true)
             }
         }
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
+        .navigationBarItems(leading: btnBack)
         .environmentObject(flightSearchModel)
         
     }

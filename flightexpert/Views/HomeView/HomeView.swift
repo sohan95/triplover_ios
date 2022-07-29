@@ -135,6 +135,7 @@ struct HomeView: View {
 //            //.padding(10)
 //        }
         VStack(alignment: .center, spacing: 0) {
+            //Top Menus
             HStack(alignment: .center) {
                 NavigationLink {
                     FlightView()
@@ -198,7 +199,7 @@ struct HomeView: View {
             }
             .frame(minWidth: 0, maxWidth: .infinity, alignment: .center)
             Spacer()
-            
+            // Bottom Menus
             HStack(alignment: .center, spacing: 70) {
                 Button {
                     self.selectedTab = "Home"
@@ -211,8 +212,8 @@ struct HomeView: View {
                             .scaledToFit()
                             .frame(width: btnImgWidth2)
                         Text("Home")
-                            .padding(.top, -5)
-                            .font(.system(size: 12, weight: .bold))
+                            .padding(.top, -2)
+                            
                     }
                 }
                 
@@ -225,8 +226,7 @@ struct HomeView: View {
                             .scaledToFit()
                             .frame(width: btnImgWidth2)
                         Text("My Booking")
-                            .padding(.top, -5)
-                            .font(.system(size: 12, weight: .bold))
+                            .padding(.top, -2)
                     }
                 }
                 
@@ -239,13 +239,13 @@ struct HomeView: View {
                             .scaledToFit()
                             .frame(width: btnImgWidth2)
                         Text("Login")
-                            .padding(.top, -5)
-                            .font(.system(size: 12, weight: .bold))
+                            .padding(.top, -2)
                     }
                     
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: 60)
+            .font(.system(size: 10, weight: .medium, design: .rounded))
             .background(Color("colorPrimary"))
             .accentColor(.white)
             .padding(.bottom, 44)

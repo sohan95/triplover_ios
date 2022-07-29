@@ -41,7 +41,8 @@ class SSLCmzViewController: UIViewController, SSLCommerzDelegate {
                 //self.isBooking = false
                 
                 guard let result = result else {
-                    fatalError("There must be a problem decoding the data...")
+                    return
+                    //fatalError("There must be a problem decoding the data...")
                 }
                 
                 //self.bookingResponse = result
