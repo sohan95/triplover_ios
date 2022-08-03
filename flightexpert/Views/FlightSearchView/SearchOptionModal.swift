@@ -211,15 +211,17 @@ struct MenuButtonView: View {
                 .font(.system(size: 11, weight: .medium, design: .rounded))
             Text(title2)
                 .font(.system(size: 13, weight: .bold, design: .rounded))
+                .foregroundColor(.black)
             Text("Click to change")
                 .font(.system(size: 10, weight: .regular, design: .rounded))
         }
         .frame(minWidth:0, maxWidth: .infinity, minHeight: 75, maxHeight: 75, alignment: .leading)
+        .foregroundColor(Color(hex: "#2D2D2D"))
         .padding(.leading, 10)
         .background(.white)
         .overlay(
                 RoundedRectangle(cornerRadius: 5)
-                    .stroke(.gray.opacity(0.5), lineWidth: 0.7)
+                    .stroke(Color.gray.opacity(0.5), lineWidth: 0.7)
             )
     }
 }
@@ -238,7 +240,7 @@ struct MenuButton: View {
         Menu {
             Picker(selection: $selectedNumber,
             label: EmptyView()) {
-                ForEach(0..<maxNumber+1) {
+                ForEach(0..<maxNumber + 1) {
                     Text("\($0) Adults")
                 }
             }.onReceive([self.$selectedNumber].publisher.first()) { value in

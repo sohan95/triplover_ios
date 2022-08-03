@@ -1,5 +1,5 @@
 //
-//  OriginFlightList.swift
+//  FlightSelectionView.swift
 //  flightexpert
 //
 //  Created by sohan on 6/1/22.
@@ -30,7 +30,7 @@ struct Stack {
     }
 }
 
-struct OriginFlightList: View {
+struct FlightSelectionView: View {
     //@ObservedObject var flightSearchModel: FlightSearchModel
     @EnvironmentObject var flightSearchModel: FlightSearchModel
     @State private var sheetMode: SheetMode = .none
@@ -96,25 +96,24 @@ struct OriginFlightList: View {
                 .scaledToFill()
                 .edgesIgnoringSafeArea(.all)
             
-            NavigationLink(destination:RoutesConfirmView(), tag: "RoutesConfirmView", selection: $selection) { EmptyView() }
+            NavigationLink(destination:SelectedFlightDetails(), tag: "SelectedFlightDetails", selection: $selection) { EmptyView() }
         
-            VStack(spacing:1) {
+            VStack(spacing: 5) {
                 HStack{
                     Spacer()
                     Text("\(currentDirectionList.count) Flight/s found")
-                        .font(.system(size: 11, weight: .medium, design: .rounded))
+                        .font(.system(size: 12, weight: .medium, design: .rounded))
                         .foregroundColor(.black)
-//                        .padding(.horizontal,5)
                         .padding(7)
                         .background(.white)
                         .cornerRadius(4)
                 }
-                .padding(.top,5)
+                .padding(.trailing, 5)
                 
                 ScrollView {
                     VStack(spacing: 10) {
                         ForEach(currentDirectionList, id: \.self) { direction in
-                            ListRow(direction: direction,
+                            FlightCell(direction: direction,
                                     isSelectBtnTapped: $flightSearchModel.isSelectBtnTapped, selectedDirection:currentDirection) { directionResult in
                                 
                                 if flightSearchModel.isSelectBtnTapped {
@@ -128,7 +127,7 @@ struct OriginFlightList: View {
                 }
                 .frame(minWidth:0, maxWidth: .infinity, minHeight:0, maxHeight: .infinity)
                 .navigationBarTitleDisplayMode(.inline)
-                .navigationBarBackButtonHidden(true)
+
                 .toolbar(){
                     ToolbarItem(placement: .principal) {
                         VStack (alignment: .center) {
@@ -155,6 +154,7 @@ struct OriginFlightList: View {
                         
                     }
                 }
+                .navigationBarBackButtonHidden(true)
                 .navigationBarItems(leading: btnBack)
                 .onAppear() {
                     updateOnAppear()
@@ -165,6 +165,7 @@ struct OriginFlightList: View {
                     VStack {
                         Button {
                             //Flight Details
+                            self.gotoDetailsView(direction: self.currentDirection!)
                         } label: {
                             HStack{
                                 Spacer()
@@ -303,8 +304,11 @@ struct OriginFlightList: View {
         if isFilterShown {
             return
         }
-        flightSearchModel.detailsDir = direction
-        selection = "RoutesConfirmView"
+        if currentDirection != nil {
+            flightSearchModel.detailsDir = direction
+            selection = "SelectedFlightDetails"
+        }
+        
     }
     
     
@@ -317,7 +321,7 @@ struct OriginFlightList: View {
         
         //Next steps
         if flightSearchModel.isOneWay {
-            selection = "RoutesConfirmView"
+            selection = "SelectedFlightDetails"
         } else if flightSearchModel.isRoundTrip {
             if flightSearchModel.routeIndex == 0 {
                 flightSearchModel.routeIndex = 1
@@ -325,11 +329,11 @@ struct OriginFlightList: View {
                 self.currentDirectionList = flightSearchModel.selectedDirectionList[1]
                 self.currentDirection = flightSearchModel.getSelectedFlight(index: 1)
             } else if flightSearchModel.routeIndex == 1 {
-                selection = "RoutesConfirmView"
+                selection = "SelectedFlightDetails"
             }
         } else if flightSearchModel.isMultiCity {
             if flightSearchModel.routeIndex == (flightSearchModel.searchFlighRequest?.routes.count)!-1 {
-                selection = "RoutesConfirmView"
+                selection = "SelectedFlightDetails"
             } else if flightSearchModel.routeIndex < (flightSearchModel.searchFlighRequest?.routes.count)!-1 {
                 flightSearchModel.routeIndex += 1
                 flightSearchModel.getFollowingDirection()
@@ -405,10 +409,9 @@ struct OriginFlightList: View {
     
 }
 
-struct OriginFlightList_Previews: PreviewProvider {
+struct FlightSelectionView_Previews: PreviewProvider {
     static var previews: some View {
-       // OriginFlightList(
-        OriginFlightList()
+        FlightSelectionView()
     }
 }
 

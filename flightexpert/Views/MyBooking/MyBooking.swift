@@ -46,7 +46,7 @@ struct MyBooking: View {
                         .clipped()
                         .frame(minHeight: 480, maxHeight:.infinity)
                         .navigationBarTitleDisplayMode(.inline)
-                        .navigationBarBackButtonHidden(true)
+//                        .navigationBarBackButtonHidden(true)
                         Spacer()
                         HStack(alignment: .center, spacing: 70) {
                             Button {

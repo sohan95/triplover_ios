@@ -29,11 +29,13 @@ class FlightSearchModel: ObservableObject {
 //    @Published var selectedFlightList = Stack()
     
     //RePrice Response
+    @Published var totalPrice: Double = 0.0
     @Published var rePriceResponse: RePriceResponse = RePriceResponse()
     @Published var selection: String? = nil
     @Published var isSelectBtnTapped: Bool = false
     
     @Published var flightRouteType: String?
+    @Published var isDomestic: Bool = true
     
     @Published var bookedAirTicketList: [AirTicketingResponse] = []
     
@@ -251,7 +253,6 @@ class FlightSearchModel: ObservableObject {
             }
         }
     }
-    */
     
     func prepareBooking(requestBody:PrepareBookingRequest) {
         self.isBooking = true
@@ -269,6 +270,7 @@ class FlightSearchModel: ObservableObject {
             }
         }
     }
-    
+     
+     */
     
 }

@@ -28,7 +28,7 @@ struct ContentView: View {
             }
             .environmentObject(flightSearchModel)
             .navigationBarTitleDisplayMode(.inline)
-        }
+        }.accentColor(.black)
     }
 }
 

@@ -158,8 +158,8 @@ struct SignupView: View {
         }
         .navigationTitle("Login/Register")
         .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true)
-        .navigationBarItems(leading: btnBack)
+//        .navigationBarBackButtonHidden(true)
+//        .navigationBarItems(leading: btnBack)
         
     }
     

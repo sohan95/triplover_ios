@@ -249,10 +249,11 @@ final class HttpUtility {
     
     func bookingConfirm(requestBody:SSLComerzResponse, completionHandler:@escaping(_ result: BookingConfirmResponse?)->Void) {
         let token = UserDefaults.standard.string(forKey: "token")
+        print(token)
         guard let token = token else {
             return
         }
-        var urlRequest = URLRequest(url: URL(string: "\(HttpUtility.baseUrl)/BookB2C/AppBookingLog")!)
+        var urlRequest = URLRequest(url: URL(string: "\(HttpUtility.baseUrl)/BookB2C/AppBookingConfirm")!)
         urlRequest.httpMethod = "post"
         urlRequest.addValue("application/json", forHTTPHeaderField: "content-type")
         urlRequest.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
@@ -264,9 +265,9 @@ final class HttpUtility {
         encoder.dateEncodingStrategy = .formatted(formatter)
         urlRequest.httpBody = try? encoder.encode(requestBody)
         
-//        let encoder3 = JSONEncoder()
-//        let myEventsJSONData = try! encoder3.encode(bookingRequest)
-//        print(String(data: myEventsJSONData, encoding: .utf8)!)
+        let encoder3 = JSONEncoder()
+        let myEventsJSONData = try! encoder3.encode(requestBody)
+        print(String(data: myEventsJSONData, encoding: .utf8)!)
         
         let sessionConfig = URLSessionConfiguration.default
         sessionConfig.timeoutIntervalForRequest = 300.0

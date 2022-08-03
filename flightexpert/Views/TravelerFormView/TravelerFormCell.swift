@@ -1,46 +1,11 @@
 //
-//  UserFormView.swift
+//  TravelerFormCell.swift
 //  flightexpert
 //
 //  Created by sohan on 6/10/22.
 //
 
 import SwiftUI
-//struct ContactInfo : Codable {
-//    var email: String = ""
-//    var phone: String = ""
-//    var phoneCountryCode: String  = ""
-//    var countryCode: String = ""
-//    var cityName: String = ""
-//}
-//
-//struct DocumentInfo : Codable {
-//    var documentType: String = ""
-//    var documentNumber: String = ""
-//    var expireDate: Date = Date()
-//    var frequentFlyerNumber: String = ""
-//    var issuingCountry: String = ""
-//    var nationality: String = ""
-//}
-//
-//struct NameElement : Codable {
-//    var title : String = ""
-//    var firstName : String = ""
-//    var lastName : String = ""
-//    var middleName : String = ""
-//}
-//
-//struct PassengerInfo : Codable {
-//    var nameElement : NameElement?
-//    var contactInfo : ContactInfo?
-//    var documentInfo : DocumentInfo?
-//    var passengerType : String = ""
-//    var gender : String = ""
-//    var dateOfBirth : String = ""
-//    var passengerKey : String = ""
-//    var isLeadPassenger : Bool = true
-//    var meal : String = ""
-//}
 
 struct UserData: Encodable {
     //passengerInfoes:
@@ -153,9 +118,7 @@ class CountryViewModel: NSObject, ObservableObject {
         }
 }
 
-
-struct UserFormView: View {
-    //var userTitle: String = "ADULT # 1"
+struct TravelerFormCell: View {
     @Binding var userData: UserData
     var isDomestic: Bool
     
@@ -457,8 +420,8 @@ struct UserFormView: View {
 //    }
 //}
 
-struct UserFormView_Previews: PreviewProvider {
+struct TravelerFormCell_Previews: PreviewProvider {
     static var previews: some View {
-        UserFormView(userData: .constant(UserData()), isDomestic: false)
+        TravelerFormCell(userData: .constant(UserData()), isDomestic: false)
     }
 }

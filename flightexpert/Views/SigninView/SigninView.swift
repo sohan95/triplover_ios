@@ -134,8 +134,8 @@ struct SigninView: View {
         }
         .navigationTitle("Login/Register")
         .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true)
-        .navigationBarItems(leading: btnBack)
+//        .navigationBarBackButtonHidden(true)
+//        .navigationBarItems(leading: btnBack)
         .alert(isPresented: $showErrorAlert) {
             Alert(title: Text("Failed!"), message: Text(errorMsg), dismissButton: .default(Text("Close")))
         }

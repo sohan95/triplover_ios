@@ -106,8 +106,8 @@ struct BookedFlightDetails: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true)
-        .navigationBarItems(leading: btnBack)
+//        .navigationBarBackButtonHidden(true)
+//        .navigationBarItems(leading: btnBack)
         .onAppear() {
             getAirTicketingDetails()
         }

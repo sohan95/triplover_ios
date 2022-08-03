@@ -9,7 +9,7 @@ import SwiftUI
 struct FakeProgressBar: View {
     var isActive: Bool
     @State var progressValue: Double = 0.0
-    private let maxValue: Double = 20
+    private let maxValue: Double = 50
     private let backgroundEnabled: Bool = true
     private let backgroundColor: Color = Color(UIColor(red: 245/255,
                                                        green: 245/255,
@@ -120,7 +120,7 @@ struct SplashScreen: View {
                 VStack {
                     Spacer()
                     ProgressBar(isActive: $isActive)
-                        .frame(height: 3)
+                        .frame(height: 5)
                         
                 }
                 .padding(.bottom, 40)
