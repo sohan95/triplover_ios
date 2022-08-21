@@ -46,7 +46,7 @@ struct MyBooking: View {
                         .clipped()
                         .frame(minHeight: 480, maxHeight:.infinity)
                         .navigationBarTitleDisplayMode(.inline)
-                        .navigationBarBackButtonHidden(true)
+//                        .navigationBarBackButtonHidden(true)
                         Spacer()
                         HStack(alignment: .center, spacing: 70) {
                             Button {
@@ -106,23 +106,22 @@ struct MyBooking: View {
                 }
                 
             }
-//            else {
-//                LoadingView()
-//                    .navigationBarBackButtonHidden(true)
-//            }
             else {
                 ZStack {
                     SplashScreenBg
                         .resizable()
                         .scaledToFill()
                         .edgesIgnoringSafeArea(.all)
-                    VStack {
+                    VStack(spacing: 40) {
                         Spacer()
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: .orange))
+                            .scaleEffect(2)
                         ProgressBar(isActive: $isLoading)
                             .frame(height: 3)
                             
                     }
-                    .padding(.bottom, 44)
+                    .padding(.bottom, 64)
                     
                 }
                 

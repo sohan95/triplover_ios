@@ -17,14 +17,13 @@ struct FlightDetailsCell: View {
                 HStack(spacing: 20) {
                     Image(systemName: "airplane.departure")
                     Text("\(direction.from!) - \(direction.to!)")
+                        .font(.system(size: 13, weight: .bold, design: .rounded))
                 }
                 .foregroundColor(.blue)
                 .padding(.bottom, 10)
-                HStack(spacing: 15) {
-                    
-                    ImageUrlView(urlString: "\(ROOT_URL_THUMB)\(direction.platingCarrierCode!).png", sizeVal: 30)
-                        .frame(width: 30, height: 30)
-                        .background(Color.gray)
+                HStack(spacing: 20) {
+                    ImageUrlView(urlString: "\(ROOT_URL_THUMB)\(direction.platingCarrierCode!).png", sizeVal: 20)
+                        .frame(width: 20, height: 20)
                         .clipShape(Circle())
                     VStack(alignment: .leading, spacing: 2){
                         Text("\(direction.segments?[0].details?[0].departure ?? "")")
@@ -63,12 +62,12 @@ struct FlightDetailsCell: View {
                 }
                 
             }
+            .font(.system(size: 10, weight: .regular, design: .rounded))
             .foregroundColor(.black)
             .background(.white)
             .padding(20)
             Spacer()
         }
-        .font(.system(size: 15, weight: .medium, design: .rounded))
         .background(.white)
         .cornerRadius(10)
         .padding(.horizontal, 10)

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+var cabinClassList: [String] = ["Economy" ,"Premium", "Business", "First Class"]
 
 struct SearchOptionModal: View {
     @Binding var isShowing: Bool
@@ -15,18 +16,20 @@ struct SearchOptionModal: View {
     @Binding var cabinClass: String
     var doneAction : () -> ()
     
-    @State private var selectedClass: Int = 0
-    var cabinClassList: [String] = ["Economy" ,"Premium", "Business", "First Class"]
-    
+    @State var selectedCabin: String = "Economy"
     @State var selectedAdultNumber: Int = 1
     @State var selectedChildNumber: Int = 0
     @State var selectedInfantNumber: Int = 0
     
+    @State var maxCabin: Int = 4
     @State var maxAdult: Int = 8
     @State var maxChild: Int = 1
     @State var maxInfants: Int = 0
     
     var totalPassenger: Int = 9
+    @State var showRadioList: Bool = false
+    @State var buttonIndex: Int = -1
+    @State var selectedSortCategory = ""
     
     
     var body: some View {
@@ -41,7 +44,7 @@ struct SearchOptionModal: View {
                     }
                 
                 VStack {
-                    //header
+                    // header
                     HStack() {
                         Text("")
                             .frame(width:60)
@@ -64,75 +67,37 @@ struct SearchOptionModal: View {
                     .frame(maxWidth:.infinity, maxHeight:40)
                     .background(Color.gray.opacity(0.4))
                     
-                    // First Row-button
+                    // First Row-Button
                     VStack(alignment: .leading, spacing:10){
                         HStack(spacing: 10) {
-                            Menu {
-                                Picker(selection: $selectedClass,
-                                label: EmptyView()) {
-                                    ForEach(0..<cabinClassList.count) {
-                                        //Text("\($0) Adults")
-                                        Text(self.cabinClassList[$0])
-                                        .font(.system(size: 11, weight: .medium, design: .rounded))
-                                    }
-                                }
-
+                            Button {
+                                self.buttonIndex = 0
+                                self.showRadioList = true
                             } label: {
-                                MenuButtonView(title1: "CLASS", title2: self.cabinClassList[selectedClass])
+                                MenuButtonView(title1: "CLASS", title2:selectedCabin)
                             }
                             
-                            MenuButton(title1: "ADULT (12+)", title2: "\(selectedAdultNumber) Traveler", maxNumber: $maxAdult, selectedNumber: $selectedAdultNumber) {
-                                
-                                self.maxChild = totalPassenger - selectedAdultNumber
-                                self.maxAdult = totalPassenger - selectedChildNumber
-                                self.maxInfants = selectedAdultNumber
-                                
-                                print("maxAdult=\(maxAdult)maxChild=\(maxChild)maxInfants=\(maxInfants)")
-                                print("selectedAdultNumber=\(selectedAdultNumber)  selectedChildNumber=\(selectedChildNumber)")
+                            Button {
+                                self.buttonIndex = 1
+                                self.showRadioList = true
+                            } label: {
+                                MenuButtonView(title1: "ADULT (12+)", title2:"\(selectedAdultNumber) Traveler")
                             }
-                            
-//                            Menu {
-//                                Picker(selection: $selectedAdultNumber,
-//                                label: EmptyView()) {
-//                                    ForEach(0..<maxAdult+1) {
-//                                        Text("\($0) Adults")
-//                                    }
-//                                }.onReceive([self.$selectedAdultNumber].publisher.first()) { value in
-//                                    print("\(selectedAdultNumber)")
-//                                    self.updateAdults()
-//                                }
-//                            } label: {
-//                                MenuButtonView(title1: "ADULT (12+)", title2:"\(selectedAdultNumber) Traveler")
-//                            }
                         }
                         .foregroundColor(.gray)
                         .padding(.horizontal, 15)
                         
                         HStack(spacing: 10) {
-                            MenuButton(title1: "CHILD (2 - 12)", title2: "\(selectedChildNumber) Traveler", maxNumber: $maxChild, selectedNumber: $selectedChildNumber) {
-                                self.updateChilds()
+                            Button {
+                                self.buttonIndex = 2
+                                self.showRadioList = true
+                            } label: {
+                                MenuButtonView(title1: "CHILD (2 - 12)", title2:"\(selectedChildNumber) Traveler")
                             }
-//                            Menu {
-//                                Picker(selection: $selectedChildNumber,
-//                                label: EmptyView()) {
-//                                    ForEach(0..<maxChild+1) {
-//                                        Text("\($0) Children")
-//                                    }
-//                                }.onReceive([self.$selectedChildNumber].publisher.first()) { value in
-//                                    print("\($selectedChildNumber)")
-//                                    self.updateChilds()
-//                                }
-//                            } label: {
-//                                MenuButtonView(title1: "CHILD (2 - 12)", title2:"\(selectedChildNumber) Traveler")
-//                            }
-
-                            Menu {
-                                Picker(selection: $selectedInfantNumber,
-                                label: EmptyView()) {
-                                    ForEach(0..<maxInfants+1) {
-                                        Text("\($0) Infants")
-                                    }
-                                }
+                            
+                            Button {
+                                self.buttonIndex = 3
+                                self.showRadioList = true
                             } label: {
                                 MenuButtonView(title1: "INFANTS (0 - 2)", title2:"\(selectedInfantNumber) Traveler")
                             }
@@ -141,14 +106,17 @@ struct SearchOptionModal: View {
                         .padding(.horizontal, 15)
                     }
                     
+                    
                     Button(action: {
                         adults = selectedAdultNumber
                         childs = selectedChildNumber
                         infants = selectedInfantNumber
-                        cabinClass = self.cabinClassList[self.selectedClass]
+                        cabinClass = selectedCabin
+                        self.showRadioList.toggle()
                         isShowing = false
+                        self.buttonIndex = -1
+                        self.showRadioList = false
                         self.doneAction()
-                        
                     }, label: {
                         Text("DONE")
                             .frame(maxWidth:.infinity)
@@ -165,12 +133,54 @@ struct SearchOptionModal: View {
                 .frame(maxWidth: .infinity)
                 .background(Color.white)
                 .transition(.move(edge: .bottom))
+                
+                // Sort By option popup
+                VStack{
+                    Spacer()
+                    if self.buttonIndex == 0 {
+                        CabinClassPopup(title: "Class", selected: $selectedCabin, show: self.$showRadioList) {
+                            self.showRadioList.toggle()
+                        }
+                        .offset(y: self.showRadioList ? (UIApplication.shared.currentUIWindow()?.safeAreaInsets.bottom)! + 15 : UIScreen.main.bounds.height)
+                    }
+                    if self.buttonIndex == 1 {
+                        RadioListPopup(title: "Adult", itemName: "Adult", maxNumber: $maxAdult, selected: $selectedAdultNumber, show: self.$showRadioList) {
+                            
+                            maxChild = totalPassenger - selectedAdultNumber
+                            maxInfants = selectedAdultNumber
+                            
+                            if selectedInfantNumber > selectedAdultNumber {
+                                selectedInfantNumber = selectedAdultNumber
+                            }
+                            
+                            self.showRadioList.toggle()
+                        }
+                        .offset(y: self.showRadioList ? (UIApplication.shared.currentUIWindow()?.safeAreaInsets.bottom)! + 15 : UIScreen.main.bounds.height)
+                    }
+                    else if self.buttonIndex == 2 {
+                        RadioListPopup(title: "Child", itemName: "Child", maxNumber: $maxChild, selected: $selectedChildNumber, show: self.$showRadioList) {
+                            
+                            maxAdult = totalPassenger - selectedChildNumber
+                            maxInfants = selectedAdultNumber
+                            self.showRadioList.toggle()
+                        }
+                        .offset(y: self.showRadioList ? (UIApplication.shared.currentUIWindow()?.safeAreaInsets.bottom)! + 15 : UIScreen.main.bounds.height)
+                    }
+                    
+                    else if self.buttonIndex == 3 {
+                        RadioListPopup(title: "Infants", itemName: "Infants", maxNumber: $maxInfants, selected: $selectedInfantNumber, show: self.$showRadioList) {
+                            self.showRadioList.toggle()
+                        }
+                        .offset(y: self.showRadioList ? (UIApplication.shared.currentUIWindow()?.safeAreaInsets.bottom)! + 15 : UIScreen.main.bounds.height)
+                    }
+                    
+                }.background(Color(UIColor.label.withAlphaComponent(self.showRadioList ? 0.3 : 0)).edgesIgnoringSafeArea(.all))
             }
             
         }
         .frame(maxWidth:.infinity, maxHeight: .infinity, alignment: .bottom)
         .ignoresSafeArea()
-        .animation(.easeInOut)
+        .animation(Animation.easeInOut(duration: 1.0), value: 200.0)
         .onAppear(){
             maxAdult = 9
             maxChild = totalPassenger-selectedAdultNumber
@@ -211,48 +221,50 @@ struct MenuButtonView: View {
                 .font(.system(size: 11, weight: .medium, design: .rounded))
             Text(title2)
                 .font(.system(size: 13, weight: .bold, design: .rounded))
+                .foregroundColor(.black)
             Text("Click to change")
                 .font(.system(size: 10, weight: .regular, design: .rounded))
         }
         .frame(minWidth:0, maxWidth: .infinity, minHeight: 75, maxHeight: 75, alignment: .leading)
+        .foregroundColor(Color(hex: "#2D2D2D"))
         .padding(.leading, 10)
         .background(.white)
         .overlay(
                 RoundedRectangle(cornerRadius: 5)
-                    .stroke(.gray.opacity(0.5), lineWidth: 0.7)
+                    .stroke(Color.gray.opacity(0.5), lineWidth: 0.7)
             )
     }
 }
 
-struct MenuButton: View {
-
-    var title1:String
-    var title2:String
-    @Binding var maxNumber:Int
-    @Binding var selectedNumber:Int
-    var doneAction : () -> ()
-    typealias Action = (Int) -> Void
-    var action: Action?
-
-    var body: some View {
-        Menu {
-            Picker(selection: $selectedNumber,
-            label: EmptyView()) {
-                ForEach(0..<maxNumber+1) {
-                    Text("\($0) Adults")
-                }
-            }.onReceive([self.$selectedNumber].publisher.first()) { value in
-                print("\(value)")
-                self.doneAction()
-//                if let action = action {
-//                    action(value)
+//struct MenuButton: View {
+//
+//    var title1:String
+//    var title2:String
+//    @Binding var maxNumber:Int
+//    @Binding var selectedNumber:Int
+//    var doneAction : () -> ()
+//    typealias Action = (Int) -> Void
+//    var action: Action?
+//
+//    var body: some View {
+//        Menu {
+//            Picker(selection: $selectedNumber,
+//            label: EmptyView()) {
+//                ForEach(0..<maxNumber + 1) {
+//                    Text("\($0) Adults")
 //                }
-            }
-        } label: {
-            MenuButtonView(title1: title1, title2:"\(selectedNumber) Traveler")
-        }
-    }
-}
+//            }.onReceive([self.$selectedNumber].publisher.first()) { value in
+//                print("\(value)")
+//                self.doneAction()
+////                if let action = action {
+////                    action(value)
+////                }
+//            }
+//        } label: {
+//            MenuButtonView(title1: title1, title2:"\(selectedNumber) Traveler")
+//        }
+//    }
+//}
 
 struct MenuButtonView_Previews: PreviewProvider {
     static var previews: some View {

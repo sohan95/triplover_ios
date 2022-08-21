@@ -44,33 +44,25 @@ struct BookedFlightDetails: View {
                                     .font(.system(size: 10, weight: .medium, design: .rounded))
                                 Text("\(getDateStringWithTemplate(dateStr:details.issueDate ?? "", template: "yyyy-MM-dd'T'HH:mm:ss.SSS"))")
                                     .font(.system(size: 10, weight: .bold, design: .rounded))
-//                                Text("Issue Date: \(getDateStringWithTemplate(dateStr:details.issueDate ?? "", template: "yyyy-MM-dd'T'HH:mm:ss.SSS"))").lineLimit(1)
                                 
                                 Spacer()
                             }
-    //                        PassengerInfo()
                             PassengerInfo(ticketInfoes:details.ticketInfoes!)
                             Text("Flight Details")
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .font(.system(size: 11, weight: .bold, design: .rounded))
                                 .padding(5)
                                 .background(.gray.opacity(0.4))
-                                
                             
-                            //Text((details.flightInfo?.directions?[0].first?.fromAirport)!)
                             FlightDetails(directions:(details.flightInfo?.directions)!)
-//                            FlightDetails()
                             
                             Text("Fare Details")
                                 .frame(maxWidth:.infinity,alignment: .leading)
                                 .font(.system(size: 11, weight: .bold, design: .rounded))
                                 .padding(5)
                                 .background(.gray.opacity(0.4))
-//                                .padding(.vertical,10)
                             
                             VStack(alignment: .trailing, spacing:1) {
-    //                            FareDetails(passengerFares: airTicketingDetails?.flightInfo?.passengerFares)
-    //                            FareTotal(bookingComponents: (airTicketingDetails?.flightInfo?.bookingComponents!)!)
                                 FareDetailsList(passengerFares: (details.flightInfo?.passengerFares)!, passengerCounts: (details.flightInfo?.passengerCounts)!)
                                 FareTotal(bookingComponent: (details.flightInfo?.bookingComponents?.first)!)
                             }
@@ -83,31 +75,28 @@ struct BookedFlightDetails: View {
                     .padding(10)
                 }
             }
-//            else {
-//                LoadingView()
-//                    .navigationBarBackButtonHidden(true)
-//            }
             else {
                 ZStack {
                     SplashScreenBg
                         .resizable()
                         .scaledToFill()
                         .edgesIgnoringSafeArea(.all)
-                    VStack {
+                    VStack(spacing: 40) {
                         Spacer()
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: .orange))
+                            .scaleEffect(2)
                         ProgressBar(isActive: $isLoading)
                             .frame(height: 3)
                             
                     }
-                    .padding(.bottom, 44)
+                    .padding(.bottom, 64)
                     
                 }
                 
             }
         }
         .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true)
-        .navigationBarItems(leading: btnBack)
         .onAppear() {
             getAirTicketingDetails()
         }
@@ -135,7 +124,6 @@ struct BookedFlightDetails: View {
                     return
                 }
                 airTicketingDetails = result
-                //print(result)
             }
         })
     }

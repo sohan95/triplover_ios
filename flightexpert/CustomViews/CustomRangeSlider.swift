@@ -165,8 +165,10 @@ struct SliderView: View {
             .frame(width: slider.width, height: slider.lineWidth)
             .overlay(
                 ZStack {
+                    
                     //Path between both handles
                     SliderPathBetweenView(slider: slider)
+                        
                     
                     //Low Handle
                     SliderHandleView(handle: slider.lowHandle)
@@ -211,14 +213,12 @@ struct RangeSliderView: View {
 
     var body: some View {
         VStack {
-            Text("Value: " + slider.valueBetween)
-            Text("Percentages: " + slider.percentagesBetween)
-
-            Text("High Value: \(slider.highHandle.currentValue)")
-            Text("Low Value: \(slider.lowHandle.currentValue)")
-
-            //Slider
-            SliderView(slider: slider)
+            HStack{
+                Text("\(slider.highHandle.currentValue)")
+                SliderView(slider: slider)
+                Text("\(slider.lowHandle.currentValue)")
+            }.padding(.trailing,10)
+            
         }
         .onAppear() {
             

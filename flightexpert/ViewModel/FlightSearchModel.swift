@@ -29,11 +29,13 @@ class FlightSearchModel: ObservableObject {
 //    @Published var selectedFlightList = Stack()
     
     //RePrice Response
+    @Published var totalPrice: Double = 0.0
     @Published var rePriceResponse: RePriceResponse = RePriceResponse()
     @Published var selection: String? = nil
     @Published var isSelectBtnTapped: Bool = false
     
     @Published var flightRouteType: String?
+    @Published var isDomestic: Bool = true
     
     @Published var bookedAirTicketList: [AirTicketingResponse] = []
     
@@ -152,12 +154,14 @@ class FlightSearchModel: ObservableObject {
         
         //airlineList
         self.airlineList = Array(airlineSet)
-//        // max-min filter:
-//        let directionMax = directions.max { $0.totalPrice! < $1.totalPrice! }
-//        self.maxPrice = (directionMax?.totalPrice)!
-//
-//        let directionMin = directions.min { $0.totalPrice! < $1.totalPrice! }
+        // max-min filter:
+        let directionMax = directions.max { $0.totalPrice! < $1.totalPrice! }
+        //self.maxPrice = (directionMax?.totalPrice)!
+        self.minMaxPrice.maxPrice = (directionMax?.totalPrice)!
+
+        let directionMin = directions.min { $0.totalPrice! < $1.totalPrice! }
 //        self.minPrice = (directionMin?.totalPrice)!
+        self.minMaxPrice.minPrice = (directionMin?.totalPrice)!
         
         print("maxPrice=\(self.maxPrice)___minPrice=\(self.minPrice)")
         print("maxPrice=\(self.maxPrice)___minPrice=\(self.minPrice)")
@@ -251,7 +255,6 @@ class FlightSearchModel: ObservableObject {
             }
         }
     }
-    */
     
     func prepareBooking(requestBody:PrepareBookingRequest) {
         self.isBooking = true
@@ -269,6 +272,7 @@ class FlightSearchModel: ObservableObject {
             }
         }
     }
-    
+     
+     */
     
 }

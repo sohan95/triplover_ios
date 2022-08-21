@@ -1,5 +1,5 @@
 //
-//  FlightDetailsView.swift
+//  FlightDetailsView2.swift
 //  flightexpert
 //
 //  Created by sohan on 6/6/22.
@@ -14,7 +14,7 @@ import SwiftUI
 //    case full
 //}
 
-struct FlightDetailsView<Content: View>: View {
+struct FlightDetailsView2<Content: View>: View {
     
     let content: () -> Content
     var sheetMode:Binding<SheetMode>
@@ -71,9 +71,9 @@ struct FlightDetailsView<Content: View>: View {
 }
 
 
-struct FlightDetailsView_Previews: PreviewProvider {
+struct FlightDetailsView2_Previews: PreviewProvider {
     static var previews: some View {
-        FlightDetailsView(sheetMode: .constant(.none)) {
+        FlightDetailsView2(sheetMode: .constant(.none)) {
             VStack{
                 Text("None")
             }.frame(width: .infinity, height: .infinity)

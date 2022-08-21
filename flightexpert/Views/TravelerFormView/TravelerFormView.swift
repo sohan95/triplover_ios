@@ -1,5 +1,5 @@
 //
-//  UserFormView.swift
+//  TravelerFormCell.swift
 //  flightexpert
 //
 //  Created by sohan on 6/8/22.
@@ -9,7 +9,7 @@ import SwiftUI
 //import Combine
 //import SSLCommerzSDK
 
-struct TravelerDetails: View {
+struct TravelerFormView: View {
     
 //    @ObservedObject var flightSearchModel: FlightSearchModel
     //@StateObject var bookingDataSource = BookingDataSource()
@@ -22,6 +22,12 @@ struct TravelerDetails: View {
     @State var isAgree: Bool = false
     @State var isShowSSLView = false
     @State var showSSLCz: String? = nil
+    @State private var data = 3
+    @State var showAlert: Bool = false
+    @State var alertMsg: String = " "
+    
+    
+    @State var bookingConfirmResponse:BookingConfirmResponse?
 
     @Environment(\.presentationMode) var presentationMode
     var btnBack : some View { Button(action: {
@@ -42,71 +48,63 @@ struct TravelerDetails: View {
                 .scaledToFill()
                 .ignoresSafeArea(.all, edges: .all)
             
-            NavigationLink(destination:VCRepresented(), tag: "VCRepresented", selection: $showSSLCz) { EmptyView() }
-            VStack {
-                ScrollView {
-                    ForEach(self.userDataArray.indices, id: \.self) { i in
-                        UserFormView(userData: self.$userDataArray[i], isDomestic: false)
+//            NavigationLink(destination:VCRepresented().environmentObject(flightSearchModel), tag: "VCRepresented", selection: $showSSLCz) { EmptyView() }
+            NavigationLink(destination:MyBooking().environmentObject(flightSearchModel), tag: "MyBooking", selection: $showSSLCz) { EmptyView() }
+            GeometryReader { reader in
+                VStack(spacing: 5) {
+                    Spacer()
+                    ScrollView {
+                        ForEach(self.userDataArray.indices, id: \.self) { i in
+                            TravelerFormCell(userData: self.$userDataArray[i], isDomestic: flightSearchModel.isDomestic)
+                        }
                     }
+//                    .offset(y: 64)
+//                    .clipped()
+                    
+                    VStack(alignment: .center, spacing: 10) {
+                        HStack(alignment: .center, spacing: 0) {
+                            Spacer()
+                            Toggle("I agree to the", isOn: $isAgree)
+                                .toggleStyle(CheckboxStyle())
+                                .foregroundColor(.black)
+                                .font(.system(size: 11, weight:.medium, design: .rounded))
+                                .padding(.leading,10)
+                                .padding(.trailing, 5)
+                            Link("Terms and Condition", destination: URL(string: "https://triplover.com/Terms.aspx")!)
+                                .font(.system(size: 11, weight:.bold, design: .rounded))
+                                .foregroundColor(.black)
+                            
+                            Spacer()
+                        }
+                        
+                        Button {
+                            //Goto Pricing page
+                            self.prepareBookingService()
+                        } label: {
+                            Text("Book and Continue")
+                                .font(.system(size: 13, weight:.bold, design: .rounded))
+                            .foregroundColor(.white)
+                            .frame(minWidth:0, maxWidth: .infinity, minHeight: 35, maxHeight: 35)
+                            .background(RoundedRectangle(cornerRadius: 17.5)
+                                .fill(blueGradient))
+                        }
+                    }
+                    .frame(height: 70)
+                    .padding(.horizontal,5)
+                    .padding(.bottom, 50)
                 }
-                .offset(y: 64)
+                .offset(y: 50)
+                .frame(height: reader.size.height - 50)
                 .clipped()
-                
-                VStack(alignment: .center, spacing: 10) {
-                    HStack(spacing: -10) {
-
-                        Toggle("I agree to the", isOn: $isAgree)
-                            .toggleStyle(CheckboxStyle())
-                            .foregroundColor(.black)
-                          .frame(width:150)
-                          .padding(.leading,10)
-
-
-                        NavigationLink("Terms and Condition", destination: SignupView())
-                            .font(.headline)
-                            .foregroundColor(.black)
-
-                        Spacer()
-                    }
-
-
-//                    HStack {
-//                        Spacer()
-//                        Button("Book and Continue") {
-//                            //Goto Pricing page
-//                            PrepareBooking()
-//                        }
-//                        .font(.system(size: 16, weight:.bold, design: .monospaced))
-//                        .foregroundColor(.white)
-//                        Spacer()
-//                    }
-//                    .frame(maxWidth:.infinity)
-//                    .frame(height: 40)
-//                    .background(.black)
-                    Button {
-                        //Goto Pricing page
-                        PrepareBooking()
-                    } label: {
-                        Text("Book and Continue")
-                            .font(.system(size: 20, weight:.bold, design: .rounded))
-                        .foregroundColor(.white)
-                        .frame(minWidth:0, maxWidth: .infinity, minHeight: 40, maxHeight: 40)
-                        .background(RoundedRectangle(cornerRadius: 10)
-                            .fill(blueGradient))
-                    }
-                }
-                .frame(height: 100)
-                .padding(.horizontal,10)
-                .padding(.bottom, 64)
-                
-                
             }
         }
         .navigationTitle("Passenger Details")
         .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true)
-        .navigationBarItems(leading: btnBack)
+//        .navigationBarBackButtonHidden(true)
+//        .navigationBarItems(leading: btnBack)
+        
         .onAppear {
+            print("sohan=\(data)")
 //            for i in 1...self.totalUserCount {
 //                print("\(i)")
 //                self.userDataArray.append(UserData())
@@ -153,7 +151,18 @@ struct TravelerDetails: View {
                 }
             }
         }
+        .sheet(isPresented: $isShowSSLView) {
+            VCRepresented(data: $data, isShownSSL: $isShowSSLView)
+           
+        }
+        .alert(isPresented: self.$showAlert) {
+            Alert(title: Text("Info"), message: Text("error failed!"), dismissButton: .default(Text("Close")))
+        }
         .environmentObject(flightSearchModel)
+    }
+    
+    func doIt() {
+            print("do something")
     }
     
     func setPassengerInfo(userData: UserData) -> PrepareBookingRequest.PassengerInfoes {
@@ -166,7 +175,7 @@ struct TravelerDetails: View {
         return passengerInfo
     }
     
-    func PrepareBooking() {
+    func prepareBookingService() {
         var passengerInfoes:[PrepareBookingRequest.PassengerInfoes] = []
         for userData in userDataArray {
             let passengerInfo = setPassengerInfo(userData: userData)
@@ -175,27 +184,35 @@ struct TravelerDetails: View {
         let prepareBookingRequest = PrepareBookingRequest(passengerInfoes: passengerInfoes,
                                             taxRedemptions: [], priceCodeRef: flightSearchModel.rePriceResponse.item1?.priceCodeRef, uniqueTransID: flightSearchModel.rePriceResponse.item1?.uniqueTransID, itemCodeRef: flightSearchModel.rePriceResponse.item1?.itemCodeRef)
         
-        print(prepareBookingRequest)
+        print("prepareBookingRequest=\(prepareBookingRequest)")
         
-        self.prepareBooking(requestBody: prepareBookingRequest)
-    }
-    
-    func prepareBooking(requestBody:PrepareBookingRequest) {
         flightSearchModel.isBooking = true
-        HttpUtility.shared.prepareBooking(requestBody: requestBody) { result in
+        HttpUtility.shared.prepareBooking(requestBody: prepareBookingRequest) { result in
 
             DispatchQueue.main.async { [self] in
                 flightSearchModel.isBooking = false
                 
                 guard let result = result else {
+                    self.showAlert = true
+                    self.alertMsg = "There are something wrong. Please try again!"
                     fatalError("There must be a problem decoding the data...")
                 }
                 
+                SSLCmzViewController.callback = {
+                    (bookingConfirmResponse) in
+                    //print(beatCount)
+                    if bookingConfirmResponse?.message != nil {
+                        self.showAlert = true
+                        self.alertMsg = bookingConfirmResponse?.message! ?? ""
+                    }
+                    isShowSSLView = false
+                }
                 flightSearchModel.bookingResponse = result
                 print(result)
                 
                 //call for openSSLCZ
                 showSSLCz = "VCRepresented"
+                isShowSSLView = true
                 
             }
         }
@@ -217,9 +234,9 @@ struct TravelerDetails: View {
     }
 }
 
-struct TravelerDetails_Previews: PreviewProvider {
+struct TravelerFormView_Previews: PreviewProvider {
     static var previews: some View {
-//        TravelerDetails()
-        TravelerDetails()
+//        TravelerFormView()
+        TravelerFormView()
     }
 }

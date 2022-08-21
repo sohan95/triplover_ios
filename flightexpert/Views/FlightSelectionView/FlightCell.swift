@@ -1,5 +1,5 @@
 //
-//  ListRow.swift
+//  FlightCell.swift
 //  flightexpert
 //
 //  Created by sohan on 6/3/22.
@@ -53,7 +53,7 @@ struct BookedFlight: View {
     }
 }
 
-struct ListRow: View {
+struct FlightCell: View {
     typealias Action = (Direction) -> Void
     
 //    @State var selectedModel: RandomModel? = nil
@@ -183,10 +183,10 @@ struct ListRow: View {
                         FlightSelectAction()
                     } label: {
                         Text("Select")
-                            .padding(.horizontal, 5)
+//                            .padding(.horizontal, 5)
                     }
                     .buttonStyle(.borderedProminent)
-                    .tint(selectedDirection?.id == direction.id ? .blue : .orange)
+                    .tint(selectedDirection?.id == direction.id ? .green : .orange)
                     .font(.system(size: 12, weight: .bold, design: .rounded))
                 }
             }
@@ -253,11 +253,11 @@ struct ListRow: View {
     
 }
 
-struct ListRow_Previews: PreviewProvider {
+struct FlightCell_Previews: PreviewProvider {
     static var previews: some View {
 //        let dir = try? Direction(from: "Dhaka" as! Decoder)
-//        ListRow(direction: .constant(Direction()), isSelectBtnTapped: true)
-//        OriginFlightList(title: "abc", flightSearchModel: FlightSearchModel())
+//        FlightCell(direction: .constant(Direction()), isSelectBtnTapped: true)
+//        FlightSelectionView(title: "abc", flightSearchModel: FlightSearchModel())
         ZStack {
             Color.gray
             BookedFlight(flight: AirTicketingResponse(paxName: "Rafiur Rahamn", issueDate: "25-5-87", travellDate: "25-5-87", uniqueTransID: "25-5-87", pnr: "25-5-87", ticketNumber: "25-5-87", status: "25-5-87", platingCarrier: "25-5-87", airlineName: "25-5-87", origin: "25-5-87", destination: "25-5-87", journeyType: "25-5-87", gatewayCharge: 12.0))
