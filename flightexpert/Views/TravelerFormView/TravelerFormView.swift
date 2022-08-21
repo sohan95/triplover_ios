@@ -51,11 +51,11 @@ struct TravelerFormView: View {
 //            NavigationLink(destination:VCRepresented().environmentObject(flightSearchModel), tag: "VCRepresented", selection: $showSSLCz) { EmptyView() }
             NavigationLink(destination:MyBooking().environmentObject(flightSearchModel), tag: "MyBooking", selection: $showSSLCz) { EmptyView() }
             GeometryReader { reader in
-                VStack {
+                VStack(spacing: 5) {
                     Spacer()
                     ScrollView {
                         ForEach(self.userDataArray.indices, id: \.self) { i in
-                            TravelerFormCell(userData: self.$userDataArray[i], isDomestic: false)
+                            TravelerFormCell(userData: self.$userDataArray[i], isDomestic: flightSearchModel.isDomestic)
                         }
                     }
 //                    .offset(y: 64)
@@ -69,10 +69,11 @@ struct TravelerFormView: View {
                                 .foregroundColor(.black)
                                 .font(.system(size: 11, weight:.medium, design: .rounded))
                                 .padding(.leading,10)
-
+                                .padding(.trailing, 5)
                             Link("Terms and Condition", destination: URL(string: "https://triplover.com/Terms.aspx")!)
                                 .font(.system(size: 11, weight:.bold, design: .rounded))
                                 .foregroundColor(.black)
+                            
                             Spacer()
                         }
                         

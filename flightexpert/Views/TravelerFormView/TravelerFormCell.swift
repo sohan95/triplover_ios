@@ -137,14 +137,14 @@ struct TravelerFormCell: View {
                 ScrollView {
                     HStack {
                         Text(userData.userType)
-                            .font(.system(size: 20, weight:.regular, design: .rounded))
+                            .font(.system(size: 15, weight: .bold, design: .rounded))
                             .foregroundColor(.red.opacity(0.7))
                             .padding()
                         
                         Spacer()
                     }
-                    .frame(maxWidth:.infinity, minHeight: 50, maxHeight: 50)
-                    .background(.gray.opacity(0.2))
+                    .frame(maxWidth:.infinity, minHeight: 40, maxHeight: 40)
+                    .background(.gray.opacity(0.4))
                     
                     
                     VStack(alignment: .leading, spacing: 10){
@@ -157,18 +157,12 @@ struct TravelerFormCell: View {
                             VStack(alignment: .leading, spacing: 5) {
                                 Text("First Name")
                                 TextField("First Name", text: $userData.firstName)
-//                                    .frame(height: 50)
-//                                    .textFieldStyle(.roundedBorder)
                                     .padding([.horizontal], 10)
                                     .frame(height: 35)
                                     .textFieldStyle(PlainTextFieldStyle())
                                     .cornerRadius(5)
-                                    .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.gray.opacity(0.5)))
-                                    
-                                    
-//                                    .background(Color.gray.opacity(0.3).cornerRadius(5))
+                                    .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.black.opacity(0.4), lineWidth: 0.5))
                             }
-//                            .padding(.horizontal, 10)
                         }
                         HStack {//Row-2
                             VStack(alignment: .leading) {
@@ -178,7 +172,7 @@ struct TravelerFormCell: View {
                                     .frame(height: 35)
                                     .textFieldStyle(PlainTextFieldStyle())
                                     .cornerRadius(5)
-                                    .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.gray.opacity(0.5)))
+                                    .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.black.opacity(0.4), lineWidth: 0.5))
                             }
                         }
                         HStack {//Row-3
@@ -198,7 +192,7 @@ struct TravelerFormCell: View {
                                 .frame(maxWidth:.infinity)
                                 .textFieldStyle(PlainTextFieldStyle())
                                 .cornerRadius(5)
-                                .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.gray.opacity(0.5)))
+                                .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.black.opacity(0.4), lineWidth: 0.5))
                             }
                             
                             VStack(alignment: .leading) {
@@ -233,9 +227,8 @@ struct TravelerFormCell: View {
                                         .frame(height: 35)
                                         .textFieldStyle(PlainTextFieldStyle())
                                         .cornerRadius(5)
-                                        .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.gray.opacity(0.5)))
+                                        .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.black.opacity(0.4), lineWidth: 0.5))
                                 }
-
                                 
                             }
                             HStack {//Row-6
@@ -246,7 +239,7 @@ struct TravelerFormCell: View {
                                         .frame(height: 35)
                                         .textFieldStyle(PlainTextFieldStyle())
                                         .cornerRadius(5)
-                                        .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.gray.opacity(0.5)))
+                                        .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.black.opacity(0.4), lineWidth: 0.5))
                                 }
                                 
                                 VStack(alignment: .leading) {
@@ -265,7 +258,7 @@ struct TravelerFormCell: View {
                                     .frame(maxWidth:.infinity)
                                     .textFieldStyle(PlainTextFieldStyle())
                                     .cornerRadius(5)
-                                    .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.gray.opacity(0.5)))
+                                    .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.black.opacity(0.4), lineWidth: 0.5))
                                     
     //                                DatePicker("", selection: $userData.expireDate, in: Date()..., displayedComponents: .date)
     //                                    .frame(maxWidth:.infinity)
@@ -289,25 +282,25 @@ struct TravelerFormCell: View {
                     
                     HStack(alignment: .center) {
                         Text("contact".uppercased())
-                            .font(.system(size: 16, weight:.semibold, design: .rounded))
+                            .font(.system(size: 13, weight:.bold, design: .rounded))
                             .foregroundColor(.black.opacity(0.7))
                             .padding()
                         Spacer()
                     }
                     .frame(maxWidth:.infinity)
-                    .frame(height: 40.0)
+                    .frame(height: 30.0)
                     .background(.gray.opacity(0.3))
                     
                     VStack(alignment: .leading, spacing: 5) {
                         HStack {//Row-1
-                            VStack(alignment: .leading) {
+                            VStack(alignment: .leading, spacing: 2) {
                                 Text("Email")
                                 TextField("Email", text: $userData.email)
                                     .padding([.horizontal], 10)
                                     .frame(height: 35)
                                     .textFieldStyle(PlainTextFieldStyle())
                                     .cornerRadius(5)
-                                    .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.gray.opacity(0.5)))
+                                    .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.black.opacity(0.4), lineWidth: 0.5))
                             }
                         }
                         
@@ -320,7 +313,7 @@ struct TravelerFormCell: View {
                                         .frame(height: 35)
                                         .textFieldStyle(PlainTextFieldStyle())
                                         .cornerRadius(5)
-                                        .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.gray.opacity(0.5)))
+                                        .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.black.opacity(0.4), lineWidth: 0.5))
                                 }
 
                                 VStack(alignment: .leading) {
@@ -330,7 +323,7 @@ struct TravelerFormCell: View {
                                         .frame(height: 35)
                                         .textFieldStyle(PlainTextFieldStyle())
                                         .cornerRadius(5)
-                                        .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.gray.opacity(0.5)))
+                                        .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.black.opacity(0.4), lineWidth: 0.5))
                                 }
                             }
                         }
@@ -351,7 +344,7 @@ struct TravelerFormCell: View {
                                     .frame(height: 35)
                                     .textFieldStyle(PlainTextFieldStyle())
                                     .cornerRadius(5)
-                                    .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.gray.opacity(0.5)))
+                                    .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.black.opacity(0.4), lineWidth: 0.5))
                             }
                             
                         }
@@ -359,6 +352,7 @@ struct TravelerFormCell: View {
                     .frame(minWidth: 0, maxWidth: .infinity)
                     .background(.gray.opacity(0.02))
                     .padding(.horizontal,10)
+                    .padding(.bottom, 10)
                     
                 }
             }

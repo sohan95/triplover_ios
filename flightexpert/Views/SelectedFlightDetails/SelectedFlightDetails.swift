@@ -174,8 +174,24 @@ struct SelectedFlightDetails: View {
                 }
                 
             } else {
-                LoadingView()
-//                    .navigationBarBackButtonHidden(true)
+                ZStack {
+                    SplashScreenBg
+                        .resizable()
+                        .scaledToFill()
+                        .edgesIgnoringSafeArea(.all)
+                    VStack(spacing: 40) {
+                        Spacer()
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: .orange))
+                            .scaleEffect(2)
+                        FakeProgressBar(isActive:flightSearchModel.isSearching)
+                            .frame(height: 4)
+
+                    }
+                    .padding(.bottom, 64)
+
+                }
+                .navigationBarBackButtonHidden(true)
             }
         }
         .navigationBarTitleDisplayMode(.inline)

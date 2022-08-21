@@ -156,7 +156,7 @@ struct FlightSelectionView: View {
                 }
                 .navigationBarBackButtonHidden(true)
                 .navigationBarItems(leading: btnBack)
-                .onAppear() {
+                .onAppear {
                     updateOnAppear()
                 }
                 
@@ -165,6 +165,10 @@ struct FlightSelectionView: View {
                     VStack {
                         Button {
                             //Flight Details
+                            guard self.currentDirection != nil else {
+                                return
+                            }
+
                             self.gotoDetailsView(direction: self.currentDirection!)
                         } label: {
                             HStack{
@@ -215,12 +219,12 @@ struct FlightSelectionView: View {
                     .padding(.horizontal,10)
                     Spacer()
                 }
-                .frame(minWidth:0, maxWidth: .infinity, minHeight:0, maxHeight: 210)
+                .frame(minWidth:0, maxWidth: .infinity, minHeight:0, maxHeight: 180)
                 
             }
-            .offset(y: 64)
+            .offset(y: 50)
             .onTapGesture {
-                sheetMode = .none
+                self.isFilterShown.toggle()
             }
             
             // Sort By option popup
@@ -229,14 +233,14 @@ struct FlightSelectionView: View {
                 RadioButtonsPopup(selected: $selectedSortCategory, show: self.$show) {
                     doSelectedSorting()
                 }
-                .offset(y: self.show ? (UIApplication.shared.windows.last?.safeAreaInsets.bottom)! + 15 : UIScreen.main.bounds.height)
+                .offset(y: self.show ? (UIApplication.shared.currentUIWindow()?.safeAreaInsets.bottom)! + 15 : UIScreen.main.bounds.height)
                 
             }.background(Color(UIColor.label.withAlphaComponent(self.show ? 0.3 : 0)).edgesIgnoringSafeArea(.all))
             
                
             // Filter Option View
             if isFilterShown {
-                FilterBottomPopup(selectedStop: $selectedStop, selectedAirline: $selectedAirline, selectedMinMaxPrice: $selectedMinMaxPrice, minMaxPrice: flightSearchModel.minMaxPrice) { isApply in
+                FilterBottomPopup(selectedStop: $selectedStop, selectedAirline: $selectedAirline, selectedMinMaxPrice: $selectedMinMaxPrice, minMaxPrice: selectedMinMaxPrice,slider: CustomSlider(start: selectedMinMaxPrice.maxPrice, end: selectedMinMaxPrice.minPrice)) { isApply in
                     self.isFilterShown.toggle()
                     self.updateOnAppear()
                     if isApply {
@@ -252,12 +256,8 @@ struct FlightSelectionView: View {
         if isFilterShown {
             return
         }
-        
-//        if let selectedMinMaxPrice = flightSearchModel.minMaxPrice {
-//            let checkit = selectedMinMaxPrice
-//            self.selectedMinMaxPrice = selectedMinMaxPrice
-//        }
-        
+
+        self.selectedMinMaxPrice = flightSearchModel.minMaxPrice
         
         if flightSearchModel.isOneWay {
             flightSearchModel.routeIndex = 0
@@ -412,6 +412,21 @@ struct FlightSelectionView: View {
 struct FlightSelectionView_Previews: PreviewProvider {
     static var previews: some View {
         FlightSelectionView()
+    }
+}
+
+public extension UIApplication {
+    func currentUIWindow() -> UIWindow? {
+        let connectedScenes = UIApplication.shared.connectedScenes
+            .filter { $0.activationState == .foregroundActive }
+            .compactMap { $0 as? UIWindowScene }
+        
+        let window = connectedScenes.first?
+            .windows
+            .first { $0.isKeyWindow }
+
+        return window
+        
     }
 }
 

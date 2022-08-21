@@ -15,6 +15,7 @@ struct FilterBottomPopup: View {
     @Binding var selectedAirline: String;
     @Binding var selectedMinMaxPrice: MinMaxPrice;
     var minMaxPrice: MinMaxPrice
+    @ObservedObject var slider:CustomSlider
     typealias Action = (Bool) -> Void
     var doneFilterAction: Action?
     
@@ -24,7 +25,10 @@ struct FilterBottomPopup: View {
     @State var width1: Double = 15
     @State var ratio: Double = 0
     var totalWidth = UIScreen.main.bounds.width - 60
+    //@ObservedObject var slider: CustomSlider
+    //@StateObject var progress: CustomSlider
 
+    
     var body: some View {
         ZStack {
             Color.black
@@ -77,7 +81,7 @@ struct FilterBottomPopup: View {
                         VStack(alignment: .leading, spacing: 15) {
                             if filterTypeIndex == 0 { // For stops
                                 VStack(alignment: .leading, spacing: 10) {
-                                    HStack{
+                                    /*HStack{
                                         Text("\(self.getValue(val:self.width))")
                                         Text("\(self.getValue(val:self.width1))")
                                     }.lineLimit(1)
@@ -129,7 +133,17 @@ struct FilterBottomPopup: View {
                                         }
                                         .padding(.horizontal,10)
                                     }
-                                    .padding(.top, 25)
+                                    .padding(.top, 25)*/
+                                    HStack{
+                                        Text("\(slider.highHandle.currentValue)")
+                                        Text("\(slider.lowHandle.currentValue)")
+                                    }.padding(.trailing,10)
+                                    ZStack{
+                                        Rectangle()
+                                                .fill(Color.gray.opacity(0.5))
+                                                .frame(height: 30)
+                                        SliderView(slider: slider) 
+                                    }
                                     
                                 }
                                 .frame(maxWidth:.infinity)
@@ -191,6 +205,7 @@ struct FilterBottomPopup: View {
                         HStack(spacing: 5) {
                             Button {
                                 print("Reset")
+                                self.selectedMinMaxPrice = MinMaxPrice(minPrice: slider.lowHandle.currentValue, maxPrice: slider.highHandle.currentValue)
                                 if let doneFilterAction = doneFilterAction {
                                     doneFilterAction(false)
                                 }
@@ -204,7 +219,8 @@ struct FilterBottomPopup: View {
                             Button {
                                 print("Apply")
                                 if let doneFilterAction = doneFilterAction {
-                                    self.selectedMinMaxPrice = MinMaxPrice(minPrice: width*ratio, maxPrice: width1*ratio)
+//                                    self.selectedMinMaxPrice = MinMaxPrice(minPrice: width*ratio, maxPrice: width1*ratio)
+                                    self.selectedMinMaxPrice = MinMaxPrice(minPrice: slider.lowHandle.currentValue, maxPrice: slider.highHandle.currentValue)
                                     doneFilterAction(true)
                                 }
                                 
@@ -234,9 +250,11 @@ struct FilterBottomPopup: View {
 
         }
         .onAppear(){
-            ratio = (minMaxPrice.maxPrice-minMaxPrice.minPrice)/totalWidth
-            width1 = totalWidth
-            print(String(format: "%.2f", ratio))
+//            ratio = (minMaxPrice.maxPrice-minMaxPrice.minPrice)/totalWidth
+//            width1 = totalWidth
+//            print(String(format: "%.2f", ratio))
+            //self.slider = CustomSlider(start: 300, end: 400)
+//            self.progress = CustomSlider(start: self.flightSearchModel.minMaxPrice.minPrice, end: self.flightSearchModel.minMaxPrice.maxPrice)
         }
     }
     
@@ -248,10 +266,10 @@ struct FilterBottomPopup: View {
     }
 }
 
-struct FilterBottomPopup_Previews: PreviewProvider {
-    static var previews: some View {
-//        FilterBottomPopup(selectedStop: .constant("1 Stop"), selectedAirline: .constant("Biman"))
-        let minMaxPrice1 = MinMaxPrice(minPrice: 0.0, maxPrice: 0.0)
-        FilterBottomPopup(selectedStop: .constant("1 Stop"), selectedAirline: .constant("Biman"), selectedMinMaxPrice: .constant(minMaxPrice1), minMaxPrice: minMaxPrice1)
-    }
-}
+//struct FilterBottomPopup_Previews: PreviewProvider {
+//    static var previews: some View {
+////        FilterBottomPopup(selectedStop: .constant("1 Stop"), selectedAirline: .constant("Biman"))
+//        let minMaxPrice1 = MinMaxPrice(minPrice: 0.0, maxPrice: 0.0)
+//        FilterBottomPopup(selectedStop: .constant("1 Stop"), selectedAirline: .constant("Biman"), selectedMinMaxPrice: .constant(minMaxPrice1), minMaxPrice: minMaxPrice1)
+//    }
+//}

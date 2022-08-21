@@ -50,7 +50,7 @@ struct FlightSearchView: View {
     @State var routeDate = [Date]()
     
     var flightRouteTypes = ["One-Way" ,"Round-Trip", "Multi-City"]
-    var cabinClassList = ["Economy" ,"PremiumEconomy", "Business", "First", "PremiumFirst"]
+//    var cabinClassList = ["Economy" ,"PremiumEconomy", "Business", "First", "PremiumFirst"]
     
     @State var typeSelected: String = "One-Way"
     @State var showErrorAlert = false
@@ -80,8 +80,12 @@ struct FlightSearchView: View {
     }
     
     @Environment(\.presentationMode) var presentationMode
-    var btnBack : some View { Button(action: {
-        self.presentationMode.wrappedValue.dismiss()
+    var btnBack : some View {
+        Button(action: {
+            if self.showErrorAlert == false {
+                self.presentationMode.wrappedValue.dismiss()
+            }
+            
         }) {
             HStack {
             Image(systemName: "arrow.backward") // set image here
@@ -215,7 +219,6 @@ struct FlightSearchView: View {
                                                         
                                                     }
                                                     .frame(minWidth:0, maxWidth: .infinity, minHeight: 75, maxHeight: 75, alignment: .leading)
-        //                                            .padding(.leading, 10)
                                                     .background(.white)
                                                     .addBorder(Color.gray, width: 0.7, cornerRadius: 5)
                                                 }
@@ -288,26 +291,6 @@ struct FlightSearchView: View {
                                                 }
                                                 .frame(minWidth: 0, maxWidth: .infinity, minHeight: 30, maxHeight: 30, alignment: .trailing)
                                                 .padding(.trailing, 10)
-                                                ///
-        //                                                HStack {
-        //                                                    if i > 1 {
-        //                                                        Button("Remove") {
-        //                                                            routePathUpdate(isIncrease: true)
-        //                                                        }
-        //                                                        .font(.system(size: 11, weight: .medium, design: .rounded))
-        //                                                        .foregroundColor(Color.red)
-        //                                                    }
-        //                                                    DatePicker("Departure Time", selection: $routeDate[i], in: Date()..., displayedComponents: .date)
-        //                                                        .padding(.leading, 50)
-        //                                                        .padding(.trailing, 20)
-        //                                                        .padding(.top,1)
-        //                                                        .accentColor(.red)
-        //                                                        .background(.white)
-        //                                                        .foregroundColor(Color.black)
-        //                                                        .font(.system(size: 10, weight: .medium, design: .rounded))
-        //                                                }
-        //                                                .padding(.horizontal, 10)
-                                                
                                             }
                                         }
 
@@ -349,9 +332,7 @@ struct FlightSearchView: View {
                                     .foregroundColor(Color(hex: "#2D2D2D"))
                                     .padding(.horizontal, 10)
                                 }
-        //                        Spacer()
                             }
-//                            .frame(minHeight: bgHeight, maxHeight: bgHeight)
                             .padding(10)
                             .background(
                                 RoundedRectangle(cornerRadius: 5)
@@ -372,11 +353,8 @@ struct FlightSearchView: View {
                     }
                     .offset(y: 50)
                     .frame(height: reader.size.height - 50)
-//                    .clipped()
                 }
-                
-//                .navigationBarBackButtonHidden(true)
-//                .navigationBarItems(leading: btnBack)
+                .navigationBarBackButtonHidden(self.showOptionModal)
                 .onAppear() {
                     self.resetView()
                 }
@@ -391,26 +369,25 @@ struct FlightSearchView: View {
                                   cabinClass: $cabinClass,
                                   doneAction:self.changeClassAndTraveler)
             }
-//            else {
-//                LoadingView()
-//                    .navigationBarBackButtonHidden(true)
-//            }
             else {
                 ZStack {
                     SplashScreenBg
                         .resizable()
                         .scaledToFill()
                         .edgesIgnoringSafeArea(.all)
-                    VStack {
+                    VStack(spacing: 40) {
                         Spacer()
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: .orange))
+                            .scaleEffect(2)
                         FakeProgressBar(isActive:flightSearchModel.isSearching)
-                            .frame(height: 3)
+                            .frame(height: 4)
 
                     }
-                    .padding(.bottom, 44)
+                    .padding(.bottom, 64)
 
                 }
-//                .navigationBarBackButtonHidden(true)
+                .navigationBarBackButtonHidden(true)
 
             }
         }

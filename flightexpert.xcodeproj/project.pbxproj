@@ -75,6 +75,7 @@
 		1FBAE03F28468AC90088269B /* RegisterRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBAE03E28468AC90088269B /* RegisterRequest.swift */; };
 		1FBAE04128468C6D0088269B /* RegisterResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBAE04028468C6C0088269B /* RegisterResponse.swift */; };
 		1FBAE0432846992D0088269B /* LoginRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBAE0422846992D0088269B /* LoginRequest.swift */; };
+		1FBB6BDA28A2179400E5990A /* RadioListPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBB6BD928A2179400E5990A /* RadioListPopup.swift */; };
 		1FBC9663285758F2007C7ACA /* RePriceResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBC9662285758F2007C7ACA /* RePriceResponse.swift */; };
 		1FBC966528575E33007C7ACA /* RePriceRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBC966428575E33007C7ACA /* RePriceRequest.swift */; };
 		1FBE4F2E282A0B8400E25128 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBE4F2D282A0B8400E25128 /* HomeView.swift */; };
@@ -202,6 +203,7 @@
 		1FBAE03E28468AC90088269B /* RegisterRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterRequest.swift; sourceTree = "<group>"; };
 		1FBAE04028468C6C0088269B /* RegisterResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterResponse.swift; sourceTree = "<group>"; };
 		1FBAE0422846992D0088269B /* LoginRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginRequest.swift; sourceTree = "<group>"; };
+		1FBB6BD928A2179400E5990A /* RadioListPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioListPopup.swift; sourceTree = "<group>"; };
 		1FBC9662285758F2007C7ACA /* RePriceResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RePriceResponse.swift; sourceTree = "<group>"; };
 		1FBC966428575E33007C7ACA /* RePriceRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RePriceRequest.swift; sourceTree = "<group>"; };
 		1FBE4F2D282A0B8400E25128 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -354,6 +356,7 @@
 				1F89FCE0288A7CAE00A65DF6 /* RadioButtonsPopup.swift */,
 				1F89FCE2288A7D3800A65DF6 /* FilterBottomPopup.swift */,
 				1FCB8601288B44C100140B06 /* CustomRangeSlider.swift */,
+				1FBB6BD928A2179400E5990A /* RadioListPopup.swift */,
 			);
 			path = CustomViews;
 			sourceTree = "<group>";
@@ -479,17 +482,17 @@
 			children = (
 				1FF41DF72824DD3100755A79 /* flightexpertApp.swift */,
 				1FF41DF92824DD3100755A79 /* ContentView.swift */,
-				1FC38A1F28941B76007F33B9 /* SSLCommerz */,
-				1FC20EB628796AAC008C6AD0 /* TermsAndCondition */,
-				1FD1D9AE28733DC9008EB7AC /* SelectedFlightDetails */,
-				1F23A2BA286B642E007438C7 /* LoadingView */,
 				1FC7DD942865C65800F808A5 /* SplashScreen */,
 				1F36BA512835D3AB00B4EE93 /* HomeView */,
 				1F23A2B5286B3AAF007438C7 /* MyBooking */,
-				1FB97C502855F9570099D690 /* CustomViews */,
 				1FB9918B283DB6880051546E /* FlightSearchView */,
 				1FBC9646285752F5007C7ACA /* FlightSelectionView */,
+				1FD1D9AE28733DC9008EB7AC /* SelectedFlightDetails */,
 				1F95F0BA28504F3300BF85F0 /* TravelerFormView */,
+				1FC38A1F28941B76007F33B9 /* SSLCommerz */,
+				1FC20EB628796AAC008C6AD0 /* TermsAndCondition */,
+				1F23A2BA286B642E007438C7 /* LoadingView */,
+				1FB97C502855F9570099D690 /* CustomViews */,
 				1F36BA522835D3DD00B4EE93 /* SideMenuView */,
 				1F1F1431283C6E6000BB1C5D /* SignupView */,
 				1F36BA532835D46400B4EE93 /* SigninView */,
@@ -804,6 +807,7 @@
 				1FA6625F2858031000922554 /* SignoutView.swift in Sources */,
 				1FBE4F2E282A0B8400E25128 /* HomeView.swift in Sources */,
 				1F363B6F2862169E00D858BA /* TripSegmentedView.swift in Sources */,
+				1FBB6BDA28A2179400E5990A /* RadioListPopup.swift in Sources */,
 				1FF41E242824E5DA00755A79 /* SideMenuHeaderView.swift in Sources */,
 				1F1D9EC32840855200771544 /* AirportDataLoader.swift in Sources */,
 				1FB431EB2841B1F0003057F5 /* SelectionRow.swift in Sources */,

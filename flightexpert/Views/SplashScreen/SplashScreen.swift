@@ -117,10 +117,13 @@ struct SplashScreen: View {
                     .resizable()
                     .scaledToFill()
                     .edgesIgnoringSafeArea(.all)
-                VStack {
+                VStack(spacing:40) {
                     Spacer()
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: .orange))
+                        .scaleEffect(2)
                     ProgressBar(isActive: $isActive)
-                        .frame(height: 5)
+                        .frame(height: 4)
                         
                 }
                 .padding(.bottom, 40)

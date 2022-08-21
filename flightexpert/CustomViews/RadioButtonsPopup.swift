@@ -7,11 +7,6 @@
 
 import SwiftUI
 
-//struct RadioButtonsPopup: View {
-//    var body: some View {
-//        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-//    }
-//}
 struct RadioButtonsPopup : View {
     @Binding var selected : String
     @Binding var show : Bool
@@ -22,9 +17,9 @@ struct RadioButtonsPopup : View {
         
         VStack{
             VStack{
-                VStack(alignment: .leading, spacing: 20) {
+                VStack(alignment: .leading, spacing: 15) {
                     Text("Filter By")
-                        .font(.system(size: 18, weight: .bold, design: .rounded))
+                        .font(.system(size: 15, weight: .semibold , design: .rounded))
                         .foregroundColor(.black.opacity(0.7))
                         .padding(.top)
                     
@@ -34,16 +29,16 @@ struct RadioButtonsPopup : View {
                             self.selected = item
                             self.doneAction()
                         }) {
-                            HStack(alignment:.center, spacing: 20) {
+                            HStack(alignment:.center, spacing: 15) {
                                 ZStack(alignment: .center){
-                                    Circle().stroke(self.selected == item ? Color.black : Color.gray, lineWidth: 2).frame(width: 20, height: 20)
+                                    Circle().stroke(self.selected == item ? Color.black : Color.gray, lineWidth: 2).frame(width: 18, height: 18)
                                     
                                     if self.selected == item {
-                                        Circle().fill(Color.black).frame(width: 15, height: 15)
+                                        Circle().fill(Color.black).frame(width: 13, height: 13)
                                     }
                                 }
                                 Text(item)
-                                    .font(.system(size: 16, weight: .semibold, design: .rounded))
+                                    .font(.system(size: 13, weight: .medium, design: .rounded))
                                 
                             }
                             .foregroundColor(.black)
@@ -57,21 +52,21 @@ struct RadioButtonsPopup : View {
                          }) {
                              Text("CLOSE")
                                  .padding(.vertical, 10)
-                                 .font(.system(size: 16, weight: .bold, design: .rounded))
-                                 .foregroundColor(.black.opacity(0.8))
+                                 .font(.system(size: 13, weight: .semibold, design: .rounded))
+                                 .foregroundColor(.black.opacity(0.7))
                          }
                     }
                     
                 }
-                .padding(.horizontal,30)
+                .padding(.horizontal,20)
             }
             .background(Color.white)
             .cornerRadius(5)
-            .padding(.horizontal,30)
+            .padding(.horizontal,40)
             .shadow(color: .gray, radius: 5, x: 2, y: 2)
         }
         .padding(.bottom,(UIApplication.shared.windows.last?.safeAreaInsets.bottom)! + UIScreen.main.bounds.height/3)
-        .foregroundColor(.black.opacity(0.8))
+        .foregroundColor(.black.opacity(0.7))
     }
 }
 
