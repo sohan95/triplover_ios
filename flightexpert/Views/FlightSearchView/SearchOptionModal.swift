@@ -106,6 +106,7 @@ struct SearchOptionModal: View {
                         .padding(.horizontal, 15)
                     }
                     
+                    
                     Button(action: {
                         adults = selectedAdultNumber
                         childs = selectedChildNumber
