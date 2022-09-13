@@ -249,8 +249,8 @@ struct SelectedFlightDetails: View {
                 }
                 flightSearchModel.rePriceResponse = result!
                 flightSearchModel.totalPrice = self.final_totalPrice
-                SSLCmzViewController.balerPrice = self.final_totalPrice
-                SSLCmzViewController.balerId = (flightSearchModel.rePriceResponse.item1?.uniqueTransID)!
+//                SSLCmzViewController.balerPrice = self.final_totalPrice
+//                SSLCmzViewController.balerId = (flightSearchModel.rePriceResponse.item1?.uniqueTransID)!
                 self.selection = "TravelerFormView"
                 
             }

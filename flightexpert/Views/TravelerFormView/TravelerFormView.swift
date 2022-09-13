@@ -198,15 +198,15 @@ struct TravelerFormView: View {
                     fatalError("There must be a problem decoding the data...")
                 }
                 
-                SSLCmzViewController.callback = {
-                    (bookingConfirmResponse) in
-                    //print(beatCount)
-                    if bookingConfirmResponse?.message != nil {
-                        self.showAlert = true
-                        self.alertMsg = bookingConfirmResponse?.message! ?? ""
-                    }
-                    isShowSSLView = false
-                }
+//                SSLCmzViewController.callback = {
+//                    (bookingConfirmResponse) in
+//                    //print(beatCount)
+//                    if bookingConfirmResponse?.message != nil {
+//                        self.showAlert = true
+//                        self.alertMsg = bookingConfirmResponse?.message! ?? ""
+//                    }
+//                    isShowSSLView = false
+//                }
                 flightSearchModel.bookingResponse = result
                 print(result)
                 

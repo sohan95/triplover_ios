@@ -84,8 +84,6 @@
 		1FC38A2128941BC9007F33B9 /* SSLViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC38A2028941BC9007F33B9 /* SSLViewRepresentable.swift */; };
 		1FC61D0B2847795D00956952 /* AirportData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC61D0A2847795D00956952 /* AirportData.swift */; };
 		1FC7DD962865C66B00F808A5 /* SplashScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC7DD952865C66B00F808A5 /* SplashScreen.swift */; };
-		1FC904A6288EF105001120CB /* SSLCommerzSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FC904A5288EF105001120CB /* SSLCommerzSDK.framework */; settings = {ATTRIBUTES = (Required, ); }; };
-		1FC904A7288EF354001120CB /* SSLCommerzSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1FC904A5288EF105001120CB /* SSLCommerzSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		1FCA2E20286F0E5700526295 /* SearchOptionModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCA2E1F286F0E5700526295 /* SearchOptionModal.swift */; };
 		1FCB8602288B44C100140B06 /* CustomRangeSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCB8601288B44C100140B06 /* CustomRangeSlider.swift */; };
 		1FD1D9B028733EA8008EB7AC /* SelectedFlightDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD1D9AF28733EA8008EB7AC /* SelectedFlightDetails.swift */; };
@@ -127,7 +125,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				1FC904A7288EF354001120CB /* SSLCommerzSDK.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -212,7 +209,6 @@
 		1FC38A2028941BC9007F33B9 /* SSLViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSLViewRepresentable.swift; sourceTree = "<group>"; };
 		1FC61D0A2847795D00956952 /* AirportData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AirportData.swift; sourceTree = "<group>"; };
 		1FC7DD952865C66B00F808A5 /* SplashScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreen.swift; sourceTree = "<group>"; };
-		1FC904A5288EF105001120CB /* SSLCommerzSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SSLCommerzSDK.framework; path = ../../../../../../WorkSpaceSA/RnD/IntegrationObjCFrmwkInSwift/IntegrationObjCFrmwkInSwift/Frameworks/SSLCommerzSDK.framework; sourceTree = "<group>"; };
 		1FCA2E1F286F0E5700526295 /* SearchOptionModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchOptionModal.swift; sourceTree = "<group>"; };
 		1FCB8601288B44C100140B06 /* CustomRangeSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomRangeSlider.swift; sourceTree = "<group>"; };
 		1FD1D9AF28733EA8008EB7AC /* SelectedFlightDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedFlightDetails.swift; sourceTree = "<group>"; };
@@ -238,7 +234,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1FC904A6288EF105001120CB /* SSLCommerzSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -331,7 +326,6 @@
 		1F54EE95285C426B00B456C4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				1FC904A5288EF105001120CB /* SSLCommerzSDK.framework */,
 			);
 			path = Frameworks;
 			sourceTree = "<group>";
