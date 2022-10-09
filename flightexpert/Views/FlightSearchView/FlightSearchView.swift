@@ -71,6 +71,7 @@ struct FlightSearchView: View {
 //    @State var selectedModel: RandomModel? = nil
     @State var bgHeight: Double = 350.0
     @State var shouldScroll: Bool = false
+    @State var topOffset: CGFloat = 60.0
     
     
     let columnSpacing: CGFloat = 5
@@ -80,6 +81,8 @@ struct FlightSearchView: View {
     }
     
     @Environment(\.presentationMode) var presentationMode
+    
+    
     var btnBack : some View {
         Button(action: {
             if self.showErrorAlert == false {
@@ -127,21 +130,25 @@ struct FlightSearchView: View {
                                             //Row-1
                                             ZStack(alignment: .center) {
                                                 HStack(spacing: 10) {
-                                                    RoutePointButton(source: $routeArray[0])
-                                                    RoutePointButton(source: $routeArray[1])
+                                                    RoutePointButton(source: $routeArray[0], directionName: "From")
+                                                    RoutePointButton(source: $routeArray[1], directionName: "To")
                                                 }
                                                 .padding(.horizontal, 10)
                                                 
                                                 if isRoundTrip {
-                                                    Image("repeat1")
-                                                        .resizable()
-                                                        .frame(width: 20, height: 20, alignment: .center)
-                                                        .foregroundColor(.white)
-                                                        .padding(10)
-                                                        .background(.gray)
-                                                        .opacity(0.3)
-                                                        .clipShape(Circle())
                                                     
+                                                    Button {
+                                                        routeArray.swapAt(0, 1)
+                                                    } label: {
+                                                        Image("repeat1")
+                                                            .resizable()
+                                                            .frame(width: 20, height: 20, alignment: .center)
+                                                            .foregroundColor(.white)
+                                                            .padding(10)
+                                                            .background(.gray)
+                                                            .opacity(0.3)
+                                                            .clipShape(Circle())
+                                                    }
                                                 }
                                             }
                                             //Row-2
@@ -254,8 +261,8 @@ struct FlightSearchView: View {
                                         ForEach(0 ..< multiCityRouteCount, id:\.self) { i in
                                             VStack(spacing:0) {
                                                 HStack(spacing: 10) {
-                                                    RoutePointButton(source: $routeArray[i])
-                                                    RoutePointButton(source: $routeArray[i+1])
+                                                    RoutePointButton(source: $routeArray[i], directionName: "From")
+                                                    RoutePointButton(source: $routeArray[i+1], directionName: "To")
                                                 }
                                                 .foregroundColor(.gray)
                                                 .padding(.horizontal, 10)
@@ -351,12 +358,19 @@ struct FlightSearchView: View {
                         .clipped()
                         Spacer(minLength: 30)
                     }
-                    .offset(y: 50)
-                    .frame(height: reader.size.height - 50)
+                    .offset(y: topOffset)
+                    .frame(height: reader.size.height - topOffset)
                 }
                 .navigationBarBackButtonHidden(self.showOptionModal)
                 .onAppear() {
                     self.resetView()
+                    //check Device Notch
+                    if UIDevice.current.hasNotch {
+                        //... consider notch
+                        topOffset = 60.0
+                    } else {
+                        topOffset = 100.0
+                    }
                 }
                 .alert(isPresented: $showErrorAlert) {
                     Alert(title: Text("Failed!"), message: Text("Sorry, no flight found..."), dismissButton: .default(Text("Close")))

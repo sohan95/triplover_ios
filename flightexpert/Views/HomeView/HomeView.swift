@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct HomeView: View {
     @EnvironmentObject var flightSearchModel: FlightSearchModel
@@ -15,125 +16,153 @@ struct HomeView: View {
     //@State private var selection: String? = nil
     let btnImgWidth: Double = 80.0
     let btnImgWidth2: Double = 20.0
+    @State var bottomPadding: CGFloat = 50.0
     
     var body: some View {
-        VStack(alignment: .center, spacing: 0) {
-            //Top Menus
-            HStack(alignment: .center) {
-                NavigationLink {
-                    FlightSearchView()
-                } label: {
-                    Image("menu_flights")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: btnImgWidth)
-                }
-                .frame(width: 75, height: 75, alignment: .center)
-                
-                
-                Button {
-                    self.selectedMenu = "Hotels"
-                    self.showsAlert.toggle()
-                } label: {
-                    Image("menu_hotels")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: btnImgWidth)
-                }.frame(width: 75, height: 75, alignment: .center)
-                
-                Button {
-                    self.selectedMenu = "Tour"
-                    self.showsAlert.toggle()
-                } label: {
-                    Image("menu_tour")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: btnImgWidth)
-                }.frame(width: 75, height: 75, alignment: .center)
-                
-                Button {
-                    self.selectedMenu = "Visa"
-                    self.showsAlert.toggle()
-                } label: {
-                    Image("menu_visa")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: btnImgWidth)
-                }.frame(width: 75, height: 75, alignment: .center)
-            }
-            .frame(minWidth: 0, maxWidth: .infinity, alignment: .center)
-            .padding(.horizontal,10)
-            .alert(isPresented: self.$showsAlert) {
-                Alert(title: Text(selectedMenu), message: Text("This feature is comming soon..."), dismissButton: .default(Text("THANKS")))
-            }
+        ZStack {
+            BackgroundImage
+            .resizable()
+            .scaledToFill()
+            .edgesIgnoringSafeArea(.all)
             
-            Spacer()
-            VStack{
-                Image("image_1")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(maxWidth: .infinity)
-                    .padding(10)
-                Image("image_2")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(maxWidth: .infinity)
-                    .padding(10)
-            }
-            .frame(minWidth: 0, maxWidth: .infinity, alignment: .center)
-            Spacer()
-            // Bottom Menus
-            HStack(alignment: .center, spacing: 70) {
-                Button {
-                    self.selectedTab = "Home"
-//                        self.showsAlert.toggle()
-//                        ContentView()
-                } label: {
-                    VStack{
-                        Image(systemName: "house")
+            VStack(alignment: .center, spacing: 0) {
+                //Top Menus
+                HStack(alignment: .center) {
+                    NavigationLink {
+                        FlightSearchView()
+                    } label: {
+                        Image("menu_flights")
                             .resizable()
                             .scaledToFit()
-                            .frame(width: btnImgWidth2)
-                        Text("Home")
-                            .padding(.top, -2)
+                            .frame(width: btnImgWidth)
+                    }
+                    .frame(width: 75, height: 75, alignment: .center)
+                    
+                    
+                    Button {
+                        self.selectedMenu = "Hotels"
+                        self.showsAlert.toggle()
+                    } label: {
+                        Image("menu_hotels")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: btnImgWidth)
+                    }.frame(width: 75, height: 75, alignment: .center)
+                    
+                    Button {
+                        self.selectedMenu = "Tour"
+                        self.showsAlert.toggle()
+                    } label: {
+                        Image("menu_tour")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: btnImgWidth)
+                    }.frame(width: 75, height: 75, alignment: .center)
+                    
+                    Button {
+                        self.selectedMenu = "Visa"
+                        self.showsAlert.toggle()
+                    } label: {
+                        Image("menu_visa")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: btnImgWidth)
+                    }.frame(width: 75, height: 75, alignment: .center)
+                }
+                .frame(minWidth: 0, maxWidth: .infinity, alignment: .center)
+                .padding(.horizontal,10)
+                .alert(isPresented: self.$showsAlert) {
+                    Alert(title: Text(selectedMenu), message: Text("This feature is comming soon..."), dismissButton: .default(Text("THANKS")))
+                }
+                
+                Spacer()
+                VStack{
+                    Image("image_1")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(maxWidth: .infinity)
+                        .padding(10)
+                    Image("image_2")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(maxWidth: .infinity)
+                        .padding(10)
+                }
+                .frame(minWidth: 0, maxWidth: .infinity, alignment: .center)
+                Spacer()
+                HStack(alignment: .center, spacing: 70) {
+                    Button {
+                        self.selectedTab = "Home"
+    //                        self.showsAlert.toggle()
+    //                        ContentView()
+                    } label: {
+                        VStack{
+                            if (self.selectedTab == "Home"){
+                                Image(systemName:"house.fill")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: btnImgWidth2)
+                                Text("Home")
+                                    .padding(.top, -2)
+                                    .font(.system(size: 11, weight: .bold, design: .rounded))
+                            } else {
+                                Image(systemName:"house")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: btnImgWidth2)
+                                Text("Home")
+                                    .padding(.top, -2)
+                            }
                             
-                    }
-                }
-                
-                NavigationLink {
-                    MyBooking()
-                } label: {
-                    VStack{
-                        Image(systemName: "paperplane")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: btnImgWidth2)
-                        Text("My Booking")
-                            .padding(.top, -2)
-                    }
-                }
-                
-                NavigationLink {
-                    SigninView()
-                } label: {
-                    VStack{
-                        Image(systemName: "rectangle.portrait.and.arrow.right")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: btnImgWidth2)
-                        Text("Login")
-                            .padding(.top, -2)
+                                
+                        }
                     }
                     
+                    NavigationLink {
+                        MyBooking()
+                    } label: {
+                        VStack{
+                            Image(systemName: "paperplane")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: btnImgWidth2)
+                            Text("My Booking")
+                                .padding(.top, -2)
+                        }
+                    }
+                    
+                    NavigationLink {
+                        SigninView()
+                    } label: {
+                        VStack{
+                            Image(systemName: "rectangle.portrait.and.arrow.right")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: btnImgWidth2)
+                            Text("Login")
+                                .padding(.top, -2)
+                        }
+                        
+                    }
                 }
+                .font(.system(size: 10, weight: .medium, design: .rounded))
+                .frame(maxWidth: .infinity, maxHeight: 60)
+                .background(Color("colorPrimary"))
+                .accentColor(.white)
             }
-            .frame(maxWidth: .infinity, maxHeight: 60)
-            .font(.system(size: 10, weight: .medium, design: .rounded))
-            .background(Color("colorPrimary"))
-            .accentColor(.white)
-            .padding(.bottom, 44)
+            .padding(.top, bottomPadding)
+            .padding(.bottom, bottomPadding)
         }
-        .padding(.top, 100)
+        .onAppear(perform: {
+            //check Device Notch
+            if UIDevice.current.hasNotch {
+                //... consider notch
+                bottomPadding = 50.0
+            } else {
+                bottomPadding = 100.0
+            }
+        })
+        
         .environmentObject(flightSearchModel)
     }
 }

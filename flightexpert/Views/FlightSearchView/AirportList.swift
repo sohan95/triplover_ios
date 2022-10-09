@@ -13,7 +13,7 @@ struct AirportList: View {
     typealias Action = (AirportData) -> Void
     var action: Action?
     
-    let airportList = AirportDataLoader().airportList
+    @State var airportList = [AirportData]()
     @State var selectedAirport: AirportData?
     
     @State private var searchText = ""
@@ -43,6 +43,10 @@ struct AirportList: View {
                 }
 //                .listStyle(GroupedListStyle())
             }
+        }
+        .onAppear {
+            airportList = AirportDataLoader().airportList
+            print("Array-count: \(airportList.count)")
         }
     }
     

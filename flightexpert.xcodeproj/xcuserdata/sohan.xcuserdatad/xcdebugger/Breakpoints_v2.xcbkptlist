@@ -7,15 +7,31 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "92CBEFE4-8FA2-45D0-A6A3-5E70FFD8CAA5"
-            shouldBeEnabled = "Yes"
+            uuid = "87DF823C-481B-461C-B9FB-83C765FA74CB"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "flightexpert/Views/FlightSearchView/SearchOptionModal.swift"
+            filePath = "flightexpert/Views/FlightSelectionView/FlightSelectionView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "149"
-            endingLineNumber = "149"
+            startingLineNumber = "305"
+            endingLineNumber = "305"
+            landmarkName = "gotoDetailsView(direction:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "EB30CD31-3733-4D20-8B82-C20A4A99B2AA"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "flightexpert/Views/HomeView/HomeView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "158"
+            endingLineNumber = "158"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -23,15 +39,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "8632A661-3AF5-41E3-9E81-55276887139E"
-            shouldBeEnabled = "Yes"
+            uuid = "12F5916F-54B0-4340-9D93-571AF1956148"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "flightexpert/Views/FlightSearchView/SearchOptionModal.swift"
+            filePath = "flightexpert/Views/FlightSearchView/FlightSearchView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "163"
-            endingLineNumber = "163"
+            startingLineNumber = "368"
+            endingLineNumber = "368"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>

@@ -10,14 +10,21 @@ import SwiftUI
 struct RoutePointButton: View {
     @State var selectedModel: RandomModel? = nil
     @Binding var source: AirportData
+    var directionName: String
     
     var body: some View {
         Button {
             selectedModel = RandomModel(title:"source", iata: source.iata)
         } label: {
             VStack(alignment:.leading, spacing: 5){
-                Text("From")
-                    .font(.system(size: 11, weight: .medium, design: .rounded))
+                if directionName == "From" {
+                    Text("From")
+                        .font(.system(size: 11, weight: .medium, design: .rounded))
+                } else {
+                    Text("To")
+                        .font(.system(size: 11, weight: .medium, design: .rounded))
+                }
+                
                 Text(source.iata)
                     .font(.system(size: 13, weight: .bold, design: .rounded))
                     .foregroundColor(.black)
@@ -43,6 +50,6 @@ struct RoutePointButton: View {
 struct RoutePointButton_Previews: PreviewProvider {
     static var previews: some View {
         let source = AirportData(name: "Aasiaat", city: "Aasiaat", country:"Greenland", iata: "JEG")
-        RoutePointButton(source: .constant(source))
+        RoutePointButton(source: .constant(source), directionName: "From")
     }
 }

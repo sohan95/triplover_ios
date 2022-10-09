@@ -17,15 +17,7 @@ struct ContentView: View {
     
     var body: some View {
         NavigationView {
-            ZStack {
-                BackgroundImage
-                    .resizable()
-                    .scaledToFill()
-                    .edgesIgnoringSafeArea(.all)
-                
-                HomeView()
-                    
-            }
+            HomeView()
             .environmentObject(flightSearchModel)
             .navigationBarTitleDisplayMode(.inline)
         }.accentColor(.black)

@@ -43,7 +43,7 @@ struct FlightSelectionView: View {
     
     //For Filter
     @State var show = false
-    @State var selectedSortCategory = ""
+    @State var selectedSortCategory = "Price Low"
 
     @State var isFilterShown = false
     @State var selectedStop: String = "";
@@ -300,14 +300,14 @@ struct FlightSelectionView: View {
             }
         }
     }
+    
     func gotoDetailsView(direction: Direction) {
         if isFilterShown {
             return
         }
-        if currentDirection != nil {
-            flightSearchModel.detailsDir = direction
-            selection = "SelectedFlightDetails"
-        }
+        
+        flightSearchModel.detailsDir = direction
+        selection = "SelectedFlightDetails"
         
     }
     
