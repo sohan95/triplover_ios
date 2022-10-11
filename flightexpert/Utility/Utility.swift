@@ -64,7 +64,7 @@ func getTimeString(dateStr: String) -> String {
     dateFormatter.dateFormat = "HH:mm"
     dateFormatter.locale = tempLocale // reset the locale
     let dateString = dateFormatter.string(from: date)
-    print("EXACT_DATE : \(dateString)")
+//    print("EXACT_DATE : \(dateString)")
     return dateString
 }
 
@@ -79,7 +79,7 @@ func getTimeStringWithTemplate(dateStr: String, template: String) -> String {
     dateFormatter.dateFormat = "HH:mm"
     dateFormatter.locale = tempLocale // reset the locale
     let dateString = dateFormatter.string(from: date)
-    print("EXACT_DATE : \(dateString)")
+//    print("EXACT_DATE : \(dateString)")
     return dateString
 }
 
@@ -97,7 +97,7 @@ func getDateStringWithTemplate(dateStr: String, template: String) -> String {
     dateFormatter.dateFormat = "MMM d, yyyy"
     dateFormatter.locale = tempLocale // reset the locale
     let dateString = dateFormatter.string(from: date)
-    print("EXACT_DATE : \(dateString)")
+//    print("EXACT_DATE : \(dateString)")
     return dateString
 }
 
@@ -112,7 +112,7 @@ func getDateString(dateStr: String) -> String {
     dateFormatter.dateFormat = "MMM d, yyyy"
     dateFormatter.locale = tempLocale // reset the locale
     let dateString = dateFormatter.string(from: date)
-    print("EXACT_DATE : \(dateString)")
+//    print("EXACT_DATE : \(dateString)")
     return dateString
 }
 

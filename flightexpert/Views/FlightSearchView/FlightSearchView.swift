@@ -425,10 +425,8 @@ struct FlightSearchView: View {
     }
     
     func resetView() {
-//        routeArray = [AirportData]()
-//        routeDate = [Date]()
         bgHeight = 350.0
-        shouldScroll = false
+//        shouldScroll = false
         
         if isOneWay {
             // set RoutPoint to make Route
@@ -571,6 +569,7 @@ struct FlightSearchView: View {
         
         flightSearchModel.searchFlighRequest = requestBody
         
+        print("AirSearchRequest=\(requestBody)")
         self.getAirSearchResponses(requestBody: requestBody)
         
 //        let oneWayRoute: Route = Route(origin: "DAC", destination: "CGP", departureDate:"2022-06-16")

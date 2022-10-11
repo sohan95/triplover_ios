@@ -22,6 +22,7 @@ struct SelectedFlightDetails: View {
     @State var final_taxes: Double = 0.0
     @State var final_discountPrice: Double = 0.0
     @State var final_totalPrice: Double = 0.0
+    @State var bottomPadding: CGFloat = 50.0
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
@@ -135,38 +136,21 @@ struct SelectedFlightDetails: View {
                         .background(.gray.opacity(0.4))
                         Spacer(minLength: 40)
                     }
-                    .offset(y: 50)
-                    .frame(height: reader.size.height - 50)
+//                    .offset(y: 50)
+                    .padding(.top, bottomPadding)
+//                    .padding(.bottom, 50)
+                    .frame(height: reader.size.height - (bottomPadding - 50))
                     .clipped()
-                    .onAppear() {
-                        self.selectedFlightList.removeAll()
-                        if flightSearchModel.isSelectBtnTapped {
-                            self.spaceValue = 60.0
-                            
-                            if flightSearchModel.isOneWay {
-                                self.selectedFlightList.append(flightSearchModel.selectedFlightList.first!)
-                            } else if flightSearchModel.isRoundTrip {
-                                for index in flightSearchModel.selectedFlightList.indices where index < (flightSearchModel.searchFlighRequest?.routes.count)! {
-                                    self.selectedFlightList.append(flightSearchModel.selectedFlightList[index])
-                                }
-                            } else if flightSearchModel.isMultiCity {
-                                for index in flightSearchModel.selectedFlightList.indices where index < (flightSearchModel.searchFlighRequest?.routes.count)! {
-                                    self.selectedFlightList.append(flightSearchModel.selectedFlightList[index])
-                                }
-                            }
-                            
+                    .onAppear(perform: {
+                        //check Device Notch
+                        if UIDevice.current.hasNotch {
+                            //... consider notch
+                            bottomPadding = 50.0
                         } else {
-                            self.selectedFlightList.append(flightSearchModel.detailsDir!)
+                            bottomPadding = 100.0
                         }
-
-                        
-                        for flight in self.selectedFlightList {
-                            self.final_basePrice += flight.bookingComponents?.first?.basePrice ?? 0.0
-                            self.final_taxes += flight.bookingComponents?.first?.taxes ?? 0.0
-                            self.final_discountPrice += flight.bookingComponents?.first?.discountPrice ?? 0.0
-                            self.final_totalPrice += flight.bookingComponents?.first?.totalPrice ?? 0.0
-                        }
-                    }
+                        updateOnAppear()
+                    })
                     .alert(isPresented: self.$showsAlert) {
                         Alert(title: Text("Booking failed!"), message: Text(failedMsg), dismissButton: .default(Text("Try Again")))
                     }
@@ -199,6 +183,35 @@ struct SelectedFlightDetails: View {
 //        .navigationBarItems(leading: btnBack)
         .environmentObject(flightSearchModel)
         
+    }
+    
+    func updateOnAppear() {
+        self.selectedFlightList.removeAll()
+        if flightSearchModel.isSelectBtnTapped {
+            self.spaceValue = 60.0
+            
+            if flightSearchModel.isOneWay {
+                self.selectedFlightList.append(flightSearchModel.selectedFlightList.first!)
+            } else if flightSearchModel.isRoundTrip {
+                for index in flightSearchModel.selectedFlightList.indices where index < (flightSearchModel.searchFlighRequest?.routes.count)! {
+                    self.selectedFlightList.append(flightSearchModel.selectedFlightList[index])
+                }
+            } else if flightSearchModel.isMultiCity {
+                for index in flightSearchModel.selectedFlightList.indices where index < (flightSearchModel.searchFlighRequest?.routes.count)! {
+                    self.selectedFlightList.append(flightSearchModel.selectedFlightList[index])
+                }
+            }
+            
+        } else {
+            self.selectedFlightList.append(flightSearchModel.detailsDir!)
+        }
+        
+        for flight in self.selectedFlightList {
+            self.final_basePrice += flight.bookingComponents?.first?.basePrice ?? 0.0
+            self.final_taxes += flight.bookingComponents?.first?.taxes ?? 0.0
+            self.final_discountPrice += flight.bookingComponents?.first?.discountPrice ?? 0.0
+            self.final_totalPrice += flight.bookingComponents?.first?.totalPrice ?? 0.0
+        }
     }
     
     func ConfirmAction() {
@@ -237,6 +250,7 @@ struct SelectedFlightDetails: View {
     
     func rePriceStatus(requestBody: RePriceRequest) {
         self.isSearching = true
+        print("RePriceRequest=\(requestBody)")
         HttpUtility.shared.rePriceService(rePriceRequest: requestBody) { result in
             
             DispatchQueue.main.async { [ self] in

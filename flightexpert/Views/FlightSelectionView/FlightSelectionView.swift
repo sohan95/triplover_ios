@@ -53,7 +53,7 @@ struct FlightSelectionView: View {
     @State var selectedFilterItem: [String] = []
     
     @State var selectedMinMaxPrice: MinMaxPrice = MinMaxPrice(minPrice: 0.0, maxPrice: 0.0)
-    
+    @State var bottomPadding: CGFloat = 50.0
     @Environment(\.presentationMode) var presentationMode
     var btnBack : some View { Button(action: {
             if isFilterShown == false  && show == false {
@@ -156,9 +156,9 @@ struct FlightSelectionView: View {
                 }
                 .navigationBarBackButtonHidden(true)
                 .navigationBarItems(leading: btnBack)
-                .onAppear {
-                    updateOnAppear()
-                }
+//                .onAppear {
+//                    updateOnAppear()
+//                }
                 
                 //Bottom: Button Option View
                 VStack{
@@ -219,10 +219,22 @@ struct FlightSelectionView: View {
                     .padding(.horizontal,10)
                     Spacer()
                 }
-                .frame(minWidth:0, maxWidth: .infinity, minHeight:0, maxHeight: 180)
+                .frame(minWidth:0, maxWidth: .infinity, minHeight:0, maxHeight: bottomPadding+90)
                 
             }
-            .offset(y: 50)
+            .padding(.top, bottomPadding)
+//            .padding(.bottom, bottomPadding)
+            .onAppear(perform: {
+                //check Device Notch
+                if UIDevice.current.hasNotch {
+                    //... consider notch
+                    bottomPadding = 50.0
+                } else {
+                    bottomPadding = 100.0
+                }
+                updateOnAppear()
+            })
+            //.offset(y: 50)
             .onTapGesture {
                 self.isFilterShown.toggle()
             }

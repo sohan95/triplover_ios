@@ -26,7 +26,7 @@ struct TravelerFormView: View {
     @State var showAlert: Bool = false
     @State var alertMsg: String = " "
     
-    
+    @State var bottomPadding: CGFloat = 50.0
     @State var bookingConfirmResponse:BookingConfirmResponse?
 
     @Environment(\.presentationMode) var presentationMode
@@ -93,9 +93,19 @@ struct TravelerFormView: View {
                     .padding(.horizontal,5)
                     .padding(.bottom, 50)
                 }
-                .offset(y: 50)
-                .frame(height: reader.size.height - 50)
+//                .offset(y: bottomPadding)
+                .padding(.top, bottomPadding)
+                .frame(height: reader.size.height - (bottomPadding - 50))
                 .clipped()
+                .onAppear(perform: {
+                    //check Device Notch
+                    if UIDevice.current.hasNotch {
+                        //... consider notch
+                        bottomPadding = 50.0
+                    } else {
+                        bottomPadding = 100.0
+                    }
+                })
             }
         }
         .navigationTitle("Passenger Details")
