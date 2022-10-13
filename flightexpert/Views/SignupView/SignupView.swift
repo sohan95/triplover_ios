@@ -94,12 +94,20 @@ struct SignupView: View {
                                 Text("By creating this account you are agree to our")
                                     .font(.system(size: 10, weight: .regular, design: .rounded))
                                 
-                                NavigationLink {
-                                    //SigninView()
-                                } label: {
-                                    Text("Terms & Conditions")
+                                if #available(iOS 15, *) {
+                                    Text("[Terms & Conditions](https://www.triplover.com/Terms.aspx)")
                                         .underline()
                                         .font(.system(size: 11, weight: .semibold, design: .rounded))
+                                } else {
+                                    Button(action: {
+                                        if let url = URL(string: "https://www.triplover.com/Terms.aspx") {
+                                           UIApplication.shared.open(url)
+                                        }
+                                    }) {
+                                        Text("Terms & Conditions")
+                                            .underline()
+                                            .font(.system(size: 11, weight: .semibold, design: .rounded))
+                                    }
                                 }
                                 
                             }

@@ -266,6 +266,7 @@ struct FlightSearchView: View {
                                                 }
                                                 .foregroundColor(.gray)
                                                 .padding(.horizontal, 10)
+                                                
                                                 HStack {
                                                     if i > 1 {
                                                         Button("Remove") {
@@ -284,17 +285,21 @@ struct FlightSearchView: View {
                                                             .foregroundColor(.white)
                                                             .background(Color.white)
                                                             .opacity(0.05)
-                                                        Text("\(routeDate[i].formatted(date: .long, time: .omitted))")
-                                                        .font(.system(size: 11, weight: .medium, design: .rounded))
-                                                        .padding(.vertical, 5)
-                                                        .padding(.horizontal, 10)
-                                                        .background(Color.white)
-                                                        .allowsHitTesting(false)
+                                                        HStack {
+                                                            Text("\(routeDate[i].formatted(date: .long, time: .omitted))")
+                                                            .font(.system(size: 11, weight: .medium, design: .rounded))
+                                                            .padding(.vertical, 5)
+                                                            .padding(.horizontal, 10)
+                                                            .background(Color.white)
+                                                            .allowsHitTesting(false)
+                                                            Image(systemName:"arrowtriangle.down.fill")
+                                                                .resizable()
+                                                                .scaledToFill()
+                                                                .frame(width: 7, height: 5)
+                                                        }
+                                                        
                                                     }
-                                                    Image(systemName:"arrowtriangle.down.fill")
-                                                        .resizable()
-                                                        .scaledToFill()
-                                                        .frame(width: 7, height: 5)
+                                                    
                                                 }
                                                 .frame(minWidth: 0, maxWidth: .infinity, minHeight: 30, maxHeight: 30, alignment: .trailing)
                                                 .padding(.trailing, 10)
@@ -318,12 +323,20 @@ struct FlightSearchView: View {
                                                 Text(cabinClass)
                                                     .font(.system(size: 10, weight: .regular, design: .rounded))
                                             }
-                                            .padding(2)
+//                                            .padding(2)
+                                            .frame(minWidth:0, maxWidth: .infinity, minHeight: 75, maxHeight: 75, alignment: .leading)
+                                            .foregroundColor(Color(hex: "#2D2D2D"))
+                                            .padding(.leading, 10)
+                                            .background(Color.white)
+                                            .overlay(
+                                                    RoundedRectangle(cornerRadius: 5)
+                                                        .stroke(Color.gray, lineWidth: 0.7)
+                                                )
                                         }
-                                        .frame(minWidth:0, maxWidth: .infinity, minHeight: 75, maxHeight: 75, alignment: .leading)
-                                        .padding(.leading, 10)
-                                        .background(.white)
-                                        .addBorder(Color.gray, width: 0.7, cornerRadius: 5)
+//                                        .frame(minWidth:0, maxWidth: .infinity, minHeight: 75, maxHeight: 75, alignment: .leading)
+//                                        .padding(.leading, 10)
+//                                        .background(.white)
+//                                        .addBorder(Color.gray, width: 0.7, cornerRadius: 5)
                                         
                                         Button {
                                             self.searchFlightsService()

@@ -31,13 +31,15 @@ struct RoutePointButton: View {
                 Text("Click to search")
                     .font(.system(size: 10, weight: .regular, design: .rounded))
             }
+            .frame(minWidth:0, maxWidth: .infinity, minHeight: 75, maxHeight: 75, alignment: .leading)
             .foregroundColor(Color(hex: "#2D2D2D"))
-            .padding(2)
+            .padding(.leading, 10)
+            .background(Color.white)
+            .overlay(
+                    RoundedRectangle(cornerRadius: 5)
+                        .stroke(Color.gray, lineWidth: 0.7)
+                )
         }
-        .frame(minWidth:0, maxWidth: .infinity, minHeight: 75, maxHeight: 75, alignment: .leading)
-        .padding(.leading, 10)
-        .background(.white)
-        .addBorder(Color.gray, width: 0.7, cornerRadius: 5)
         .sheet(item: $selectedModel) { model in
             AirportList() { airport in
                 source = airport
