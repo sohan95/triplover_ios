@@ -40,7 +40,9 @@ struct SearchOptionModal: View {
                     .opacity(0.3)
                     .ignoresSafeArea()
                     .onTapGesture {
-                        isShowing = false
+                        withAnimation {
+                            isShowing = false
+                        }
                     }
                 
                 VStack {
@@ -56,7 +58,9 @@ struct SearchOptionModal: View {
                         Spacer()
                         Button {
                             print("Cancel Btn tapped")
-                            isShowing = false
+                            withAnimation {
+                                isShowing = false
+                            }
                         } label: {
                             Text("Cancel")
                                 .font(.system(size: 13, weight: .bold, design: .rounded))
@@ -72,14 +76,18 @@ struct SearchOptionModal: View {
                         HStack(spacing: 10) {
                             Button {
                                 self.buttonIndex = 0
-                                self.showRadioList = true
+                                withAnimation {
+                                    self.showRadioList = true
+                                }
                             } label: {
                                 MenuButtonView(title1: "CLASS", title2:selectedCabin)
                             }
                             
                             Button {
                                 self.buttonIndex = 1
-                                self.showRadioList = true
+                                withAnimation {
+                                    self.showRadioList = true
+                                }
                             } label: {
                                 MenuButtonView(title1: "ADULT (12+)", title2:"\(selectedAdultNumber) Traveler")
                             }
@@ -90,14 +98,18 @@ struct SearchOptionModal: View {
                         HStack(spacing: 10) {
                             Button {
                                 self.buttonIndex = 2
-                                self.showRadioList = true
+                                withAnimation {
+                                    self.showRadioList = true
+                                }
                             } label: {
                                 MenuButtonView(title1: "CHILD (2 - 12)", title2:"\(selectedChildNumber) Traveler")
                             }
                             
                             Button {
                                 self.buttonIndex = 3
-                                self.showRadioList = true
+                                withAnimation {
+                                    self.showRadioList = true
+                                }
                             } label: {
                                 MenuButtonView(title1: "INFANTS (0 - 2)", title2:"\(selectedInfantNumber) Traveler")
                             }
@@ -112,10 +124,12 @@ struct SearchOptionModal: View {
                         childs = selectedChildNumber
                         infants = selectedInfantNumber
                         cabinClass = selectedCabin
-                        self.showRadioList.toggle()
-                        isShowing = false
+                        withAnimation {
+                            self.showRadioList.toggle()
+                            isShowing = false
+                        }
                         self.buttonIndex = -1
-                        self.showRadioList = false
+                        //self.showRadioList = false
                         self.doneAction()
                     }, label: {
                         Text("DONE")
@@ -139,9 +153,12 @@ struct SearchOptionModal: View {
                     Spacer()
                     if self.buttonIndex == 0 {
                         CabinClassPopup(title: "Class", selected: $selectedCabin, show: self.$showRadioList) {
-                            self.showRadioList.toggle()
+                            withAnimation {
+                                self.showRadioList.toggle()
+                            }
                         }
                         .offset(y: self.showRadioList ? (UIApplication.shared.currentUIWindow()?.safeAreaInsets.bottom)! + 15 : UIScreen.main.bounds.height)
+                        .transition(.asymmetric(insertion: .scale, removal: .opacity))
                     }
                     if self.buttonIndex == 1 {
                         RadioListPopup(title: "Adult", itemName: "Adult", maxNumber: $maxAdult, selected: $selectedAdultNumber, show: self.$showRadioList) {
@@ -152,26 +169,34 @@ struct SearchOptionModal: View {
                             if selectedInfantNumber > selectedAdultNumber {
                                 selectedInfantNumber = selectedAdultNumber
                             }
-                            
-                            self.showRadioList.toggle()
+                            withAnimation {
+                                self.showRadioList.toggle()
+                            }
                         }
                         .offset(y: self.showRadioList ? (UIApplication.shared.currentUIWindow()?.safeAreaInsets.bottom)! + 15 : UIScreen.main.bounds.height)
+                        .transition(.asymmetric(insertion: .scale, removal: .opacity))
                     }
                     else if self.buttonIndex == 2 {
                         RadioListPopup(title: "Child", itemName: "Child", maxNumber: $maxChild, selected: $selectedChildNumber, show: self.$showRadioList) {
                             
                             maxAdult = totalPassenger - selectedChildNumber
                             maxInfants = selectedAdultNumber
-                            self.showRadioList.toggle()
+                            withAnimation {
+                                self.showRadioList.toggle()
+                            }
                         }
                         .offset(y: self.showRadioList ? (UIApplication.shared.currentUIWindow()?.safeAreaInsets.bottom)! + 15 : UIScreen.main.bounds.height)
+                        .transition(.asymmetric(insertion: .scale, removal: .opacity))
                     }
                     
                     else if self.buttonIndex == 3 {
                         RadioListPopup(title: "Infants", itemName: "Infants", maxNumber: $maxInfants, selected: $selectedInfantNumber, show: self.$showRadioList) {
-                            self.showRadioList.toggle()
+                            withAnimation {
+                                self.showRadioList.toggle()
+                            }
                         }
                         .offset(y: self.showRadioList ? (UIApplication.shared.currentUIWindow()?.safeAreaInsets.bottom)! + 15 : UIScreen.main.bounds.height)
+                        .transition(.asymmetric(insertion: .scale, removal: .opacity))
                     }
                     
                 }.background(Color(UIColor.label.withAlphaComponent(self.showRadioList ? 0.3 : 0)).edgesIgnoringSafeArea(.all))

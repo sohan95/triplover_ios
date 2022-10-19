@@ -53,7 +53,10 @@ struct FlightSearchView: View {
 //    var cabinClassList = ["Economy" ,"PremiumEconomy", "Business", "First", "PremiumFirst"]
     
     @State var typeSelected: String = "One-Way"
-    @State var showErrorAlert = false
+    @State var isShownAlert = false
+    @State var alertMsgTitle = ""
+    
+    @State var alertMsg = "Failed!"
     
     private var isOneWay: Bool {
         return typeSelected == flightRouteTypes[0]
@@ -72,6 +75,7 @@ struct FlightSearchView: View {
     @State var bgHeight: Double = 350.0
     @State var shouldScroll: Bool = false
     @State var topOffset: CGFloat = 60.0
+    @State var bottomPadding: CGFloat = 64.0
     
     
     let columnSpacing: CGFloat = 5
@@ -85,7 +89,7 @@ struct FlightSearchView: View {
     
     var btnBack : some View {
         Button(action: {
-            if self.showErrorAlert == false {
+            if self.isShownAlert == false {
                 self.presentationMode.wrappedValue.dismiss()
             }
             
@@ -169,7 +173,7 @@ struct FlightSearchView: View {
                                                             Text("\(routeDate[0].formatted(date: .long, time: .omitted))")
                                                                 .font(.system(size: 13, weight: .bold, design: .rounded))
                                                                 .foregroundColor(.black)
-                                                            Text("Friday")
+                                                            Text(getDayNameOfWeek(todayDate: routeDate[0]))
                                                                 .font(.system(size: 10, weight: .regular, design: .rounded))
                                                         }
                                                         .background(Color.white)
@@ -185,8 +189,8 @@ struct FlightSearchView: View {
                                                         if isRoundTrip {
                                                             DatePicker("", selection: $routeDate[1], in: Date()..., displayedComponents: .date)
                                                                 .labelsHidden()
-                                                                .accentColor(.white)
-                                                                .background(.white)
+                                                                .foregroundColor(.white)
+                                                                .background(Color.white)
                                                                 .opacity(0.05)
                                                             Rectangle()
                                                                 .fill(Color.white)
@@ -197,7 +201,7 @@ struct FlightSearchView: View {
                                                                 Text("\(routeDate[1].formatted(date: .long, time: .omitted))")
                                                                     .font(.system(size: 13, weight: .bold, design: .rounded))
                                                                     .foregroundColor(.black)
-                                                                Text("Friday")
+                                                                Text(getDayNameOfWeek(todayDate: routeDate[1]))
                                                                     .font(.system(size: 10, weight: .regular, design: .rounded))
                                                             }
                                                             .background(Color.white)
@@ -226,7 +230,7 @@ struct FlightSearchView: View {
                                                         
                                                     }
                                                     .frame(minWidth:0, maxWidth: .infinity, minHeight: 75, maxHeight: 75, alignment: .leading)
-                                                    .background(.white)
+//                                                    .background(.white)
                                                     .addBorder(Color.gray, width: 0.7, cornerRadius: 5)
                                                 }
                                                 .foregroundColor(.gray)
@@ -298,6 +302,7 @@ struct FlightSearchView: View {
                                                                 .frame(width: 7, height: 5)
                                                         }
                                                         
+                                                        
                                                     }
                                                     
                                                 }
@@ -312,7 +317,9 @@ struct FlightSearchView: View {
                                     HStack(spacing: 10) {
                                         //SearchFilterButton()
                                         Button {
-                                            showOptionModal = true
+                                            withAnimation {
+                                                showOptionModal.toggle()
+                                            }
                                         } label: {
                                             VStack(alignment:.leading, spacing: 5){
                                                 Text("TRAVEL, CLASS")
@@ -385,8 +392,8 @@ struct FlightSearchView: View {
                         topOffset = 100.0
                     }
                 }
-                .alert(isPresented: $showErrorAlert) {
-                    Alert(title: Text("Failed!"), message: Text("Sorry, no flight found..."), dismissButton: .default(Text("Close")))
+                .alert(isPresented: $isShownAlert) {
+                    Alert(title: Text(alertMsgTitle), message: Text(alertMsg), dismissButton: .default(Text("Close")))
                 }
                 
                 SearchOptionModal(isShowing:$showOptionModal,
@@ -395,6 +402,7 @@ struct FlightSearchView: View {
                                   infants: $infants,
                                   cabinClass: $cabinClass,
                                   doneAction:self.changeClassAndTraveler)
+                .transition(.asymmetric(insertion: .scale, removal: .opacity))
             }
             else {
                 ZStack {
@@ -402,22 +410,34 @@ struct FlightSearchView: View {
                         .resizable()
                         .scaledToFill()
                         .edgesIgnoringSafeArea(.all)
-                    VStack(spacing: 40) {
-                        Spacer()
-                        ProgressView()
-                            .progressViewStyle(CircularProgressViewStyle(tint: .orange))
-                            .scaleEffect(2)
-                        FakeProgressBar(isActive:flightSearchModel.isSearching)
-                            .frame(height: 4)
-
-                    }
-                    .padding(.bottom, 64)
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: .red))
+                        .scaleEffect(2)
+//                    VStack(spacing: 40) {
+//                        ProgressView()
+//                            .progressViewStyle(CircularProgressViewStyle(tint: .orange))
+//                            .scaleEffect(2)
+//                            
+//                        FakeProgressBar(isActive:flightSearchModel.isSearching)
+//                            .frame(height: 4)
+//                            .padding(.bottom, bottomPadding)
+//
+//                    }
 
                 }
                 .navigationBarBackButtonHidden(true)
 
             }
         }
+        .onAppear(perform: {
+            //check Device Notch
+            if UIDevice.current.hasNotch {
+                //... consider notch
+                bottomPadding = 64.0
+            } else {
+                bottomPadding = 100.0
+            }
+        })
         .environmentObject(flightSearchModel)
     }
     
@@ -541,7 +561,24 @@ struct FlightSearchView: View {
         }
     }
     
+    func isFromToEqual(airportList: [AirportData]) -> Bool {
+        if airportList.count < 2 { return false}
+        
+        for n in 0..<airportList.count-1 {
+            if airportList[n].iata == airportList[n+1].iata { return false}
+        }
+        return true
+    }
+    
     func searchFlightsService() {
+        if self.isFromToEqual(airportList: routeArray) == false {
+            isShownAlert = true
+            alertMsgTitle = "Warning!"
+            alertMsg = "Flight's From and To airports should not be same!"
+            return
+        }
+        
+        
         var routeArrayObj = [Route]()
         
         if isOneWay {
@@ -601,7 +638,9 @@ struct FlightSearchView: View {
                 flightSearchModel.isSearchComplete = true
                 flightSearchModel.isSearching = false
                 guard (result?.item1?.airSearchResponses) != nil else {
-                    self.showErrorAlert.toggle()
+                    self.isShownAlert.toggle()
+                    self.alertMsgTitle = "Failed!"
+                    self.alertMsg = "No such flight is found. Please try again."
                     return
                 }
 

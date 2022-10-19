@@ -132,3 +132,28 @@ func getDateFromString(dateStr:String) -> Date {
     return date
 }
 
+func getDayNameOfWeek(todayDate:Date) -> String {
+    let myCalendar = Calendar(identifier: .gregorian)
+    let weekDay = myCalendar.component(.weekday, from: todayDate)
+    let weekDayName = EnumDays.init(rawValue: weekDay)
+    //print("Day = \(String(describing: weekDay1))")
+    guard let unwrapped = weekDayName else {
+        return ""
+    }
+    return String(describing: unwrapped)
+}
+
+// Enum to output days
+enum EnumDays : Int
+{
+    case Sunday = 1
+    case Monday
+    case Tuesday
+    case Wednesday
+    case Thursday
+    case Friday
+    case Saturday
+    
+}
+
+

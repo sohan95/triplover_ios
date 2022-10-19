@@ -104,8 +104,11 @@ struct ProgressBar: View {
 
 struct SplashScreen: View {
     @State var isActive : Bool = false
-    @State private var sliderValue: Double = 0
+//    @State private var sliderValue: Double = 0
+//    private let maxValue: Double = 20
+    @State var progressValue: Double = 0.0
     private let maxValue: Double = 20
+    let loaderTimer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
     var body: some View {
         if isActive {
             let flightSearchModel = FlightSearchModel()
@@ -117,19 +120,18 @@ struct SplashScreen: View {
                     .resizable()
                     .scaledToFill()
                     .edgesIgnoringSafeArea(.all)
-                VStack(spacing:40) {
-                    Spacer()
-                    ProgressView()
-                        .progressViewStyle(CircularProgressViewStyle(tint: .orange))
-                        .scaleEffect(2)
-                    ProgressBar(isActive: $isActive)
-                        .frame(height: 4)
-                        
-                }
-                .padding(.bottom, 40)
-                
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle(tint: .red))
+                    .scaleEffect(2)
             }
-            
+            .onReceive(loaderTimer) { _ in
+                if progressValue <= self.maxValue {
+                    progressValue += 1.0
+                } else if progressValue > self.maxValue {
+                    self.loaderTimer.upstream.connect().cancel()
+                    self.isActive = true
+                }
+            }
         }
     }
 }

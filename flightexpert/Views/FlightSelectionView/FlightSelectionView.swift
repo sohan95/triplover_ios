@@ -223,7 +223,6 @@ struct FlightSelectionView: View {
                 
             }
             .padding(.top, bottomPadding)
-//            .padding(.bottom, bottomPadding)
             .onAppear(perform: {
                 //check Device Notch
                 if UIDevice.current.hasNotch {
@@ -234,7 +233,6 @@ struct FlightSelectionView: View {
                 }
                 updateOnAppear()
             })
-            //.offset(y: 50)
             .onTapGesture {
                 self.isFilterShown.toggle()
             }

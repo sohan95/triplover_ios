@@ -162,7 +162,6 @@ struct HomeView: View {
                 bottomPadding = 100.0
             }
         })
-        
         .environmentObject(flightSearchModel)
     }
 }
