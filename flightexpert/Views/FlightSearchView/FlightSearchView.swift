@@ -645,6 +645,7 @@ struct FlightSearchView: View {
                 }
 
                 flightSearchModel.airSearchResponses = (result?.item1?.airSearchResponses)!
+                flightSearchModel.currency = (result?.item1?.currency)!
                 
                 if flightSearchModel.airSearchResponses.count > 0 {
                     flightSearchModel.isGotSearchData = "A"
@@ -662,21 +663,6 @@ struct FlightSearchView: View {
 //                self.backwardDirections = backwardD
             }
         }
-    }
-    
-    func getDateString(date:Date) -> String {
-
-        // Create Date Formatter
-        let dateFormatter = DateFormatter()
-
-        // Set Date Format
-        dateFormatter.dateFormat = "YYYY-MM-dd"
-        //2022-06-29
-
-        // Convert Date to String
-        let dateString = dateFormatter.string(from: date)
-        print(dateString)
-        return dateString
     }
     
     func changeClassAndTraveler() {

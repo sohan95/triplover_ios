@@ -13,7 +13,7 @@ class FlightSearchModel: ObservableObject {
     @Published var userDataList = [UserData]()
     @Published var bookingResponse: BookingResponse?
     @Published var isBooking: Bool = false
-    
+    @Published var currency: String? = nil
     @Published var airSearchResponses: [AirSearchResponse] = []
     @Published var backwardDirections: [Direction] = []
     @Published var forwardDirections: [Direction] = []

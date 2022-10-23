@@ -14,8 +14,7 @@ struct HomeView: View {
     @State var selectedMenu: String = String()
     @State var selectedTab: String = String()
     //@State private var selection: String? = nil
-    let btnImgWidth: Double = 80.0
-    let btnImgWidth2: Double = 20.0
+    let btnImgWidth2: Double = 30.0
     @State var bottomPadding: CGFloat = 50.0
     
     var body: some View {
@@ -34,46 +33,47 @@ struct HomeView: View {
                         Image("menu_flights")
                             .resizable()
                             .scaledToFit()
-                            .frame(width: btnImgWidth)
                     }
-                    .frame(width: 75, height: 75, alignment: .center)
-                    
-                    
+
                     Button {
-                        self.selectedMenu = "Hotels"
-                        self.showsAlert.toggle()
+                        withAnimation {
+                            self.selectedMenu = "Hotels"
+                            self.showsAlert.toggle()
+                        }
                     } label: {
                         Image("menu_hotels")
                             .resizable()
                             .scaledToFit()
-                            .frame(width: btnImgWidth)
-                    }.frame(width: 75, height: 75, alignment: .center)
-                    
+                    }
+
                     Button {
-                        self.selectedMenu = "Tour"
-                        self.showsAlert.toggle()
+                        withAnimation {
+                            self.selectedMenu = "Tour"
+                            self.showsAlert.toggle()
+                        }
                     } label: {
                         Image("menu_tour")
                             .resizable()
                             .scaledToFit()
-                            .frame(width: btnImgWidth)
-                    }.frame(width: 75, height: 75, alignment: .center)
-                    
+                    }
+
                     Button {
-                        self.selectedMenu = "Visa"
-                        self.showsAlert.toggle()
+                        withAnimation {
+                            self.selectedMenu = "Visa"
+                            self.showsAlert.toggle()
+                        }
                     } label: {
                         Image("menu_visa")
                             .resizable()
                             .scaledToFit()
-                            .frame(width: btnImgWidth)
-                    }.frame(width: 75, height: 75, alignment: .center)
+                    }
                 }
                 .frame(minWidth: 0, maxWidth: .infinity, alignment: .center)
                 .padding(.horizontal,10)
                 .alert(isPresented: self.$showsAlert) {
                     Alert(title: Text(selectedMenu), message: Text("This feature is comming soon..."), dismissButton: .default(Text("THANKS")))
                 }
+                .transition(.asymmetric(insertion: .scale, removal: .opacity))
                 
                 Spacer()
                 VStack{

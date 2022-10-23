@@ -18,6 +18,7 @@ struct Item1 : Codable {
 	let minMaxPrice : MinMaxPrice?
 	let stops : [Int]?
 	let totalFlights : Int?
+    let currency : String?
 
 	enum CodingKeys: String, CodingKey {
 
@@ -26,6 +27,7 @@ struct Item1 : Codable {
 		case minMaxPrice = "minMaxPrice"
 		case stops = "stops"
 		case totalFlights = "totalFlights"
+        case currency = "currency"
 	}
 
 	init(from decoder: Decoder) throws {
@@ -35,6 +37,7 @@ struct Item1 : Codable {
 		minMaxPrice = try values.decodeIfPresent(MinMaxPrice.self, forKey: .minMaxPrice)
 		stops = try values.decodeIfPresent([Int].self, forKey: .stops)
 		totalFlights = try values.decodeIfPresent(Int.self, forKey: .totalFlights)
+        currency = try values.decodeIfPresent(String.self, forKey: .currency)
 	}
 
 }

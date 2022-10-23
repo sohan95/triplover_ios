@@ -116,6 +116,18 @@ func getDateString(dateStr: String) -> String {
     return dateString
 }
 
+func getDateString(date: Date) -> String {
+    // Create Date Formatter
+    let dateFormatter = DateFormatter()
+    // Set Date Format
+    dateFormatter.dateFormat = "YYYY-MM-dd"
+    //2022-06-29
+    // Convert Date to String
+    let dateString = dateFormatter.string(from: date)
+    print(dateString)
+    return dateString
+}
+
 //func getDateFromString(dateStr: String) -> Date {
 //    let dateFormatter = DateFormatter()
 //    // Set Date Format

@@ -113,7 +113,7 @@ struct FlightSelectionView: View {
                 ScrollView {
                     VStack(spacing: 10) {
                         ForEach(currentDirectionList, id: \.self) { direction in
-                            FlightCell(direction: direction,
+                            FlightCell(direction: direction, currency: flightSearchModel.currency!,
                                     isSelectBtnTapped: $flightSearchModel.isSelectBtnTapped, selectedDirection:currentDirection) { directionResult in
                                 
                                 if flightSearchModel.isSelectBtnTapped {
@@ -190,7 +190,9 @@ struct FlightSelectionView: View {
                         HStack{
                             Button {
                                 //sheetMode = .semi
-                                self.isFilterShown.toggle()
+                                withAnimation {
+                                    self.isFilterShown.toggle()
+                                }
                             } label: {
                                 Label("Filter", systemImage: "line.3.horizontal.decrease")
                                     .frame(minWidth:0, maxWidth: .infinity)
@@ -203,7 +205,9 @@ struct FlightSelectionView: View {
                             
                             
                             Button {
-                                show.toggle()
+                                withAnimation {
+                                    show.toggle()
+                                }
                             } label: {
                                 Label("Sort By", systemImage: "line.3.horizontal.decrease")
                                     .frame(minWidth:0, maxWidth: .infinity)
@@ -234,7 +238,9 @@ struct FlightSelectionView: View {
                 updateOnAppear()
             })
             .onTapGesture {
-                self.isFilterShown.toggle()
+                withAnimation {
+                    self.isFilterShown.toggle()
+                }
             }
             
             // Sort By option popup
@@ -245,13 +251,18 @@ struct FlightSelectionView: View {
                 }
                 .offset(y: self.show ? (UIApplication.shared.currentUIWindow()?.safeAreaInsets.bottom)! + 15 : UIScreen.main.bounds.height)
                 
-            }.background(Color(UIColor.label.withAlphaComponent(self.show ? 0.3 : 0)).edgesIgnoringSafeArea(.all))
+            }
+            .background(Color(UIColor.label.withAlphaComponent(self.show ? 0.3 : 0)).edgesIgnoringSafeArea(.all))
+            
+            .transition(.asymmetric(insertion: .scale, removal: .opacity))
             
                
             // Filter Option View
             if isFilterShown {
                 FilterBottomPopup(selectedStop: $selectedStop, selectedAirline: $selectedAirline, selectedMinMaxPrice: $selectedMinMaxPrice, minMaxPrice: selectedMinMaxPrice,slider: CustomSlider(start: selectedMinMaxPrice.maxPrice, end: selectedMinMaxPrice.minPrice)) { isApply in
-                    self.isFilterShown.toggle()
+                    withAnimation {
+                        self.isFilterShown.toggle()
+                    }
                     self.updateOnAppear()
                     if isApply {
                         doFilterAction()
@@ -367,7 +378,9 @@ struct FlightSelectionView: View {
         } else if self.selectedSortCategory == "Time DESC" {
             currentDirectionList = currentDirectionList.sorted(by: { getDateFromString(dateStr:$0.departure!).compare(getDateFromString(dateStr:$1.departure!)) == .orderedDescending })
         }
-        self.show.toggle()
+        withAnimation {
+            self.show.toggle()
+        }
     }
     
     func getStopFilter() -> Int {
