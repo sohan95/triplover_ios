@@ -155,13 +155,14 @@ class FlightSearchModel: ObservableObject {
         //airlineList
         self.airlineList = Array(airlineSet)
         // max-min filter:
-        let directionMax = directions.max { $0.totalPrice! < $1.totalPrice! }
+        //let directionMax = directions.max { $0.totalPrice! < $1.totalPrice! }
+        let directionMax = directions.max { ($0.bookingComponents?[0].basePrice)! < ($1.bookingComponents?[0].basePrice)! }
         //self.maxPrice = (directionMax?.totalPrice)!
-        self.minMaxPrice.maxPrice = (directionMax?.totalPrice)!
+        self.minMaxPrice.maxPrice = (directionMax?.bookingComponents?[0].basePrice)!
 
-        let directionMin = directions.min { $0.totalPrice! < $1.totalPrice! }
+        let directionMin = directions.min { ($0.bookingComponents?[0].basePrice)! < ($1.bookingComponents?[0].basePrice)! }
 //        self.minPrice = (directionMin?.totalPrice)!
-        self.minMaxPrice.minPrice = (directionMin?.totalPrice)!
+        self.minMaxPrice.minPrice = (directionMin?.bookingComponents?[0].basePrice)!
         
         print("maxPrice=\(self.maxPrice)___minPrice=\(self.minPrice)")
         print("maxPrice=\(self.maxPrice)___minPrice=\(self.minPrice)")

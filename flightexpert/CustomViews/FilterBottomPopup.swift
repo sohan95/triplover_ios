@@ -25,6 +25,7 @@ struct FilterBottomPopup: View {
     @State var width1: Double = 15
     @State var ratio: Double = 0
     var totalWidth = UIScreen.main.bounds.width - 60
+    @State var popupViewHeight: CGFloat = 330.0
     //@ObservedObject var slider: CustomSlider
     //@StateObject var progress: CustomSlider
 
@@ -75,10 +76,10 @@ struct FilterBottomPopup: View {
                     .frame(maxWidth:.infinity, maxHeight: 35)
                     .foregroundColor(.white)
                     .font(.system(size: 12, weight: .semibold, design: .rounded))
-                    .padding(.vertical, 10)
+                    .padding(.top, 10)
                     
                     VStack(alignment: .leading) {
-                        VStack(alignment: .leading, spacing: 15) {
+                        VStack(alignment: .leading) {
                             if filterTypeIndex == 0 { // For stops
                                 VStack(alignment: .leading, spacing: 10) {
                                     /*HStack{
@@ -135,8 +136,9 @@ struct FilterBottomPopup: View {
                                     }
                                     .padding(.top, 25)*/
                                     HStack{
-                                        Text("\(slider.highHandle.currentValue)")
-                                        Text("\(slider.lowHandle.currentValue)")
+                                        Text("\(slider.lowHandle.currentValue, specifier: "%.2f")")
+                                        Spacer()
+                                        Text("\(slider.highHandle.currentValue, specifier: "%.2f")")
                                     }.padding(.trailing,10)
                                     ZStack{
                                         Rectangle()
@@ -151,8 +153,8 @@ struct FilterBottomPopup: View {
                             }
                             
                             if filterTypeIndex == 1 { // For stops
+                                List {
                                 ForEach(stopsList,id: \.self){item in
-
                                     Button(action: {
                                         self.selectedStop = item
                                         //self.doneAction()
@@ -172,9 +174,12 @@ struct FilterBottomPopup: View {
                                         .foregroundColor(.black)
                                     }
                                 }
+                                }
+//                                .padding(.vertical, 20)
                             }
                             
                             if filterTypeIndex == 2 { // For stops
+                                List {
                                 ForEach(flightSearchModel.airlineList,id: \.self){item in
 
                                     Button(action: {
@@ -196,15 +201,17 @@ struct FilterBottomPopup: View {
                                         .foregroundColor(.black)
                                     }
                                 }
+                                }
+//                                .padding(.vertical, 20)
                             }
                             
                         }
-                        .frame(maxWidth:.infinity, minHeight: 160, maxHeight: 160)
+                        .frame(maxWidth:.infinity, maxHeight: 160)
+//                        .background(.yellow)
                         
                         //Footer
                         HStack(spacing: 5) {
                             Button {
-                                print("Reset")
                                 self.selectedMinMaxPrice = MinMaxPrice(minPrice: slider.lowHandle.currentValue, maxPrice: slider.highHandle.currentValue)
                                 if let doneFilterAction = doneFilterAction {
                                     doneFilterAction(false)
@@ -232,30 +239,40 @@ struct FilterBottomPopup: View {
                                     .cornerRadius(5)
                             }
                         }
-                        .frame(maxWidth:.infinity, minHeight: 35, maxHeight:35)
+                        .frame(maxWidth:.infinity, maxHeight:35)
                         .foregroundColor(.white)
                         .font(.system(size: 11, weight: .medium, design: .rounded))
-                        .padding(.vertical,40)
+                        .padding(.vertical,5)
 //                        .background(.orange)
                         Spacer()
                     }
-                    .frame(maxWidth:.infinity, maxHeight: 230)
+                    .frame(maxWidth:.infinity, maxHeight: 250)
+//                    .background(.pink)
                     Spacer()
                 }
                 .font(.system(size: 12, weight: .semibold, design: .rounded))
                 .padding(.horizontal, 10)
-                .frame(maxWidth:.infinity, maxHeight: 330)
+                .frame(maxWidth:.infinity, maxHeight: popupViewHeight)//330
                 .background(.white)
             }
 
         }
-        .onAppear(){
-//            ratio = (minMaxPrice.maxPrice-minMaxPrice.minPrice)/totalWidth
-//            width1 = totalWidth
-//            print(String(format: "%.2f", ratio))
-            //self.slider = CustomSlider(start: 300, end: 400)
-//            self.progress = CustomSlider(start: self.flightSearchModel.minMaxPrice.minPrice, end: self.flightSearchModel.minMaxPrice.maxPrice)
-        }
+        .onAppear(perform: {
+            //check Device Notch
+            if UIDevice.current.hasNotch {
+                //... consider notch
+                popupViewHeight = 320.0
+            } else {
+                popupViewHeight = 370.0
+            }
+        })
+//        .onAppear(){
+////            ratio = (minMaxPrice.maxPrice-minMaxPrice.minPrice)/totalWidth
+////            width1 = totalWidth
+////            print(String(format: "%.2f", ratio))
+//            //self.slider = CustomSlider(start: 300, end: 400)
+////            self.progress = CustomSlider(start: self.flightSearchModel.minMaxPrice.minPrice, end: self.flightSearchModel.minMaxPrice.maxPrice)
+//        }
     }
     
     
