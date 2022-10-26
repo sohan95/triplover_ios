@@ -164,8 +164,7 @@ class FlightSearchModel: ObservableObject {
 //        self.minPrice = (directionMin?.totalPrice)!
         self.minMaxPrice.minPrice = (directionMin?.bookingComponents?[0].basePrice)!
         
-        print("maxPrice=\(self.maxPrice)___minPrice=\(self.minPrice)")
-        print("maxPrice=\(self.maxPrice)___minPrice=\(self.minPrice)")
+        print("maxPrice=\(self.minMaxPrice.maxPrice)___minPrice=\(self.minMaxPrice.minPrice)")
         
         self.forwardDirections = directions
         self.selectedDirectionList.insert(directions, at: self.routeIndex)

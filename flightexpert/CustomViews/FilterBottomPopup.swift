@@ -28,6 +28,7 @@ struct FilterBottomPopup: View {
     @State var popupViewHeight: CGFloat = 330.0
     //@ObservedObject var slider: CustomSlider
     //@StateObject var progress: CustomSlider
+    @State var isFlightLessThanSix: Bool = true
 
     
     var body: some View {
@@ -146,63 +147,67 @@ struct FilterBottomPopup: View {
                                                 .frame(height: 30)
                                         SliderView(slider: slider) 
                                     }
-                                    
                                 }
                                 .frame(maxWidth:.infinity)
                                 .padding()
                             }
                             
                             if filterTypeIndex == 1 { // For stops
-                                List {
-                                ForEach(stopsList,id: \.self){item in
-                                    Button(action: {
-                                        self.selectedStop = item
-                                        //self.doneAction()
-                                    }) {
-                                        HStack(alignment:.bottom, spacing: 15) {
-                                            ZStack(alignment: .center){
-                                                Rectangle().stroke(self.selectedStop == item ? Color.black : Color.gray, lineWidth: 2).frame(width: 16, height: 16)
+                                ScrollView {
+                                    VStack(alignment: .leading, spacing: 10) {
+                                        ForEach(stopsList,id: \.self){item in
+                                            Button(action: {
+                                                self.selectedStop = item
+                                                //self.doneAction()
+                                            }) {
+                                                HStack(alignment:.bottom, spacing: 15) {
+                                                    ZStack(alignment: .center){
+                                                        Rectangle().stroke(self.selectedStop == item ? Color.black : Color.gray, lineWidth: 2).frame(width: 16, height: 16)
 
-                                                if self.selectedStop == item {
-                                                    Rectangle().fill(Color.black).frame(width: 10, height: 10)
+                                                        if self.selectedStop == item {
+                                                            Rectangle().fill(Color.black).frame(width: 10, height: 10)
+                                                        }
+                                                    }
+                                                    Text(item)
+                                                        .font(.system(size: 11, weight: .medium, design: .rounded))
+
                                                 }
+                                                .foregroundColor(.black)
                                             }
-                                            Text(item)
-                                                .font(.system(size: 11, weight: .medium, design: .rounded))
-
                                         }
-                                        .foregroundColor(.black)
                                     }
                                 }
-                                }
-//                                .padding(.vertical, 20)
+                                .disableScrolling(disabled: true)
+                                
                             }
                             
-                            if filterTypeIndex == 2 { // For stops
-                                List {
-                                ForEach(flightSearchModel.airlineList,id: \.self){item in
+                            if filterTypeIndex == 2 { // For airlineList
+                                ScrollView {
+                                    VStack(alignment: .leading, spacing: 10) {
+                                        ForEach(flightSearchModel.airlineList,id: \.self){item in
+                                            Button(action: {
+                                                self.selectedAirline = item
+                                                //self.doneAction()
+                                            }) {
+                                                HStack(alignment:.bottom, spacing: 15) {
+                                                    ZStack(alignment: .center){
+                                                        Rectangle().stroke(self.selectedAirline == item ? Color.black : Color.gray, lineWidth: 1).frame(width: 16, height: 16)
 
-                                    Button(action: {
-                                        self.selectedAirline = item
-                                        //self.doneAction()
-                                    }) {
-                                        HStack(alignment:.bottom, spacing: 15) {
-                                            ZStack(alignment: .center){
-                                                Rectangle().stroke(self.selectedAirline == item ? Color.black : Color.gray, lineWidth: 1).frame(width: 16, height: 16)
+                                                        if self.selectedAirline == item {
+                                                            Rectangle().fill(Color.black).frame(width: 10, height: 10)
+                                                        }
+                                                    }
+                                                    Text(item)
+                                                        .font(.system(size: 11, weight: .medium, design: .rounded))
 
-                                                if self.selectedAirline == item {
-                                                    Rectangle().fill(Color.black).frame(width: 10, height: 10)
                                                 }
+                                                .foregroundColor(.black)
                                             }
-                                            Text(item)
-                                                .font(.system(size: 11, weight: .medium, design: .rounded))
-
                                         }
-                                        .foregroundColor(.black)
                                     }
+                                    .frame(maxWidth: .infinity)
                                 }
-                                }
-//                                .padding(.vertical, 20)
+                                .disableScrolling(disabled: flightSearchModel.airlineList.count < 6)
                             }
                             
                         }
@@ -266,13 +271,6 @@ struct FilterBottomPopup: View {
                 popupViewHeight = 370.0
             }
         })
-//        .onAppear(){
-////            ratio = (minMaxPrice.maxPrice-minMaxPrice.minPrice)/totalWidth
-////            width1 = totalWidth
-////            print(String(format: "%.2f", ratio))
-//            //self.slider = CustomSlider(start: 300, end: 400)
-////            self.progress = CustomSlider(start: self.flightSearchModel.minMaxPrice.minPrice, end: self.flightSearchModel.minMaxPrice.maxPrice)
-//        }
     }
     
     
@@ -280,6 +278,26 @@ struct FilterBottomPopup: View {
         
         let vall: Double = val * ratio
         return String(format: "%.2f", vall)
+    }
+}
+
+struct DisableScrolling: ViewModifier {
+    var disabled: Bool
+    
+    func body(content: Content) -> some View {
+    
+        if disabled {
+            content
+                .simultaneousGesture(DragGesture(minimumDistance: 0), including: .all)
+        } else {
+            content
+        }
+        
+    }
+}
+extension View {
+    func disableScrolling(disabled: Bool) -> some View {
+        modifier(DisableScrolling(disabled: disabled))
     }
 }
 
