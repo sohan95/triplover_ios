@@ -30,12 +30,7 @@ struct SignupView: View {
     }
     
     var body: some View {
-        ZStack {
-            BackgroundImage
-                .resizable()
-                .scaledToFill()
-                .edgesIgnoringSafeArea(.all)
-            
+        ScrollView {
             VStack(spacing: 10) {
                 VStack {
                     VStack(spacing:10) {
@@ -150,11 +145,11 @@ struct SignupView: View {
                 .frame(minHeight: 0, maxHeight: .infinity)
                 .background(
                     RoundedRectangle(cornerRadius: 10)
-                        .fill(Color.gray.opacity(0.3)
-                    )
+                    .fill(Color.gray.opacity(0.3))
                     .padding([.leading, .trailing], 10)
-                    .padding(.top, 80)
+                    .padding([.top, .bottom], -20)
                 )
+                .padding(.top, 80)
                 
                 Image("app_name_header")
                     .resizable()
@@ -164,6 +159,12 @@ struct SignupView: View {
                     .padding(.top, 20)
             }
         }
+        .background(
+            BackgroundImage
+                .resizable()
+                .scaledToFill()
+                .edgesIgnoringSafeArea(.all)
+        )
         .navigationTitle("Login/Register")
         .navigationBarTitleDisplayMode(.inline)
 //        .navigationBarBackButtonHidden(true)

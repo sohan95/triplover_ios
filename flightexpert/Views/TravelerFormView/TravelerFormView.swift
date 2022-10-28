@@ -42,15 +42,11 @@ struct TravelerFormView: View {
     }
     
     var body: some View {
-        ZStack {
-            BackgroundImage
-                .resizable()
-                .scaledToFill()
-                .ignoresSafeArea(.all, edges: .all)
+        GeometryReader { reader in
             
 //            NavigationLink(destination:VCRepresented().environmentObject(flightSearchModel), tag: "VCRepresented", selection: $showSSLCz) { EmptyView() }
             NavigationLink(destination:MyBooking().environmentObject(flightSearchModel), tag: "MyBooking", selection: $showSSLCz) { EmptyView() }
-            GeometryReader { reader in
+            ScrollView {
                 VStack(spacing: 5) {
                     Spacer()
                     ScrollView {
@@ -58,24 +54,17 @@ struct TravelerFormView: View {
                             TravelerFormCell(userData: self.$userDataArray[i], isDomestic: flightSearchModel.isDomestic)
                         }
                     }
-//                    .offset(y: 64)
-//                    .clipped()
-                    
                     VStack(alignment: .center, spacing: 10) {
-                        HStack(alignment: .center, spacing: 0) {
-                            Spacer()
-                            Toggle("I agree to the", isOn: $isAgree)
+                        VStack {
+                            Toggle("I agree to the [Terms and Condition](https://triplover.com/Terms.aspx)", isOn: $isAgree)
                                 .toggleStyle(CheckboxStyle())
                                 .foregroundColor(.black)
-                                .font(.system(size: 11, weight:.medium, design: .rounded))
+                                .font(.system(size: 15, weight:.medium, design: .rounded))
                                 .padding(.leading,10)
-                                .padding(.trailing, 5)
-                            Link("Terms and Condition", destination: URL(string: "https://triplover.com/Terms.aspx")!)
-                                .font(.system(size: 11, weight:.bold, design: .rounded))
-                                .foregroundColor(.black)
-                            
-                            Spacer()
+//                                    .padding(.trailing, 5)
                         }
+                        .frame(height: 35, alignment: .leading)
+//                        .background(.yellow)
                         
                         Button {
                             //Goto Pricing page
@@ -89,31 +78,30 @@ struct TravelerFormView: View {
                                 .fill(blueGradient))
                         }
                     }
-                    .frame(height: 70)
-                    .padding(.horizontal,5)
-                    .padding(.bottom, 50)
+                    .frame(height: 80)
+                    .padding(.horizontal,10)
+//                    .padding(.bottom, 20)
                 }
 //                .offset(y: bottomPadding)
-                .padding(.top, bottomPadding)
+//                .padding(.top, bottomPadding)
                 .frame(height: reader.size.height - (bottomPadding - 50))
                 .clipped()
-                .onAppear(perform: {
-                    //check Device Notch
-                    if UIDevice.current.hasNotch {
-                        //... consider notch
-                        bottomPadding = 50.0
-                    } else {
-                        bottomPadding = 100.0
-                    }
-                })
             }
         }
-        .navigationTitle("Passenger Details")
-        .navigationBarTitleDisplayMode(.inline)
-//        .navigationBarBackButtonHidden(true)
-//        .navigationBarItems(leading: btnBack)
-        
+        .background(
+            BackgroundImage
+                .resizable()
+                .scaledToFill()
+                .edgesIgnoringSafeArea(.all)
+        )
         .onAppear {
+            //check Device Notch
+            if UIDevice.current.hasNotch {
+                //... consider notch
+                bottomPadding = 40.0
+            } else {
+                bottomPadding = 80.0
+            }
             print("sohan=\(data)")
 //            for i in 1...self.totalUserCount {
 //                print("\(i)")
@@ -161,6 +149,11 @@ struct TravelerFormView: View {
                 }
             }
         }
+        .navigationTitle("Passenger Details")
+        .navigationBarTitleDisplayMode(.inline)
+//        .navigationBarBackButtonHidden(true)
+//        .navigationBarItems(leading: btnBack)
+
         .sheet(isPresented: $isShowSSLView) {
             VCRepresented(data: $data, isShownSSL: $isShowSSLView)
            

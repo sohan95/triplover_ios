@@ -33,12 +33,7 @@ struct SigninView: View {
     }
     
     var body: some View {
-        ZStack {
-            BackgroundImage
-                .resizable()
-                .scaledToFill()
-                .edgesIgnoringSafeArea(.all)
-            
+        ScrollView {
             VStack(spacing: 10) {
                 VStack(spacing: 30) {
                     VStack(spacing: 30) {
@@ -94,12 +89,6 @@ struct SigninView: View {
                                 .cornerRadius(7.5)
                                 .font(.system(size: 13, weight: .bold, design: .rounded))
                         })
-                        
-    //                    .alert(isPresented: $isLoggedin, content: {
-    //                        Alert(title: Text("Login Success"), message: Text("Right now you can book any fligh!"), dismissButton: .cancel(Text("Ok")))
-    //                    })
-//                        Text("Forgot Password")
-//                            .padding()
                         HStack {
                             Text("Don't have an account?")
                                 .font(.system(size: 10, weight: .regular, design: .rounded))
@@ -112,18 +101,16 @@ struct SigninView: View {
                             }
                         }
                         .foregroundColor(.black)
-    //                    .padding([.top,.bottom])
                     }
                     .padding(30)
                 }
                 .frame(minHeight: 0, maxHeight: .infinity)
                 .background(
                     RoundedRectangle(cornerRadius: 10)
-                        .fill(Color.gray.opacity(0.3)
-                    )
-                    .padding([.leading, .trailing], 10)
-                    .padding(.top, 100)
+                        .fill(Color.gray.opacity(0.3))
+                        .padding([.leading, .trailing], 10)
                 )
+                .padding(.top, 80)
                 
                 Image("app_name_header")
                     .resizable()
@@ -133,13 +120,14 @@ struct SigninView: View {
                     .padding(.top, 20)
             }
         }
+        .background(
+            BackgroundImage
+                .resizable()
+                .scaledToFill()
+                .edgesIgnoringSafeArea(.all)
+        )
         .navigationTitle("Login/Register")
         .navigationBarTitleDisplayMode(.inline)
-//        .navigationBarBackButtonHidden(true)
-//        .navigationBarItems(leading: btnBack)
-//        .alert(isPresented: $isShowAlert) {
-//            Alert(title: Text(alertTitle), message: Text(alertMsg), dismissButton: .default(Text("Close")))
-//        }
         .alert(isPresented: $isShowAlert, content: {
             Alert(title: Text(alertTitle), message: Text(alertMsg), dismissButton: .cancel(Text("OK")))
         })

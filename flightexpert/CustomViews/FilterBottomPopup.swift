@@ -11,24 +11,19 @@ import SwiftUI
 
 struct FilterBottomPopup: View {
     @EnvironmentObject var flightSearchModel: FlightSearchModel
-    @Binding var selectedStop: String;
-    @Binding var selectedAirline: String;
-    @Binding var selectedMinMaxPrice: MinMaxPrice;
-    var minMaxPrice: MinMaxPrice
-    @ObservedObject var slider:CustomSlider
+    @Binding var filterTypeIndex: Int
+    @Binding var selectedStop: String
+    @Binding var selectedAirline: String
+    @Binding var selectedMinPrice: Double
+    @Binding var selectedMaxPrice: Double
+    @ObservedObject var slider: CustomSlider
     typealias Action = (Bool) -> Void
     var doneFilterAction: Action?
-    
-    @State var filterTypeIndex: Int = 2
-    
-    @State var width: Double = 0
-    @State var width1: Double = 15
-    @State var ratio: Double = 0
-    var totalWidth = UIScreen.main.bounds.width - 60
+//    @State var width: Double = 0
+//    @State var width1: Double = 15
+//    @State var ratio: Double = 0
+//    var totalWidth = UIScreen.main.bounds.width - 60
     @State var popupViewHeight: CGFloat = 330.0
-    //@ObservedObject var slider: CustomSlider
-    //@StateObject var progress: CustomSlider
-    @State var isFlightLessThanSix: Bool = true
 
     
     var body: some View {
@@ -142,9 +137,9 @@ struct FilterBottomPopup: View {
                                         Text("\(slider.highHandle.currentValue, specifier: "%.2f")")
                                     }.padding(.trailing,10)
                                     ZStack{
-                                        Rectangle()
+                                        RoundedRectangle(cornerRadius: 20)
                                                 .fill(Color.gray.opacity(0.5))
-                                                .frame(height: 30)
+                                                .frame(height: 40)
                                         SliderView(slider: slider) 
                                     }
                                 }
@@ -217,7 +212,12 @@ struct FilterBottomPopup: View {
                         //Footer
                         HStack(spacing: 5) {
                             Button {
-                                self.selectedMinMaxPrice = MinMaxPrice(minPrice: slider.lowHandle.currentValue, maxPrice: slider.highHandle.currentValue)
+                                self.selectedStop = ""
+                                self.selectedAirline = ""
+//                                self.selectedMinMaxPrice = MinMaxPrice(minPrice: slider.lowHandle.currentValue, maxPrice: slider.highHandle.currentValue)
+                                self.selectedMinPrice = slider.lowHandle.currentValue
+                                self.selectedMaxPrice = slider.highHandle.currentValue
+                                
                                 if let doneFilterAction = doneFilterAction {
                                     doneFilterAction(false)
                                 }
@@ -229,10 +229,15 @@ struct FilterBottomPopup: View {
                                     .cornerRadius(5)
                             }
                             Button {
-                                print("Apply")
                                 if let doneFilterAction = doneFilterAction {
 //                                    self.selectedMinMaxPrice = MinMaxPrice(minPrice: width*ratio, maxPrice: width1*ratio)
-                                    self.selectedMinMaxPrice = MinMaxPrice(minPrice: slider.lowHandle.currentValue, maxPrice: slider.highHandle.currentValue)
+                                    print("min=\(slider.lowHandle.currentValue)");
+                                    print("max=\(slider.highHandle.currentValue)");
+                                    self.selectedMinPrice = slider.lowHandle.currentValue
+                                    self.selectedMaxPrice = slider.highHandle.currentValue
+                                    print("selectedMinPrice=\(self.selectedMinPrice)");
+                                    print("selectedMaxPrice=\(self.selectedMaxPrice)");
+//                                    self.selectedMinMaxPrice = MinMaxPrice(minPrice: slider.lowHandle.currentValue, maxPrice: slider.highHandle.currentValue)
                                     doneFilterAction(true)
                                 }
                                 
@@ -274,11 +279,11 @@ struct FilterBottomPopup: View {
     }
     
     
-    func getValue(val: Double) -> String{
-        
-        let vall: Double = val * ratio
-        return String(format: "%.2f", vall)
-    }
+//    func getValue(val: Double) -> String{
+//
+//        let vall: Double = val * ratio
+//        return String(format: "%.2f", vall)
+//    }
 }
 
 struct DisableScrolling: ViewModifier {

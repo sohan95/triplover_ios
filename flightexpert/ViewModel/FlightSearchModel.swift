@@ -43,8 +43,8 @@ class FlightSearchModel: ObservableObject {
     @Published  var routeIndex: Int = 0
     
     // Filter by total Price
-    @Published var maxPrice: Double = 0.0
-    @Published var minPrice: Double = 0.0
+//    @Published var maxPrice: Double = 0.0
+//    @Published var minPrice: Double = 0.0
     @Published var minMaxPrice: MinMaxPrice = MinMaxPrice(minPrice: 200.0, maxPrice: 10000.0)
     
     // Filter by airlines

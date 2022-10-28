@@ -16,9 +16,9 @@ struct CheckboxStyle: ToggleStyle {
  
             Image(systemName: configuration.isOn ? "checkmark.square.fill" : "square")
                 .resizable()
-                .frame(width: 15, height: 15)
-                .foregroundColor(configuration.isOn ? Color("button-bg-color") : .gray)
-                .font(.system(size: 11, weight: .medium, design: .default))
+                .frame(width: 20, height: 20)
+                .foregroundColor(configuration.isOn ? Color("button-bg-color") : .black.opacity(0.7))
+                .font(.system(size: 13, weight: .medium, design: .default))
                 .onTapGesture {
                     configuration.isOn.toggle()
                 }
