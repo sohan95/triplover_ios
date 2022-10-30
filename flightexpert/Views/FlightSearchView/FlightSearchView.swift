@@ -75,7 +75,7 @@ struct FlightSearchView: View {
     @State var bgHeight: Double = 350.0
     @State var shouldScroll: Bool = false
     @State var topOffset: CGFloat = 60.0
-    @State var bottomPadding: CGFloat = 64.0
+    @State var bottomPadding: CGFloat = 0.0
     
     
     let columnSpacing: CGFloat = 5
@@ -402,6 +402,7 @@ struct FlightSearchView: View {
                                   infants: $infants,
                                   cabinClass: $cabinClass,
                                   doneAction:self.changeClassAndTraveler)
+                .padding(.bottom, bottomPadding)
                 .transition(.asymmetric(insertion: .scale, removal: .opacity))
             }
             else {
@@ -413,16 +414,6 @@ struct FlightSearchView: View {
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle(tint: .red))
                         .scaleEffect(2)
-//                    VStack(spacing: 40) {
-//                        ProgressView()
-//                            .progressViewStyle(CircularProgressViewStyle(tint: .orange))
-//                            .scaleEffect(2)
-//                            
-//                        FakeProgressBar(isActive:flightSearchModel.isSearching)
-//                            .frame(height: 4)
-//                            .padding(.bottom, bottomPadding)
-//
-//                    }
 
                 }
                 .navigationBarBackButtonHidden(true)
@@ -433,9 +424,9 @@ struct FlightSearchView: View {
             //check Device Notch
             if UIDevice.current.hasNotch {
                 //... consider notch
-                bottomPadding = 64.0
+                bottomPadding = 0.0
             } else {
-                bottomPadding = 100.0
+                bottomPadding = 50.0
             }
         })
         .environmentObject(flightSearchModel)

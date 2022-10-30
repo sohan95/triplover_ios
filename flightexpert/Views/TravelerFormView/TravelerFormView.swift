@@ -42,10 +42,9 @@ struct TravelerFormView: View {
     }
     
     var body: some View {
-        GeometryReader { reader in
-            
 //            NavigationLink(destination:VCRepresented().environmentObject(flightSearchModel), tag: "VCRepresented", selection: $showSSLCz) { EmptyView() }
             NavigationLink(destination:MyBooking().environmentObject(flightSearchModel), tag: "MyBooking", selection: $showSSLCz) { EmptyView() }
+        GeometryReader { reader in
             ScrollView {
                 VStack(spacing: 5) {
                     Spacer()
@@ -56,7 +55,13 @@ struct TravelerFormView: View {
                     }
                     VStack(alignment: .center, spacing: 10) {
                         VStack {
-                            Toggle("I agree to the [Terms and Condition](https://triplover.com/Terms.aspx)", isOn: $isAgree)
+                            Toggle(isOn: $isAgree) {
+                                Text("I agree to the ")
+                                + Text("[Terms and Condition](https://triplover.com/Terms.aspx)").underline(true, color: Color.blue)
+                                
+
+                            }
+                            //Toggle("I agree to the [Terms and Condition](https://triplover.com/Terms.aspx)", isOn: $isAgree)
                                 .toggleStyle(CheckboxStyle())
                                 .foregroundColor(.black)
                                 .font(.system(size: 15, weight:.medium, design: .rounded))
@@ -82,9 +87,7 @@ struct TravelerFormView: View {
                     .padding(.horizontal,10)
 //                    .padding(.bottom, 20)
                 }
-//                .offset(y: bottomPadding)
-//                .padding(.top, bottomPadding)
-                .frame(height: reader.size.height - (bottomPadding - 50))
+                .frame(height: reader.size.height-bottomPadding)
                 .clipped()
             }
         }
@@ -98,9 +101,9 @@ struct TravelerFormView: View {
             //check Device Notch
             if UIDevice.current.hasNotch {
                 //... consider notch
-                bottomPadding = 40.0
+                //bottomPadding = 40.0
             } else {
-                bottomPadding = 80.0
+                bottomPadding = 10.0
             }
             print("sohan=\(data)")
 //            for i in 1...self.totalUserCount {

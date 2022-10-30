@@ -204,15 +204,13 @@ struct SearchOptionModal: View {
             
         }
         .frame(maxWidth:.infinity, maxHeight: .infinity, alignment: .bottom)
-        .ignoresSafeArea()
+//        .ignoresSafeArea()
         .animation(Animation.easeInOut(duration: 1.0), value: 200.0)
         .onAppear(){
             maxAdult = 9
             maxChild = totalPassenger-selectedAdultNumber
             maxInfants = selectedAdultNumber
-            
             print("maxAdult=\(maxAdult)maxChild=\(maxChild)maxInfants=\(maxInfants)")
-            
         }
     }
     

@@ -230,7 +230,7 @@ struct FlightSelectionView: View {
             })
             .onTapGesture {
                 withAnimation {
-                    self.isFilterShown.toggle()
+                    self.isFilterShown = false;
                 }
             }
             
