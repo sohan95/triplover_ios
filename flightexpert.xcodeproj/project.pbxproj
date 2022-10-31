@@ -25,6 +25,8 @@
 		1F36BA502835CBE800B4EE93 /* HttpUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F36BA4F2835CBE800B4EE93 /* HttpUtility.swift */; };
 		1F36BA592835D51600B4EE93 /* LoginValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F36BA582835D51600B4EE93 /* LoginValidation.swift */; };
 		1F36BA5C2835D59400B4EE93 /* LoginResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F36BA5B2835D59400B4EE93 /* LoginResource.swift */; };
+		1F52C1BD291038A300F49617 /* SSLCommerzSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F52C1BC291038A300F49617 /* SSLCommerzSDK.framework */; };
+		1F52C1BE291038EE00F49617 /* SSLCommerzSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1F52C1BC291038A300F49617 /* SSLCommerzSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		1F776098288F452F002CBF23 /* SSLCmzViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F776097288F452F002CBF23 /* SSLCmzViewController.swift */; };
 		1F77609A288F54F1002CBF23 /* SSLComerzResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F776099288F54F1002CBF23 /* SSLComerzResponse.swift */; };
 		1F89FCE1288A7CAE00A65DF6 /* RadioButtonsPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F89FCE0288A7CAE00A65DF6 /* RadioButtonsPopup.swift */; };
@@ -125,6 +127,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				1F52C1BE291038EE00F49617 /* SSLCommerzSDK.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -150,6 +153,7 @@
 		1F36BA4F2835CBE800B4EE93 /* HttpUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpUtility.swift; sourceTree = "<group>"; };
 		1F36BA582835D51600B4EE93 /* LoginValidation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginValidation.swift; sourceTree = "<group>"; };
 		1F36BA5B2835D59400B4EE93 /* LoginResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginResource.swift; sourceTree = "<group>"; };
+		1F52C1BC291038A300F49617 /* SSLCommerzSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SSLCommerzSDK.framework; sourceTree = "<group>"; };
 		1F776097288F452F002CBF23 /* SSLCmzViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSLCmzViewController.swift; sourceTree = "<group>"; };
 		1F776099288F54F1002CBF23 /* SSLComerzResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSLComerzResponse.swift; sourceTree = "<group>"; };
 		1F89FCE0288A7CAE00A65DF6 /* RadioButtonsPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButtonsPopup.swift; sourceTree = "<group>"; };
@@ -234,6 +238,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F52C1BD291038A300F49617 /* SSLCommerzSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -326,6 +331,7 @@
 		1F54EE95285C426B00B456C4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1F52C1BC291038A300F49617 /* SSLCommerzSDK.framework */,
 			);
 			path = Frameworks;
 			sourceTree = "<group>";
@@ -929,6 +935,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -989,6 +996,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
@@ -1020,7 +1028,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"flightexpert/Preview Content\"";
-				DEVELOPMENT_TEAM = APXU58TDSN;
+				DEVELOPMENT_TEAM = F73TM9H54P;
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1044,7 +1052,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = "";
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.bmqa.testSwiftUI;
+				PRODUCT_BUNDLE_IDENTIFIER = com.triplover.TripLover;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -1059,6 +1067,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"flightexpert/Preview Content\"";
@@ -1086,7 +1095,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = "";
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.bmqa.testSwiftUI;
+				PRODUCT_BUNDLE_IDENTIFIER = com.triplover.TripLover;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
