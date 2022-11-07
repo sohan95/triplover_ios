@@ -459,8 +459,8 @@ struct FlightSearchView: View {
                     routeArray.removeLast()
                 }
             } else {
-                let one = AirportData(name: "Hazrat Shahjalal International Airport", city: "Dhaka", country:"Bangladesh", iata: "MCT")
-                let two = AirportData(name: "Shah Amanat Intl", city: "Chittagong", country:"Bangladesh", iata: "DXB")
+                let one = AirportData(name: "Hazrat Shahjalal International Airport", city: "Dhaka", country:"Bangladesh", iata: "DAC")
+                let two = AirportData(name: "Shah Amanat Intl", city: "Chittagong", country:"Bangladesh", iata: "CGP")
                 routeArray = [AirportData]()
                 self.routeArray.append(contentsOf: [one,two])
             }

@@ -11,19 +11,25 @@ import SwiftUI
 
 struct BookedFlightDetails: View {
     var selectedBookedFlight: AirTicketingResponse? = nil
+    var source: String? = nil
     
     @State var airTicketingDetails: AirTicketingDetailsResponse? = nil
     @State var isLoading:Bool = true
     @State var showErrorAlert = false
     
     @Environment(\.presentationMode) var presentationMode
-    var btnBack : some View { Button(action: {
-        self.presentationMode.wrappedValue.dismiss()
-        }) {
+    var btnBack : some View {
+        Button {
+            if source == "MyBooking" {
+                self.presentationMode.wrappedValue.dismiss()
+            } else {
+                SplashScreen()
+            }
+        } label: {
             HStack {
-            Image(systemName: "arrow.backward") // set image here
-                .aspectRatio(contentMode: .fit)
-                .foregroundColor(.black)
+                Image(systemName: "arrow.backward") // set image here
+                    .aspectRatio(contentMode: .fit)
+                    .foregroundColor(.black)
             }
         }
     }
@@ -100,6 +106,8 @@ struct BookedFlightDetails: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
+        .navigationBarItems(leading: btnBack)
         .onAppear() {
             getAirTicketingDetails()
         }

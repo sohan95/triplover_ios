@@ -62,7 +62,7 @@ struct FlightDetailsCell: View {
                 }
                 
             }
-            .font(.system(size: 20, weight: .regular, design: .rounded))
+            .font(.system(size: 13, weight: .regular, design: .rounded))
             .foregroundColor(.black)
             .background(.white)
             .padding(20)

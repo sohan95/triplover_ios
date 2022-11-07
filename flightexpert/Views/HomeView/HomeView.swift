@@ -14,7 +14,7 @@ struct HomeView: View {
     @State var selectedMenu: String = String()
     @State var selectedTab: String = String()
     //@State private var selection: String? = nil
-    let btnImgWidth2: Double = 30.0
+    let btnImgWidth2: Double = 20.0
     @State var bottomPadding: CGFloat = 50.0
     
     var body: some View {
@@ -157,7 +157,7 @@ struct HomeView: View {
             //check Device Notch
             if UIDevice.current.hasNotch {
                 //... consider notch
-                bottomPadding = 50.0
+                bottomPadding = 44.0
             } else {
                 bottomPadding = 100.0
             }

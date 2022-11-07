@@ -28,6 +28,7 @@ struct TravelerFormView: View {
     
     @State var bottomPadding: CGFloat = 50.0
     @State var bookingConfirmResponse:BookingConfirmResponse?
+    @State var selectedBookedFlight: AirTicketingResponse? = nil
 
     @Environment(\.presentationMode) var presentationMode
     var btnBack : some View { Button(action: {
@@ -43,7 +44,8 @@ struct TravelerFormView: View {
     
     var body: some View {
 //            NavigationLink(destination:VCRepresented().environmentObject(flightSearchModel), tag: "VCRepresented", selection: $showSSLCz) { EmptyView() }
-            NavigationLink(destination:MyBooking().environmentObject(flightSearchModel), tag: "MyBooking", selection: $showSSLCz) { EmptyView() }
+//            NavigationLink(destination:MyBooking().environmentObject(flightSearchModel), tag: "MyBooking", selection: $showSSLCz) { EmptyView() }
+            NavigationLink(destination:BookedFlightDetails(selectedBookedFlight: selectedBookedFlight, source: "FlightBooked"), tag: "BookedFlightDetails", selection: $showSSLCz) { EmptyView() }
         GeometryReader { reader in
             ScrollView {
                 VStack(spacing: 5) {
@@ -207,11 +209,17 @@ struct TravelerFormView: View {
                 SSLCmzViewController.callback = {
                     (bookingConfirmResponse) in
                     //print(beatCount)
-                    if bookingConfirmResponse?.message != nil {
-                        self.showAlert = true
-                        self.alertMsg = bookingConfirmResponse?.message! ?? ""
-                    }
                     isShowSSLView = false
+                    if bookingConfirmResponse?.message != nil {
+//                        self.showAlert = true
+//                        self.alertMsg = bookingConfirmResponse?.message! ?? ""
+                        
+                    }
+                    selectedBookedFlight = AirTicketingResponse(paxName: "", issueDate: "", travellDate: "", uniqueTransID: bookingConfirmResponse?.data?.item2?.uniqueTransID, pnr: "", ticketNumber: "", status: "", platingCarrier: "", airlineName: "", origin: "", destination: "", journeyType: "", gatewayCharge: 100.0)
+                    
+                    //bookingConfirmResponse?.data?.item2.
+                    
+                    showSSLCz = "BookedFlightDetails"
                 }
                 flightSearchModel.bookingResponse = result
                 print(result)

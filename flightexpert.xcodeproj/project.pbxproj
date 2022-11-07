@@ -12,6 +12,8 @@
 		1F1C8E0F2878D30800186629 /* ImageUrlModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F1C8E0E2878D30800186629 /* ImageUrlModel.swift */; };
 		1F1D9EB42840701C00771544 /* RouteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F1D9EB32840701C00771544 /* RouteView.swift */; };
 		1F1D9EC32840855200771544 /* AirportDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F1D9EC22840855200771544 /* AirportDataLoader.swift */; };
+		1F1E3A0129160F5000D8D108 /* SSLCommerzSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F1E3A0029160F5000D8D108 /* SSLCommerzSDK.framework */; };
+		1F1E3A0229160F5D00D8D108 /* SSLCommerzSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1F1E3A0029160F5000D8D108 /* SSLCommerzSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		1F23A2B7286B3AC1007438C7 /* MyBooking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F23A2B6286B3AC1007438C7 /* MyBooking.swift */; };
 		1F23A2B9286B6233007438C7 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F23A2B8286B6233007438C7 /* Utility.swift */; };
 		1F2CFDA4284A51D7003E2D40 /* FlightCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2CFDA3284A51D7003E2D40 /* FlightCell.swift */; };
@@ -25,8 +27,6 @@
 		1F36BA502835CBE800B4EE93 /* HttpUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F36BA4F2835CBE800B4EE93 /* HttpUtility.swift */; };
 		1F36BA592835D51600B4EE93 /* LoginValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F36BA582835D51600B4EE93 /* LoginValidation.swift */; };
 		1F36BA5C2835D59400B4EE93 /* LoginResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F36BA5B2835D59400B4EE93 /* LoginResource.swift */; };
-		1F52C1BD291038A300F49617 /* SSLCommerzSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F52C1BC291038A300F49617 /* SSLCommerzSDK.framework */; };
-		1F52C1BE291038EE00F49617 /* SSLCommerzSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1F52C1BC291038A300F49617 /* SSLCommerzSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		1F776098288F452F002CBF23 /* SSLCmzViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F776097288F452F002CBF23 /* SSLCmzViewController.swift */; };
 		1F77609A288F54F1002CBF23 /* SSLComerzResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F776099288F54F1002CBF23 /* SSLComerzResponse.swift */; };
 		1F89FCE1288A7CAE00A65DF6 /* RadioButtonsPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F89FCE0288A7CAE00A65DF6 /* RadioButtonsPopup.swift */; };
@@ -127,7 +127,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				1F52C1BE291038EE00F49617 /* SSLCommerzSDK.framework in Embed Frameworks */,
+				1F1E3A0229160F5D00D8D108 /* SSLCommerzSDK.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -140,6 +140,8 @@
 		1F1C8E0E2878D30800186629 /* ImageUrlModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUrlModel.swift; sourceTree = "<group>"; };
 		1F1D9EB32840701C00771544 /* RouteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteView.swift; sourceTree = "<group>"; };
 		1F1D9EC22840855200771544 /* AirportDataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirportDataLoader.swift; sourceTree = "<group>"; };
+		1F1E3A0029160F5000D8D108 /* SSLCommerzSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SSLCommerzSDK.framework; sourceTree = "<group>"; };
+		1F1E3A0329160FEC00D8D108 /* flightexpert-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "flightexpert-Bridging-Header.h"; sourceTree = "<group>"; };
 		1F23A2B6286B3AC1007438C7 /* MyBooking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyBooking.swift; sourceTree = "<group>"; };
 		1F23A2B8286B6233007438C7 /* Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 		1F2CFDA3284A51D7003E2D40 /* FlightCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlightCell.swift; sourceTree = "<group>"; };
@@ -153,7 +155,6 @@
 		1F36BA4F2835CBE800B4EE93 /* HttpUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpUtility.swift; sourceTree = "<group>"; };
 		1F36BA582835D51600B4EE93 /* LoginValidation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginValidation.swift; sourceTree = "<group>"; };
 		1F36BA5B2835D59400B4EE93 /* LoginResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginResource.swift; sourceTree = "<group>"; };
-		1F52C1BC291038A300F49617 /* SSLCommerzSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SSLCommerzSDK.framework; sourceTree = "<group>"; };
 		1F776097288F452F002CBF23 /* SSLCmzViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSLCmzViewController.swift; sourceTree = "<group>"; };
 		1F776099288F54F1002CBF23 /* SSLComerzResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSLComerzResponse.swift; sourceTree = "<group>"; };
 		1F89FCE0288A7CAE00A65DF6 /* RadioButtonsPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButtonsPopup.swift; sourceTree = "<group>"; };
@@ -238,7 +239,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1F52C1BD291038A300F49617 /* SSLCommerzSDK.framework in Frameworks */,
+				1F1E3A0129160F5000D8D108 /* SSLCommerzSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -331,7 +332,7 @@
 		1F54EE95285C426B00B456C4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				1F52C1BC291038A300F49617 /* SSLCommerzSDK.framework */,
+				1F1E3A0029160F5000D8D108 /* SSLCommerzSDK.framework */,
 			);
 			path = Frameworks;
 			sourceTree = "<group>";
@@ -465,6 +466,7 @@
 				1F36BA4F2835CBE800B4EE93 /* HttpUtility.swift */,
 				1FB67AE628485D380047C651 /* FlightAPI.swift */,
 				1F23A2B8286B6233007438C7 /* Utility.swift */,
+				1F1E3A0329160FEC00D8D108 /* flightexpert-Bridging-Header.h */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -1032,8 +1034,6 @@
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/flightexpert",
-					"$(PROJECT_DIR)/flightexpert/Resource",
 					"$(PROJECT_DIR)/flightexpert/Frameworks",
 				);
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1075,8 +1075,6 @@
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/flightexpert",
-					"$(PROJECT_DIR)/flightexpert/Resource",
 					"$(PROJECT_DIR)/flightexpert/Frameworks",
 				);
 				GENERATE_INFOPLIST_FILE = YES;

@@ -26,7 +26,7 @@ struct MyBooking: View {
                 .resizable()
                 .scaledToFill()
                 .edgesIgnoringSafeArea(.all)
-            NavigationLink(destination:BookedFlightDetails(selectedBookedFlight: selectedBookedFlight), tag: "BookedFlightDetails", selection: $selection) { EmptyView() }
+            NavigationLink(destination:BookedFlightDetails(selectedBookedFlight: selectedBookedFlight, source: "MyBooking"), tag: "BookedFlightDetails", selection: $selection) { EmptyView() }
             
             if !isLoading {
                 if !showErrorAlert {

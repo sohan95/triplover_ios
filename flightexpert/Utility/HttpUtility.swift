@@ -221,9 +221,9 @@ final class HttpUtility {
         encoder.dateEncodingStrategy = .formatted(formatter)
         urlRequest.httpBody = try? encoder.encode(requestBody)
         
-//        let encoder3 = JSONEncoder()
-//        let myEventsJSONData = try! encoder3.encode(requestBody)
-//        print(String(data: myEventsJSONData, encoding: .utf8)!)
+        let encoder3 = JSONEncoder()
+        let myEventsJSONData = try! encoder3.encode(requestBody)
+        print(String(data: myEventsJSONData, encoding: .utf8)!)
         
         let sessionConfig = URLSessionConfiguration.default
         sessionConfig.timeoutIntervalForRequest = 300.0
