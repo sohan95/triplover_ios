@@ -7,10 +7,18 @@
 
 import SwiftUI
 
+struct RandomModel: Identifiable {
+    let id = UUID().uuidString
+    let title: String
+    let iata: String
+}
+
 struct RoutePointButton: View {
-    @State var selectedModel: RandomModel? = nil
     @Binding var source: AirportData
     var directionName: String
+    
+    // local
+    @State var selectedModel: RandomModel? = nil
     
     var body: some View {
         Button {

@@ -13,6 +13,7 @@ public class AirportDataLoader {
     init() {
         loadLocalJson()
         sort()
+        
     }
     
     func load() {
@@ -24,7 +25,6 @@ public class AirportDataLoader {
                 let data = try Data(contentsOf: fileLocation)
                 let jsonDecoder = JSONDecoder()
                 let dataFromJson = try jsonDecoder.decode([AirportData].self, from: data)
-                
                 self.airportList = dataFromJson
                 DispatchQueue.main.async {
                     self.airportList = dataFromJson

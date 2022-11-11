@@ -121,7 +121,7 @@ struct FlightSearchView: View {
                                     Text("Flights")
                                         .font(.system(size: 18, weight: .bold))
                                         .padding(.top, 10)
-                                    RadioRouteGroupBotton(selectedId: $typeSelected) { selected in
+                                    RadioRouteGroupBotton(selectedId: typeSelected) { selected in
                                         print("Selected RouteType is: \(selected)")
                                         self.typeSelected = selected
                                         self.resetView()

@@ -211,15 +211,19 @@ struct TravelerFormView: View {
                     //print(beatCount)
                     isShowSSLView = false
                     if bookingConfirmResponse?.message != nil {
-//                        self.showAlert = true
-//                        self.alertMsg = bookingConfirmResponse?.message! ?? ""
+                        self.showAlert = true
+                        self.alertMsg = bookingConfirmResponse?.message! ?? ""
                         
                     }
-                    selectedBookedFlight = AirTicketingResponse(paxName: "", issueDate: "", travellDate: "", uniqueTransID: bookingConfirmResponse?.data?.item2?.uniqueTransID, pnr: "", ticketNumber: "", status: "", platingCarrier: "", airlineName: "", origin: "", destination: "", journeyType: "", gatewayCharge: 100.0)
                     
-                    //bookingConfirmResponse?.data?.item2.
-                    
-                    showSSLCz = "BookedFlightDetails"
+                    if bookingConfirmResponse!.isSuccess {
+                        if (bookingConfirmResponse?.data) != nil {
+                            print("uniqueTransID = \(String(describing: bookingConfirmResponse?.data?.item2?.uniqueTransID!))")
+                            selectedBookedFlight = AirTicketingResponse(paxName: "", issueDate: "", travellDate: "", uniqueTransID: bookingConfirmResponse?.data?.item2?.uniqueTransID, pnr: "", ticketNumber: "", status: "", platingCarrier: "", airlineName: "", origin: "", destination: "", journeyType: "", gatewayCharge: 100.0)
+                            
+                            showSSLCz = "BookedFlightDetails"
+                        }
+                    }
                 }
                 flightSearchModel.bookingResponse = result
                 print(result)

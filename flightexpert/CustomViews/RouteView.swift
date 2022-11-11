@@ -7,11 +7,7 @@
 
 import SwiftUI
 
-struct RandomModel: Identifiable {
-    let id = UUID().uuidString
-    let title: String
-    let iata: String
-}
+
 
 //struct OneWayRoute: View {
 //    @State var selectedModel: RandomModel? = nil

@@ -10,6 +10,7 @@ import Foundation
 
 class FlightSearchModel: ObservableObject {
     //@Published var prepareBookingRequest:PrepareBookingRequest = PrepareBookingRequest()
+    @Published var decorationData: DecorationData?
     @Published var userDataList = [UserData]()
     @Published var bookingResponse: BookingResponse?
     @Published var isBooking: Bool = false

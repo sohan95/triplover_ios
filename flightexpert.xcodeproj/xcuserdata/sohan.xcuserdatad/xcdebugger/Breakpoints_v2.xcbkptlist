@@ -7,113 +7,97 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "0B55D966-A03A-4EC8-BB23-7830B0423E48"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "flightexpert/Views/MyBooking/BookedFlightDetails.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "23"
-            endingLineNumber = "23"
-            landmarkName = "btnBack"
-            landmarkType = "24">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "396987D3-829E-46F8-9EB8-4EF16DA2695F"
+            uuid = "4B426C81-87F2-41F0-807B-B44D945DF463"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "flightexpert/Views/MyBooking/BookedFlightDetails.swift"
+            filePath = "flightexpert/Utility/HttpUtility.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "26"
-            endingLineNumber = "26"
-            landmarkName = "btnBack"
-            landmarkType = "24">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "9EC47129-E5BE-40B0-A2DC-DCF1E70C9B95"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "flightexpert/Views/MyBooking/BookedFlightDetails.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "24"
-            endingLineNumber = "24"
-            landmarkName = "btnBack"
-            landmarkType = "24">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "98A16CCD-4C73-4ABC-A997-A68BEE559060"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "flightexpert/Views/MyBooking/BookedFlightDetails.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "124"
-            endingLineNumber = "124"
-            landmarkName = "getAirTicketingDetails()"
+            startingLineNumber = "407"
+            endingLineNumber = "407"
+            landmarkName = "getUIDecorationData(completionHandler:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "20C49D45-8C75-4453-9096-673C15ACFF79"
+            uuid = "919DA095-920F-42BE-8244-7201874AD19C"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "flightexpert/Views/MyBooking/BookedFlightDetails.swift"
+            filePath = "flightexpert/Views/HomeView/HomeView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "133"
-            endingLineNumber = "133"
-            landmarkName = "getAirTicketingDetails()"
+            startingLineNumber = "174"
+            endingLineNumber = "174"
+            landmarkName = "getUIDecorationData()"
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "20C49D45-8C75-4453-9096-673C15ACFF79 - 6608d7415662ded3"
+                  uuid = "919DA095-920F-42BE-8244-7201874AD19C - f9572a2dd925e6fe"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in closure #1 (Swift.Optional&lt;flightexpert.AirTicketingDetailsResponse&gt;) -&gt; () in flightexpert.BookedFlightDetails.getAirTicketingDetails() -&gt; ()"
+                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in closure #1 (Swift.Optional&lt;flightexpert.DecorationData&gt;) -&gt; () in flightexpert.HomeView.getUIDecorationData() -&gt; ()"
                   moduleName = "flightexpert"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/sohan/Personal/RafiurRahman/Workspace/flightexpert/flightexpert/Views/MyBooking/BookedFlightDetails.swift"
+                  urlString = "file:///Users/sohan/Personal/RafiurRahman/Workspace/flightexpert/flightexpert/Views/HomeView/HomeView.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "133"
-                  endingLineNumber = "133"
-                  offsetFromSymbolStart = "188">
+                  startingLineNumber = "174"
+                  endingLineNumber = "174"
+                  offsetFromSymbolStart = "88">
                </Location>
                <Location
-                  uuid = "20C49D45-8C75-4453-9096-673C15ACFF79 - 6608d7415662ded3"
+                  uuid = "919DA095-920F-42BE-8244-7201874AD19C - f9572a2dd925e6fe"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in closure #1 (Swift.Optional&lt;flightexpert.AirTicketingDetailsResponse&gt;) -&gt; () in flightexpert.BookedFlightDetails.getAirTicketingDetails() -&gt; ()"
+                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in closure #1 (Swift.Optional&lt;flightexpert.DecorationData&gt;) -&gt; () in flightexpert.HomeView.getUIDecorationData() -&gt; ()"
                   moduleName = "flightexpert"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/sohan/Personal/RafiurRahman/Workspace/flightexpert/flightexpert/Views/MyBooking/BookedFlightDetails.swift"
+                  urlString = "file:///Users/sohan/Personal/RafiurRahman/Workspace/flightexpert/flightexpert/Views/HomeView/HomeView.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "133"
-                  endingLineNumber = "133"
-                  offsetFromSymbolStart = "308">
+                  startingLineNumber = "174"
+                  endingLineNumber = "174"
+                  offsetFromSymbolStart = "128">
                </Location>
             </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "601F68ED-55E1-480F-B57A-90E0C380E640"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "flightexpert/Views/HomeView/HomeView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "178"
+            endingLineNumber = "178"
+            landmarkName = "getUIDecorationData()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "1697D442-1A4F-4D86-98F4-74DE822FD562"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "flightexpert/Utility/HttpUtility.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "409"
+            endingLineNumber = "409"
+            landmarkName = "getUIDecorationData(completionHandler:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

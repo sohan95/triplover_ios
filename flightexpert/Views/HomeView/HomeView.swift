@@ -161,8 +161,23 @@ struct HomeView: View {
             } else {
                 bottomPadding = 100.0
             }
+            getUIDecorationData()
         })
         .environmentObject(flightSearchModel)
+    }
+    
+    func getUIDecorationData(){
+        HttpUtility.shared.getUIDecorationData(completionHandler: { result in
+            DispatchQueue.main.async { [self] in
+                //self.isLoading = false
+                
+                guard let result = result else {
+                    //self.showErrorAlert.toggle()
+                    return
+                }
+                flightSearchModel.decorationData = result
+            }
+        })
     }
 }
 

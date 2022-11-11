@@ -169,5 +169,4 @@ struct BookingConfirmResponse : Codable {
 	var isSuccess : Bool
 	var message : String?
 	var data : Data?
-
 }

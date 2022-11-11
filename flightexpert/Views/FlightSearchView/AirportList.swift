@@ -7,54 +7,49 @@
 
 import SwiftUI
 
+struct AirportData: Hashable, Codable {
+    var name: String
+    var city: String
+    var country: String
+    var iata: String
+    var direction: String?
+}
+
 struct AirportList: View {
-    
-    @Environment(\.presentationMode) var presentationMode
     typealias Action = (AirportData) -> Void
     var action: Action?
     
+    // Locat vars
+    @Environment(\.presentationMode) var presentationMode
     @State var airportList = [AirportData]()
     @State var selectedAirport: AirportData?
-    
     @State private var searchText = ""
     @State var searching = false
     
     var body: some View {
-        ZStack {
-            Color.clear
-            
+        NavigationView {
             VStack(alignment: .leading, spacing: 0) {
                 SearchBar(searchText: $searchText, searching: $searching)
-                List {
-                    ForEach(airportList.filter({ (airport: AirportData) -> Bool in
-                        return airport.iata.hasPrefix(searchText) ||
-                        airport.name.hasPrefix(searchText) ||
-                        airport.city.hasPrefix(searchText) || searchText == ""
-                    }), id: \.self) { airport in
-                        //Text(airport.iata)
-                        SelectionRow(airport: airport, selectedAirport: $selectedAirport) {airport in
-                            print(airport)
-                            DismissSheet()
+                ScrollView {
+                    LazyVStack(spacing: 2) {
+                        ForEach(airportList.filter({ (airport: AirportData) -> Bool in
+                            return airport.iata.lowercased().hasPrefix(searchText.lowercased()) ||
+                            airport.name.lowercased().hasPrefix(searchText.lowercased()) ||
+                            airport.city.lowercased().hasPrefix(searchText.lowercased()) || searchText == ""
+                        }), id: \.self) { airport in
+                            SelectionRow(airport: airport, selectedAirport: $selectedAirport) {airport in
+                                print(airport)
+                                DismissSheet()
+                            }
                         }
-                        
                     }
-                    
-                    .padding(.vertical, 10)
                 }
-//                .listStyle(GroupedListStyle())
             }
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationTitle("Airport List")
         }
         .onAppear {
             airportList = AirportDataLoader().airportList
-            print("Array-count: \(airportList.count)")
-        }
-    }
-    
-    var searchResults: [AirportData] {
-        if searchText.isEmpty {
-            return airportList
-        } else {
-            return airportList.filter { $0.iata.contains(searchText) }
         }
     }
     
@@ -76,12 +71,13 @@ struct AirportList: View {
     }
 }
 
-//struct AirportList_Previews: PreviewProvider {
-//    static var previews: some View {
-//        AirportList(selectedModel: RandomModel(title: "source", iata: "BAB"))
-//        //        AirportList(selectedAirport: .constant(AirportData(name: "Sylhet", city:"Sylhet", country: "Bangladesh", iata: "SLT")))
-//    }
-//}
+struct AirportList_Previews: PreviewProvider {
+    static var previews: some View {
+        AirportList(){ row in
+            //
+        }
+    }
+}
 
 struct SearchBar: View {
     

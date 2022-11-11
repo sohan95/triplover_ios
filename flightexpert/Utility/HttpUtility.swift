@@ -383,5 +383,33 @@ final class HttpUtility {
             }
         }).resume()
     }
+    
+    func getUIDecorationData(completionHandler:@escaping(_ result: DecorationData?)->Void) {
+
+        var urlRequest = URLRequest(url: URL(string: "https://triplover-app-data.s3.ap-southeast-1.amazonaws.com/ui_decoration.json")!)
+        urlRequest.httpMethod = "get"
+        urlRequest.addValue("application/json", forHTTPHeaderField: "content-type")
+        
+        let sessionConfig = URLSessionConfiguration.default
+        sessionConfig.timeoutIntervalForRequest = 300.0
+        sessionConfig.timeoutIntervalForResource = 300.0
+        let session = URLSession(configuration: sessionConfig)
+
+        session.dataTask(with: urlRequest, completionHandler: { data, response, error -> Void in
+            if (error == nil && data != nil) {
+//                do {
+//                    let json = try JSONSerialization.jsonObject(with: data!) as! Dictionary<String, AnyObject>
+//                    print(json)
+//                } catch {
+//                    print("error")
+//                }
+                
+                let decoder = JSONDecoder()
+                let responseData = try? decoder.decode(DecorationData.self, from: data!)
+                print(responseData!)
+                _ = completionHandler(responseData)
+            }
+        }).resume()
+    }
 }
 
