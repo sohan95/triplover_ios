@@ -128,7 +128,7 @@ class FlightSearchModel: ObservableObject {
                 var tempDir: Direction = direction
                 tempDir.uniqueTransID = airResponse.uniqueTransID
                 tempDir.itemCodeRef = airResponse.itemCodeRef
-                tempDir.totalPrice = airResponse.totalPrice!
+                tempDir.totalPrice = airResponse.totalPrice
                 
                 tempDir.platingCarrierName = airResponse.platingCarrierName
                 
@@ -181,7 +181,7 @@ class FlightSearchModel: ObservableObject {
                 var tempDir: Direction = direction
                 tempDir.uniqueTransID = airResponse.uniqueTransID
                 tempDir.itemCodeRef = airResponse.itemCodeRef
-                tempDir.totalPrice = airResponse.totalPrice!
+                tempDir.totalPrice = airResponse.totalPrice
                 
                 tempDir.bookingComponents = airResponse.bookingComponents
                 

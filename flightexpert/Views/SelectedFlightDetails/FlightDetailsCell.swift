@@ -57,7 +57,7 @@ struct FlightDetailsCell: View {
                     Image(systemName: "airplane.departure")
                         .foregroundColor(.gray)
                     if let baggage = direction.segments?.first?.baggage?.first {
-                        Text("\((baggage.amount)!.removeZerosFromEnd()) - \((baggage.units)!)")
+                        Text("\((baggage.amount).removeZerosFromEnd()) - \((baggage.units)!)")
                     }
                 }
                 

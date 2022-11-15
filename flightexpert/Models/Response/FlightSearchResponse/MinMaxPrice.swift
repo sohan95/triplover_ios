@@ -15,17 +15,4 @@ import Foundation
 struct MinMaxPrice : Codable {
 	var minPrice : Double
 	var maxPrice : Double
-
-//	enum CodingKeys: String, CodingKey {
-//
-//		case minPrice = "minPrice"
-//		case maxPrice = "maxPrice"
-//	}
-//
-//	init(from decoder: Decoder) throws {
-//		let values = try decoder.container(keyedBy: CodingKeys.self)
-//		minPrice = try values.decodeIfPresent(Double.self, forKey: .minPrice)
-//		maxPrice = try values.decodeIfPresent(Double.self, forKey: .maxPrice)
-//	}
-
 }

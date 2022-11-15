@@ -424,10 +424,10 @@ struct FlightSelectionView: View {
     func doSelectedSorting() {
         //["Price Low","Price High","Time ASC","Time DESC"]
         if self.selectedSortCategory == "Price Low" {
-            currentDirectionList = currentDirectionList.sorted(by: { $0.totalPrice! < $1.totalPrice! })
+            currentDirectionList = currentDirectionList.sorted(by: { $0.totalPrice < $1.totalPrice })
         }
         else if self.selectedSortCategory == "Price High" {
-            currentDirectionList = currentDirectionList.sorted(by: { $0.totalPrice! > $1.totalPrice! })
+            currentDirectionList = currentDirectionList.sorted(by: { $0.totalPrice > $1.totalPrice })
         } else if self.selectedSortCategory == "Time ASC" {
             //getDateFromStringAndFormate
             currentDirectionList = currentDirectionList.sorted(by: { getDateFromString(dateStr:$0.departure!).compare(getDateFromString(dateStr:$1.departure!)) == .orderedAscending })

@@ -28,25 +28,31 @@ struct AirportList: View {
     
     var body: some View {
         NavigationView {
-            VStack(alignment: .leading, spacing: 0) {
-                SearchBar(searchText: $searchText, searching: $searching)
-                ScrollView {
-                    LazyVStack(spacing: 2) {
-                        ForEach(airportList.filter({ (airport: AirportData) -> Bool in
-                            return airport.iata.lowercased().hasPrefix(searchText.lowercased()) ||
-                            airport.name.lowercased().hasPrefix(searchText.lowercased()) ||
-                            airport.city.lowercased().hasPrefix(searchText.lowercased()) || searchText == ""
-                        }), id: \.self) { airport in
-                            SelectionRow(airport: airport, selectedAirport: $selectedAirport) {airport in
-                                print(airport)
-                                DismissSheet()
+            ZStack{
+                BackgroundImage
+                .resizable()
+                .scaledToFill()
+//                .edgesIgnoringSafeArea(.all)
+                VStack(alignment: .leading, spacing: 5) {
+                    SearchBar(searchText: $searchText, searching: $searching)
+                    ScrollView {
+                        LazyVStack(spacing: 5) {
+                            ForEach(airportList.filter({ (airport: AirportData) -> Bool in
+                                return airport.iata.lowercased().hasPrefix(searchText.lowercased()) ||
+                                airport.name.lowercased().hasPrefix(searchText.lowercased()) ||
+                                airport.city.lowercased().hasPrefix(searchText.lowercased()) || searchText == ""
+                            }), id: \.self) { airport in
+                                SelectionRow(airport: airport, selectedAirport: $selectedAirport) {airport in
+                                    print(airport)
+                                    DismissSheet()
+                                }
                             }
                         }
                     }
+                    .navigationBarTitleDisplayMode(.inline)
+//                    .navigationTitle("Airport List")
                 }
             }
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationTitle("Airport List")
         }
         .onAppear {
             airportList = AirportDataLoader().airportList
@@ -107,9 +113,9 @@ struct SearchBar: View {
                 .foregroundColor(.gray)
                 .padding(.leading, 13)
             }
-                .frame(height: 40)
-                .cornerRadius(13)
-                .padding()
+            .frame(height: 40)
+            .cornerRadius(13)
+            .padding()
             if searching {
                 Button("Cancel") {
                     searchText = ""
