@@ -56,13 +56,14 @@ struct SecureInputView: View {
                 isSecured.toggle()
             }) {
                 Image(systemName: self.isSecured ? "eye.slash" : "eye")
+                    .font(.system(size: 15))
                     .accentColor(.black)
             }
         }
         .font(.system(size: 11, weight: .regular, design: .rounded))
         .disableAutocorrection(true)
         .autocapitalization(.none)
-        .padding(8)
+        .padding(10)
         .background(Color(.secondarySystemBackground))
         .cornerRadius(4)
     }
@@ -79,8 +80,9 @@ struct SignupTextField: View {
         .font(.system(size: 11, weight: .regular, design: .rounded))
         .disableAutocorrection(true)
         .autocapitalization(.none)
-        .padding(8)
+        .padding(10)
         .background(Color(.secondarySystemBackground))
+//        .background(Color.orange)
         .cornerRadius(4)
     }
 }

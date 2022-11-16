@@ -9,8 +9,9 @@ import Foundation
 
 final class HttpUtility {
     static let shared = HttpUtility()
-    static let baseUrl = "http://52.221.202.198:83/api"
-    static let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImJzcnNvZnRiZEBnbWFpbC5jb20iLCJyb2xlIjoiQjJDIiwibmJmIjoxNjU2ODQzODc4LCJleHAiOjE2NTc0NDg2NzgsImlhdCI6MTY1Njg0Mzg3OH0.bqPW0mNAK7vRGpvBdUImdEmDqH2Z2MUL70EhrrrtjZs"
+    //static let baseUrl = "http://52.221.202.198:83/api"
+    static let baseUrl = "http://54.169.108.46:81/api"
+//    static let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImJzcnNvZnRiZEBnbWFpbC5jb20iLCJyb2xlIjoiQjJDIiwibmJmIjoxNjU2ODQzODc4LCJleHAiOjE2NTc0NDg2NzgsImlhdCI6MTY1Njg0Mzg3OH0.bqPW0mNAK7vRGpvBdUImdEmDqH2Z2MUL70EhrrrtjZs"
     private init(){}
     
     func postData<T:Decodable>(request: URLRequest, resultType:T.Type, completionHandler:@escaping(_ reuslt: T?)-> Void) {
@@ -220,9 +221,9 @@ final class HttpUtility {
         encoder.dateEncodingStrategy = .formatted(formatter)
         urlRequest.httpBody = try? encoder.encode(requestBody)
         
-//        let encoder3 = JSONEncoder()
-//        let myEventsJSONData = try! encoder3.encode(requestBody)
-//        print(String(data: myEventsJSONData, encoding: .utf8)!)
+        let encoder3 = JSONEncoder()
+        let myEventsJSONData = try! encoder3.encode(requestBody)
+        print(String(data: myEventsJSONData, encoding: .utf8)!)
         
         let sessionConfig = URLSessionConfiguration.default
         sessionConfig.timeoutIntervalForRequest = 300.0
@@ -378,6 +379,34 @@ final class HttpUtility {
                 let responseData = try? decoder.decode(AirTicketingDetailsResponse.self, from: data!)
                 // print(responseData!)
 //                let responseData = try? newJSONDecoder().decode(SearchedFlightResponse.self, from: data!)
+                _ = completionHandler(responseData)
+            }
+        }).resume()
+    }
+    
+    func getUIDecorationData(completionHandler:@escaping(_ result: DecorationData?)->Void) {
+
+        var urlRequest = URLRequest(url: URL(string: "https://triplover-app-data.s3.ap-southeast-1.amazonaws.com/ui_decoration.json")!)
+        urlRequest.httpMethod = "get"
+        urlRequest.addValue("application/json", forHTTPHeaderField: "content-type")
+        
+        let sessionConfig = URLSessionConfiguration.default
+        sessionConfig.timeoutIntervalForRequest = 300.0
+        sessionConfig.timeoutIntervalForResource = 300.0
+        let session = URLSession(configuration: sessionConfig)
+
+        session.dataTask(with: urlRequest, completionHandler: { data, response, error -> Void in
+            if (error == nil && data != nil) {
+//                do {
+//                    let json = try JSONSerialization.jsonObject(with: data!) as! Dictionary<String, AnyObject>
+//                    print(json)
+//                } catch {
+//                    print("error")
+//                }
+                
+                let decoder = JSONDecoder()
+                let responseData = try? decoder.decode(DecorationData.self, from: data!)
+                print(responseData!)
                 _ = completionHandler(responseData)
             }
         }).resume()

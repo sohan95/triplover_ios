@@ -64,7 +64,7 @@ func getTimeString(dateStr: String) -> String {
     dateFormatter.dateFormat = "HH:mm"
     dateFormatter.locale = tempLocale // reset the locale
     let dateString = dateFormatter.string(from: date)
-    print("EXACT_DATE : \(dateString)")
+//    print("EXACT_DATE : \(dateString)")
     return dateString
 }
 
@@ -79,7 +79,7 @@ func getTimeStringWithTemplate(dateStr: String, template: String) -> String {
     dateFormatter.dateFormat = "HH:mm"
     dateFormatter.locale = tempLocale // reset the locale
     let dateString = dateFormatter.string(from: date)
-    print("EXACT_DATE : \(dateString)")
+//    print("EXACT_DATE : \(dateString)")
     return dateString
 }
 
@@ -97,7 +97,7 @@ func getDateStringWithTemplate(dateStr: String, template: String) -> String {
     dateFormatter.dateFormat = "MMM d, yyyy"
     dateFormatter.locale = tempLocale // reset the locale
     let dateString = dateFormatter.string(from: date)
-    print("EXACT_DATE : \(dateString)")
+//    print("EXACT_DATE : \(dateString)")
     return dateString
 }
 
@@ -112,7 +112,19 @@ func getDateString(dateStr: String) -> String {
     dateFormatter.dateFormat = "MMM d, yyyy"
     dateFormatter.locale = tempLocale // reset the locale
     let dateString = dateFormatter.string(from: date)
-    print("EXACT_DATE : \(dateString)")
+//    print("EXACT_DATE : \(dateString)")
+    return dateString
+}
+
+func getDateString(date: Date) -> String {
+    // Create Date Formatter
+    let dateFormatter = DateFormatter()
+    // Set Date Format
+    dateFormatter.dateFormat = "YYYY-MM-dd"
+    //2022-06-29
+    // Convert Date to String
+    let dateString = dateFormatter.string(from: date)
+    print(dateString)
     return dateString
 }
 
@@ -131,4 +143,29 @@ func getDateFromString(dateStr:String) -> Date {
     let date = dateFormatter.date(from: dateStr)!
     return date
 }
+
+func getDayNameOfWeek(todayDate:Date) -> String {
+    let myCalendar = Calendar(identifier: .gregorian)
+    let weekDay = myCalendar.component(.weekday, from: todayDate)
+    let weekDayName = EnumDays.init(rawValue: weekDay)
+    //print("Day = \(String(describing: weekDay1))")
+    guard let unwrapped = weekDayName else {
+        return ""
+    }
+    return String(describing: unwrapped)
+}
+
+// Enum to output days
+enum EnumDays : Int
+{
+    case Sunday = 1
+    case Monday
+    case Tuesday
+    case Wednesday
+    case Thursday
+    case Friday
+    case Saturday
+    
+}
+
 

@@ -19,9 +19,9 @@ struct RadioButtonView: View {
     init(
         id: String,
         label:String,
-        size: CGFloat = 12,
+        size: CGFloat = 13,
         color: Color = Color.white,
-        textSize: CGFloat = 10,
+        textSize: CGFloat = 12,
         isMarked: Bool = false,
         callback: @escaping (String)->()
         ) {
@@ -44,6 +44,7 @@ struct RadioButtonView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: self.size, height: self.size)
+                    .minimumScaleFactor(0.8)
                     .foregroundColor(self.isMarked ? Color("title_third") : self.color)
                 Text(label)
                     .font(Font.system(size: textSize, weight: .bold, design: .rounded))
@@ -52,7 +53,7 @@ struct RadioButtonView: View {
                     .foregroundColor(self.color)
             }
             .frame(minWidth:0, maxWidth:.infinity)
-            .padding(.vertical, 7)
+            .padding(.vertical, 10)
             
         }
         .background(

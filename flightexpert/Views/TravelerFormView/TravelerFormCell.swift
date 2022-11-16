@@ -182,7 +182,7 @@ struct TravelerFormCell: View {
                                     Text("\(userData.dateOfBirth.formatted(date: .long, time: .omitted))")
                                         .font(.system(size: 13, weight: .semibold, design: .rounded))
                                         .foregroundColor(.black)
-                                    DatePicker("", selection: $userData.dateOfBirth, in: Date()..., displayedComponents: .date)
+                                    DatePicker("", selection: $userData.dateOfBirth, in: ...Date(), displayedComponents: .date)
                                         .labelsHidden()
                                         .background(.white)
                                         .opacity(0.05)

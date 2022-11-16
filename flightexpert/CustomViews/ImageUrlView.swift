@@ -21,7 +21,6 @@ struct ImageUrlView: View {
         Image(uiImage: (imageUrlModel.image ?? ImageUrlView.defaultImage)!)
             .resizable()
             .scaledToFit()
-            .background(.red)
             .frame(width: sizeVal, height: sizeVal)
             
     }

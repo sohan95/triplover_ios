@@ -10,12 +10,13 @@ import SwiftUI
 struct SigninView: View {
     var from: String = String()
     @State var isLoggedin: Bool = false
-    @State var userEmail: String = "apptestuser@triplover.com" //String()
-    @State var userPassword: String = "Asdf123@" // String()
+    @State var userEmail: String = "akash71khan@gmail.com" //String()
+    @State var userPassword: String = "123456" // String()
     @Environment(\.presentationMode) var presentationMode
     
-    @State var showErrorAlert = false
-    @State var errorMsg = ""
+    @State var isShowAlert = false
+    @State var alertMsg = ""
+    @State var alertTitle = "Failed!"
     private let loginValidation = LoginValidation()
     
     let defaults = UserDefaults.standard
@@ -32,12 +33,7 @@ struct SigninView: View {
     }
     
     var body: some View {
-        ZStack {
-            BackgroundImage
-                .resizable()
-                .scaledToFill()
-                .edgesIgnoringSafeArea(.all)
-            
+        ScrollView {
             VStack(spacing: 10) {
                 VStack(spacing: 30) {
                     VStack(spacing: 30) {
@@ -93,12 +89,6 @@ struct SigninView: View {
                                 .cornerRadius(7.5)
                                 .font(.system(size: 13, weight: .bold, design: .rounded))
                         })
-                        
-    //                    .alert(isPresented: $isLoggedin, content: {
-    //                        Alert(title: Text("Login Success"), message: Text("Right now you can book any fligh!"), dismissButton: .cancel(Text("Ok")))
-    //                    })
-//                        Text("Forgot Password")
-//                            .padding()
                         HStack {
                             Text("Don't have an account?")
                                 .font(.system(size: 10, weight: .regular, design: .rounded))
@@ -111,18 +101,16 @@ struct SigninView: View {
                             }
                         }
                         .foregroundColor(.black)
-    //                    .padding([.top,.bottom])
                     }
                     .padding(30)
                 }
                 .frame(minHeight: 0, maxHeight: .infinity)
                 .background(
                     RoundedRectangle(cornerRadius: 10)
-                        .fill(Color.gray.opacity(0.3)
-                    )
-                    .padding([.leading, .trailing], 10)
-                    .padding(.top, 100)
+                        .fill(Color.gray.opacity(0.3))
+                        .padding([.leading, .trailing], 10)
                 )
+                .padding(.top, 80)
                 
                 Image("app_name_header")
                     .resizable()
@@ -132,14 +120,17 @@ struct SigninView: View {
                     .padding(.top, 20)
             }
         }
+        .background(
+            BackgroundImage
+                .resizable()
+                .scaledToFill()
+                .edgesIgnoringSafeArea(.all)
+        )
         .navigationTitle("Login/Register")
         .navigationBarTitleDisplayMode(.inline)
-//        .navigationBarBackButtonHidden(true)
-//        .navigationBarItems(leading: btnBack)
-        .alert(isPresented: $showErrorAlert) {
-            Alert(title: Text("Failed!"), message: Text(errorMsg), dismissButton: .default(Text("Close")))
-        }
-        
+        .alert(isPresented: $isShowAlert, content: {
+            Alert(title: Text(alertTitle), message: Text(alertMsg), dismissButton: .cancel(Text("OK")))
+        })
     }
 
     
@@ -147,8 +138,8 @@ struct SigninView: View {
         
         let result = loginValidation.validateUserInputs(userEmail: userEmail, userPassword: userPassword)
         if(result.success == false){
-            self.errorMsg = result.errorMessage ?? "error occured"
-            self.showErrorAlert.toggle()
+            self.alertMsg = result.errorMessage ?? "error occured"
+            self.isShowAlert.toggle()
             return
         }
         
@@ -159,14 +150,17 @@ struct SigninView: View {
             DispatchQueue.main.async {
                 //Save token in localStorage
                 guard result != nil else {
-                    self.errorMsg = "Sorry, Login failed. Try again."
-                    self.showErrorAlert.toggle()
+                    self.alertMsg = "Sorry, Login failed. Try again."
+                    self.isShowAlert.toggle()
                     return
                 }
                 defaults.set(userEmail, forKey: "userEmail")
                 defaults.set(result?.token, forKey:"token")
                 defaults.set(true, forKey: "isSignin")
-                isLoggedin = true
+                
+                self.alertTitle = "Login Success"
+                self.alertMsg = "Right now you can book any fligh!"
+                self.isShowAlert.toggle()
                 presentationMode.wrappedValue.dismiss()
             }
         }

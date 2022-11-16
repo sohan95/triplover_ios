@@ -45,7 +45,7 @@ struct RePriceResponse : Codable {
                 var serviceClass : String?
                 var plane : [String]?
                 var duration : [String]?
-                var techStops : [String]?
+                var techStops : [Int]?
                 var bookingClass : String?
                 var bookingCount : String?
                 var baggage : [Baggage]?
@@ -101,6 +101,7 @@ struct RePriceResponse : Codable {
         }
         var isPriceChanged : Bool
         var priceCodeRef : String?
+        //currency
         var uniqueTransID : String?
         var itemCodeRef : String?
         var totalPrice : Double

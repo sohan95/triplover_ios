@@ -1,11 +1,11 @@
 {
   "images" : [
     {
-      "filename" : "bullet-icon.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "bullet-icon.png",
       "idiom" : "universal",
       "scale" : "2x"
     },

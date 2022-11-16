@@ -19,7 +19,7 @@ enum RouteType: String {
 
 struct RadioRouteGroupBotton: View {
     
-    @Binding var selectedId: String
+    var selectedId: String
     
     let callback: (String) -> ()
     
@@ -61,7 +61,7 @@ struct RadioRouteGroupBotton: View {
     
     func radioGroupCallback(id: String) {
         if selectedId != id {
-            selectedId = id
+            // selectedId = id
             callback(id)
         }
     }
@@ -69,7 +69,7 @@ struct RadioRouteGroupBotton: View {
 
 struct RadioRouteGroupBotton_Previews: PreviewProvider {
     static var previews: some View {
-        RadioRouteGroupBotton(selectedId: .constant("One-Way")) { abc in
+        RadioRouteGroupBotton(selectedId: "One-Way") { abc in
             //
         }
     }

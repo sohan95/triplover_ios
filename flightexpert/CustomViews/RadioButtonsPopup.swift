@@ -48,7 +48,9 @@ struct RadioButtonsPopup : View {
                     HStack{
                         Spacer()
                          Button(action: {
-                            self.show.toggle()
+                             withAnimation {
+                                 self.show.toggle()
+                             }
                          }) {
                              Text("CLOSE")
                                  .padding(.vertical, 10)

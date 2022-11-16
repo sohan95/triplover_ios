@@ -30,12 +30,7 @@ struct SignupView: View {
     }
     
     var body: some View {
-        ZStack {
-            BackgroundImage
-                .resizable()
-                .scaledToFill()
-                .edgesIgnoringSafeArea(.all)
-            
+        ScrollView {
             VStack(spacing: 10) {
                 VStack {
                     VStack(spacing:10) {
@@ -94,12 +89,20 @@ struct SignupView: View {
                                 Text("By creating this account you are agree to our")
                                     .font(.system(size: 10, weight: .regular, design: .rounded))
                                 
-                                NavigationLink {
-                                    //SigninView()
-                                } label: {
-                                    Text("Terms & Conditions")
+                                if #available(iOS 15, *) {
+                                    Text("[Terms & Conditions](https://www.triplover.com/Terms.aspx)")
                                         .underline()
                                         .font(.system(size: 11, weight: .semibold, design: .rounded))
+                                } else {
+                                    Button(action: {
+                                        if let url = URL(string: "https://www.triplover.com/Terms.aspx") {
+                                           UIApplication.shared.open(url)
+                                        }
+                                    }) {
+                                        Text("Terms & Conditions")
+                                            .underline()
+                                            .font(.system(size: 11, weight: .semibold, design: .rounded))
+                                    }
                                 }
                                 
                             }
@@ -142,11 +145,11 @@ struct SignupView: View {
                 .frame(minHeight: 0, maxHeight: .infinity)
                 .background(
                     RoundedRectangle(cornerRadius: 10)
-                        .fill(Color.gray.opacity(0.3)
-                    )
+                    .fill(Color.gray.opacity(0.3))
                     .padding([.leading, .trailing], 10)
-                    .padding(.top, 80)
+                    .padding([.top, .bottom], -20)
                 )
+                .padding(.top, 80)
                 
                 Image("app_name_header")
                     .resizable()
@@ -156,6 +159,12 @@ struct SignupView: View {
                     .padding(.top, 20)
             }
         }
+        .background(
+            BackgroundImage
+                .resizable()
+                .scaledToFill()
+                .edgesIgnoringSafeArea(.all)
+        )
         .navigationTitle("Login/Register")
         .navigationBarTitleDisplayMode(.inline)
 //        .navigationBarBackButtonHidden(true)

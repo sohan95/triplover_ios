@@ -43,17 +43,18 @@ struct FlightSelectionView: View {
     
     //For Filter
     @State var show = false
-    @State var selectedSortCategory = ""
+    @State var selectedSortCategory = "Price Low"
 
     @State var isFilterShown = false
-    @State var selectedStop: String = "";
-    @State var selectedAirline: String = "";
+    @State var selectedStop: String = ""
+    @State var selectedAirline: String = ""
     
     @State var filterTypeIndex: Int = 2
     @State var selectedFilterItem: [String] = []
-    
-    @State var selectedMinMaxPrice: MinMaxPrice = MinMaxPrice(minPrice: 0.0, maxPrice: 0.0)
-    
+    @State var selectedMinPrice: Double = 0.0
+    @State var selectedMaxPrice: Double = 0.0
+    //@State var selectedMinMaxPrice: MinMaxPrice = MinMaxPrice(minPrice: 0.0, maxPrice: 0.0)
+    @State var bottomPadding: CGFloat = 50.0
     @Environment(\.presentationMode) var presentationMode
     var btnBack : some View { Button(action: {
             if isFilterShown == false  && show == false {
@@ -113,7 +114,7 @@ struct FlightSelectionView: View {
                 ScrollView {
                     VStack(spacing: 10) {
                         ForEach(currentDirectionList, id: \.self) { direction in
-                            FlightCell(direction: direction,
+                            FlightCell(direction: direction, currency: flightSearchModel.currency!,
                                     isSelectBtnTapped: $flightSearchModel.isSelectBtnTapped, selectedDirection:currentDirection) { directionResult in
                                 
                                 if flightSearchModel.isSelectBtnTapped {
@@ -156,9 +157,6 @@ struct FlightSelectionView: View {
                 }
                 .navigationBarBackButtonHidden(true)
                 .navigationBarItems(leading: btnBack)
-                .onAppear {
-                    updateOnAppear()
-                }
                 
                 //Bottom: Button Option View
                 VStack{
@@ -190,7 +188,9 @@ struct FlightSelectionView: View {
                         HStack{
                             Button {
                                 //sheetMode = .semi
-                                self.isFilterShown.toggle()
+                                withAnimation {
+                                    self.isFilterShown.toggle()
+                                }
                             } label: {
                                 Label("Filter", systemImage: "line.3.horizontal.decrease")
                                     .frame(minWidth:0, maxWidth: .infinity)
@@ -203,7 +203,9 @@ struct FlightSelectionView: View {
                             
                             
                             Button {
-                                show.toggle()
+                                withAnimation {
+                                    show.toggle()
+                                }
                             } label: {
                                 Label("Sort By", systemImage: "line.3.horizontal.decrease")
                                     .frame(minWidth:0, maxWidth: .infinity)
@@ -219,12 +221,17 @@ struct FlightSelectionView: View {
                     .padding(.horizontal,10)
                     Spacer()
                 }
-                .frame(minWidth:0, maxWidth: .infinity, minHeight:0, maxHeight: 180)
+                .frame(minWidth:0, maxWidth: .infinity, minHeight:0, maxHeight: bottomPadding+90)
                 
             }
-            .offset(y: 50)
+            .padding(.top, bottomPadding)
+            .onAppear(perform: {
+                updateOnAppear()
+            })
             .onTapGesture {
-                self.isFilterShown.toggle()
+                withAnimation {
+                    self.isFilterShown = false;
+                }
             }
             
             // Sort By option popup
@@ -235,14 +242,22 @@ struct FlightSelectionView: View {
                 }
                 .offset(y: self.show ? (UIApplication.shared.currentUIWindow()?.safeAreaInsets.bottom)! + 15 : UIScreen.main.bounds.height)
                 
-            }.background(Color(UIColor.label.withAlphaComponent(self.show ? 0.3 : 0)).edgesIgnoringSafeArea(.all))
+            }
+            .background(Color(UIColor.label.withAlphaComponent(self.show ? 0.3 : 0)).edgesIgnoringSafeArea(.all))
+            
+            .transition(.asymmetric(insertion: .scale, removal: .opacity))
             
                
             // Filter Option View
-            if isFilterShown {
-                FilterBottomPopup(selectedStop: $selectedStop, selectedAirline: $selectedAirline, selectedMinMaxPrice: $selectedMinMaxPrice, minMaxPrice: selectedMinMaxPrice,slider: CustomSlider(start: selectedMinMaxPrice.maxPrice, end: selectedMinMaxPrice.minPrice)) { isApply in
-                    self.isFilterShown.toggle()
-                    self.updateOnAppear()
+            if (isFilterShown) {
+                FilterBottomPopup(filterTypeIndex:$filterTypeIndex, selectedStop: $selectedStop, selectedAirline: $selectedAirline, selectedMinPrice: $selectedMinPrice, selectedMaxPrice: $selectedMaxPrice, slider: CustomSlider(start: flightSearchModel.minMaxPrice.minPrice, end: flightSearchModel.minMaxPrice.maxPrice, currentMin: selectedMinPrice, currentMax: selectedMaxPrice)) { isApply in
+                    withAnimation {
+                        self.isFilterShown.toggle()
+                    }
+                    print("selectedMinPrice =\(selectedMinPrice)")
+                    print("selectedMaxPrice =\(selectedMaxPrice)")
+                    
+                    self.resetDataForView()
                     if isApply {
                         doFilterAction()
                     }
@@ -253,11 +268,73 @@ struct FlightSelectionView: View {
     }
     
     func updateOnAppear() {
+
+        //check Device Notch
+        if UIDevice.current.hasNotch {
+            //... consider notch
+            bottomPadding = 50.0
+        } else {
+            bottomPadding = 100.0
+        }
+        
         if isFilterShown {
             return
         }
+        
+        if flightSearchModel.isOneWay {
+            flightSearchModel.routeIndex = 0
+            flightSearchModel.getForwardDirection()
+            self.currentDirectionList = flightSearchModel.selectedDirectionList[0]
+            self.currentDirection = flightSearchModel.getSelectedFlight(index: 0)
+            
+        } else if flightSearchModel.isRoundTrip {
+            if flightSearchModel.routeIndex == 0 {
+                flightSearchModel.getForwardDirection()
+                self.currentDirectionList = flightSearchModel.selectedDirectionList[0]
+                self.currentDirection = flightSearchModel.getSelectedFlight(index: 0)
+                
+            } else if flightSearchModel.routeIndex == 1 {
+                flightSearchModel.getFollowingDirection()
+                self.currentDirectionList = flightSearchModel.selectedDirectionList[1]
+                self.currentDirection = flightSearchModel.getSelectedFlight(index: 1)
+            }
+            
+        } else if flightSearchModel.isMultiCity {
+            
+            if flightSearchModel.routeIndex == 0 {
+                flightSearchModel.getForwardDirection()
+                self.currentDirectionList = flightSearchModel.selectedDirectionList[0]
+                self.currentDirection = flightSearchModel.getSelectedFlight(index: 0)
+                
+            } else if flightSearchModel.routeIndex == 1 {
+                flightSearchModel.getFollowingDirection()
+                self.currentDirectionList = flightSearchModel.selectedDirectionList[1]
+                self.currentDirection = flightSearchModel.getSelectedFlight(index: 1)
+                
+            } else if flightSearchModel.routeIndex == 2 {
+                flightSearchModel.getFollowingDirection()
+                self.currentDirectionList = flightSearchModel.selectedDirectionList[2]
+                self.currentDirection = flightSearchModel.getSelectedFlight(index: 2)
+                
+            } else if flightSearchModel.routeIndex == 3 {
+                flightSearchModel.getFollowingDirection()
+                self.currentDirectionList = flightSearchModel.selectedDirectionList[3]
+                self.currentDirection = flightSearchModel.getSelectedFlight(index: 3)
+            }
+        }
+        
+        
+        self.selectedMinPrice = flightSearchModel.minMaxPrice.minPrice
+        self.selectedMaxPrice = flightSearchModel.minMaxPrice.maxPrice
+        print("selectedMinPrice =\(selectedMinPrice)")
+        print("selectedMaxPrice =\(selectedMaxPrice)")
+    }
+    
+    func resetDataForView() {
 
-        self.selectedMinMaxPrice = flightSearchModel.minMaxPrice
+        if isFilterShown {
+            return
+        }
         
         if flightSearchModel.isOneWay {
             flightSearchModel.routeIndex = 0
@@ -300,14 +377,14 @@ struct FlightSelectionView: View {
             }
         }
     }
+    
     func gotoDetailsView(direction: Direction) {
         if isFilterShown {
             return
         }
-        if currentDirection != nil {
-            flightSearchModel.detailsDir = direction
-            selection = "SelectedFlightDetails"
-        }
+        
+        flightSearchModel.detailsDir = direction
+        selection = "SelectedFlightDetails"
         
     }
     
@@ -347,17 +424,19 @@ struct FlightSelectionView: View {
     func doSelectedSorting() {
         //["Price Low","Price High","Time ASC","Time DESC"]
         if self.selectedSortCategory == "Price Low" {
-            currentDirectionList = currentDirectionList.sorted(by: { $0.totalPrice! < $1.totalPrice! })
+            currentDirectionList = currentDirectionList.sorted(by: { $0.totalPrice < $1.totalPrice })
         }
         else if self.selectedSortCategory == "Price High" {
-            currentDirectionList = currentDirectionList.sorted(by: { $0.totalPrice! > $1.totalPrice! })
+            currentDirectionList = currentDirectionList.sorted(by: { $0.totalPrice > $1.totalPrice })
         } else if self.selectedSortCategory == "Time ASC" {
             //getDateFromStringAndFormate
             currentDirectionList = currentDirectionList.sorted(by: { getDateFromString(dateStr:$0.departure!).compare(getDateFromString(dateStr:$1.departure!)) == .orderedAscending })
         } else if self.selectedSortCategory == "Time DESC" {
             currentDirectionList = currentDirectionList.sorted(by: { getDateFromString(dateStr:$0.departure!).compare(getDateFromString(dateStr:$1.departure!)) == .orderedDescending })
         }
-        self.show.toggle()
+        withAnimation {
+            self.show.toggle()
+        }
     }
     
     func getStopFilter() -> Int {
@@ -375,16 +454,14 @@ struct FlightSelectionView: View {
     func doFilterAction() {
         print("Do filter Action")
         
-        //Filter-by-Airline
+        // Filter-by-Airline
         var filteredArray: [Direction] = []
         if selectedAirline.count > 0 {
             filteredArray = currentDirectionList.filter { $0.platingCarrierName!.localizedCaseInsensitiveContains(selectedAirline) }
-
-            //currentDirectionList = filteredArray
         }
         
     
-        //Filter-by-Stops
+        // Filter-by-Stops
         if selectedStop.count > 0 {
             let stopFilter: Int = getStopFilter()
             if stopFilter < 2 {
@@ -394,17 +471,15 @@ struct FlightSelectionView: View {
             }
         }
         
-        //Filter-by-TotalPrice-Range
-//        if selectedMinMaxPrice.maxPrice != flightSearchModel.minMaxPrice.maxPrice &&
-//            selectedMinMaxPrice.minPrice != flightSearchModel.minMaxPrice.minPrice {
-//            filteredArray = filteredArray.filter { ($0.totalPrice! >= selectedMinMaxPrice.minPrice &&
-//                                                    $0.totalPrice! <= selectedMinMaxPrice.maxPrice)
-//            }
-//        }
+        // Filter-by-TotalPrice-Range
+        if (filteredArray.isEmpty) {
+            filteredArray = currentDirectionList;
+        }
+        print("basePrice=\(selectedMinPrice)");
+        print("basePrice=\(selectedMaxPrice)");
         
+        filteredArray = filteredArray.filter({ ($0.bookingComponents?[0].basePrice)! >= selectedMinPrice && ($0.bookingComponents?[0].basePrice)! <= selectedMaxPrice })
         currentDirectionList = filteredArray
-        
-        
     }
     
 }

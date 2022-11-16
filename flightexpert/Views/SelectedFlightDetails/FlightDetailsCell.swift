@@ -57,12 +57,12 @@ struct FlightDetailsCell: View {
                     Image(systemName: "airplane.departure")
                         .foregroundColor(.gray)
                     if let baggage = direction.segments?.first?.baggage?.first {
-                        Text("\((baggage.amount)!.removeZerosFromEnd()) - \((baggage.units)!)")
+                        Text("\((baggage.amount).removeZerosFromEnd()) - \((baggage.units)!)")
                     }
                 }
                 
             }
-            .font(.system(size: 10, weight: .regular, design: .rounded))
+            .font(.system(size: 13, weight: .regular, design: .rounded))
             .foregroundColor(.black)
             .background(.white)
             .padding(20)

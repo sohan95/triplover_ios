@@ -26,8 +26,9 @@ struct TravelerFormView: View {
     @State var showAlert: Bool = false
     @State var alertMsg: String = " "
     
-    
+    @State var bottomPadding: CGFloat = 50.0
     @State var bookingConfirmResponse:BookingConfirmResponse?
+    @State var selectedBookedFlight: AirTicketingResponse? = nil
 
     @Environment(\.presentationMode) var presentationMode
     var btnBack : some View { Button(action: {
@@ -42,15 +43,11 @@ struct TravelerFormView: View {
     }
     
     var body: some View {
-        ZStack {
-            BackgroundImage
-                .resizable()
-                .scaledToFill()
-                .ignoresSafeArea(.all, edges: .all)
-            
 //            NavigationLink(destination:VCRepresented().environmentObject(flightSearchModel), tag: "VCRepresented", selection: $showSSLCz) { EmptyView() }
-            NavigationLink(destination:MyBooking().environmentObject(flightSearchModel), tag: "MyBooking", selection: $showSSLCz) { EmptyView() }
-            GeometryReader { reader in
+//            NavigationLink(destination:MyBooking().environmentObject(flightSearchModel), tag: "MyBooking", selection: $showSSLCz) { EmptyView() }
+            NavigationLink(destination:BookedFlightDetails(selectedBookedFlight: selectedBookedFlight, source: "FlightBooked"), tag: "BookedFlightDetails", selection: $showSSLCz) { EmptyView() }
+        GeometryReader { reader in
+            ScrollView {
                 VStack(spacing: 5) {
                     Spacer()
                     ScrollView {
@@ -58,24 +55,23 @@ struct TravelerFormView: View {
                             TravelerFormCell(userData: self.$userDataArray[i], isDomestic: flightSearchModel.isDomestic)
                         }
                     }
-//                    .offset(y: 64)
-//                    .clipped()
-                    
                     VStack(alignment: .center, spacing: 10) {
-                        HStack(alignment: .center, spacing: 0) {
-                            Spacer()
-                            Toggle("I agree to the", isOn: $isAgree)
+                        VStack {
+                            Toggle(isOn: $isAgree) {
+                                Text("I agree to the ")
+                                + Text("[Terms and Condition](https://triplover.com/Terms.aspx)").underline(true, color: Color.blue)
+                                
+
+                            }
+                            //Toggle("I agree to the [Terms and Condition](https://triplover.com/Terms.aspx)", isOn: $isAgree)
                                 .toggleStyle(CheckboxStyle())
                                 .foregroundColor(.black)
-                                .font(.system(size: 11, weight:.medium, design: .rounded))
+                                .font(.system(size: 15, weight:.medium, design: .rounded))
                                 .padding(.leading,10)
-                                .padding(.trailing, 5)
-                            Link("Terms and Condition", destination: URL(string: "https://triplover.com/Terms.aspx")!)
-                                .font(.system(size: 11, weight:.bold, design: .rounded))
-                                .foregroundColor(.black)
-                            
-                            Spacer()
+//                                    .padding(.trailing, 5)
                         }
+                        .frame(height: 35, alignment: .leading)
+//                        .background(.yellow)
                         
                         Button {
                             //Goto Pricing page
@@ -89,21 +85,28 @@ struct TravelerFormView: View {
                                 .fill(blueGradient))
                         }
                     }
-                    .frame(height: 70)
-                    .padding(.horizontal,5)
-                    .padding(.bottom, 50)
+                    .frame(height: 80)
+                    .padding(.horizontal,10)
+//                    .padding(.bottom, 20)
                 }
-                .offset(y: 50)
-                .frame(height: reader.size.height - 50)
+                .frame(height: reader.size.height-bottomPadding)
                 .clipped()
             }
         }
-        .navigationTitle("Passenger Details")
-        .navigationBarTitleDisplayMode(.inline)
-//        .navigationBarBackButtonHidden(true)
-//        .navigationBarItems(leading: btnBack)
-        
+        .background(
+            BackgroundImage
+                .resizable()
+                .scaledToFill()
+                .edgesIgnoringSafeArea(.all)
+        )
         .onAppear {
+            //check Device Notch
+            if UIDevice.current.hasNotch {
+                //... consider notch
+                //bottomPadding = 40.0
+            } else {
+                bottomPadding = 10.0
+            }
             print("sohan=\(data)")
 //            for i in 1...self.totalUserCount {
 //                print("\(i)")
@@ -151,6 +154,11 @@ struct TravelerFormView: View {
                 }
             }
         }
+        .navigationTitle("Passenger Details")
+        .navigationBarTitleDisplayMode(.inline)
+//        .navigationBarBackButtonHidden(true)
+//        .navigationBarItems(leading: btnBack)
+
         .sheet(isPresented: $isShowSSLView) {
             VCRepresented(data: $data, isShownSSL: $isShowSSLView)
            
@@ -201,11 +209,21 @@ struct TravelerFormView: View {
                 SSLCmzViewController.callback = {
                     (bookingConfirmResponse) in
                     //print(beatCount)
+                    isShowSSLView = false
                     if bookingConfirmResponse?.message != nil {
                         self.showAlert = true
                         self.alertMsg = bookingConfirmResponse?.message! ?? ""
+                        
                     }
-                    isShowSSLView = false
+                    
+                    if bookingConfirmResponse!.isSuccess {
+                        if (bookingConfirmResponse?.data) != nil {
+                            print("uniqueTransID = \(String(describing: bookingConfirmResponse?.data?.item2?.uniqueTransID!))")
+                            selectedBookedFlight = AirTicketingResponse(paxName: "", issueDate: "", travellDate: "", uniqueTransID: bookingConfirmResponse?.data?.item2?.uniqueTransID, pnr: "", ticketNumber: "", status: "", platingCarrier: "", airlineName: "", origin: "", destination: "", journeyType: "", gatewayCharge: 100.0)
+                            
+                            showSSLCz = "BookedFlightDetails"
+                        }
+                    }
                 }
                 flightSearchModel.bookingResponse = result
                 print(result)

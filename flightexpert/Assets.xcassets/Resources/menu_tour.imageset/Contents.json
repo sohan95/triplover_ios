@@ -1,15 +1,16 @@
 {
   "images" : [
     {
-      "filename" : "menu_tour.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "menu_tour@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "menu_tour@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

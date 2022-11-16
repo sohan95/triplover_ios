@@ -26,7 +26,7 @@ struct MyBooking: View {
                 .resizable()
                 .scaledToFill()
                 .edgesIgnoringSafeArea(.all)
-            NavigationLink(destination:BookedFlightDetails(selectedBookedFlight: selectedBookedFlight), tag: "BookedFlightDetails", selection: $selection) { EmptyView() }
+            NavigationLink(destination:BookedFlightDetails(selectedBookedFlight: selectedBookedFlight, source: "MyBooking"), tag: "BookedFlightDetails", selection: $selection) { EmptyView() }
             
             if !isLoading {
                 if !showErrorAlert {
@@ -112,16 +112,19 @@ struct MyBooking: View {
                         .resizable()
                         .scaledToFill()
                         .edgesIgnoringSafeArea(.all)
-                    VStack(spacing: 40) {
-                        Spacer()
-                        ProgressView()
-                            .progressViewStyle(CircularProgressViewStyle(tint: .orange))
-                            .scaleEffect(2)
-                        ProgressBar(isActive: $isLoading)
-                            .frame(height: 3)
-                            
-                    }
-                    .padding(.bottom, 64)
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: .red))
+                        .scaleEffect(2)
+//                    VStack(spacing: 40) {
+//                        Spacer()
+//                        ProgressView()
+//                            .progressViewStyle(CircularProgressViewStyle(tint: .orange))
+//                            .scaleEffect(2)
+//                        ProgressBar(isActive: $isLoading)
+//                            .frame(height: 3)
+//
+//                    }
+//                    .padding(.bottom, 64)
                     
                 }
                 

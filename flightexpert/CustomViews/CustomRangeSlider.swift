@@ -106,6 +106,8 @@ class CustomSlider: ObservableObject {
     //Slider value range from valueStart to valueEnd
     var valueStart: Double
     var valueEnd: Double
+    var currentMinValue: Double
+    var currentMaxValue: Double
     
     //Slider Handle
     @Published var highHandle: SliderHandle
@@ -118,9 +120,15 @@ class CustomSlider: ObservableObject {
     final var anyCancellableHigh: AnyCancellable?
     final var anyCancellableLow: AnyCancellable?
     
-    init(start: Double, end: Double) {
+    init(start: Double, end: Double, currentMin: Double,  currentMax: Double) {
         valueStart = start
         valueEnd = end
+        currentMinValue = currentMin
+        currentMaxValue = currentMax
+        
+        let sliderValueRange = valueEnd - valueStart
+        highHandleStartPercentage = (currentMaxValue - start) / sliderValueRange
+        lowHandleStartPercentage = (currentMinValue - start) / sliderValueRange
         
         highHandle = SliderHandle(sliderWidth: width,
                                   sliderHeight: lineWidth,
@@ -160,8 +168,8 @@ struct SliderView: View {
     @ObservedObject var slider: CustomSlider
     
     var body: some View {
-        RoundedRectangle(cornerRadius: slider.lineWidth)
-            .fill(Color.gray.opacity(0.2))
+        RoundedRectangle(cornerRadius: slider.lineWidth/2)
+            .fill(Color.gray.opacity(0.05))
             .frame(width: slider.width, height: slider.lineWidth)
             .overlay(
                 ZStack {
@@ -171,11 +179,11 @@ struct SliderView: View {
                         
                     
                     //Low Handle
-                    SliderHandleView(handle: slider.lowHandle)
+                    SliderHandleView(handle: slider.lowHandle, noteColor: Color.yellow)
                         .highPriorityGesture(slider.lowHandle.sliderDragGesture)
                     
                     //High Handle
-                    SliderHandleView(handle: slider.highHandle)
+                    SliderHandleView(handle: slider.highHandle, noteColor: Color.orange)
                         .highPriorityGesture(slider.highHandle.sliderDragGesture)
                 }
             )
@@ -184,11 +192,12 @@ struct SliderView: View {
 
 struct SliderHandleView: View {
     @ObservedObject var handle: SliderHandle
+    var noteColor: Color
     
     var body: some View {
         Circle()
             .frame(width: handle.diameter, height: handle.diameter)
-            .foregroundColor(.white)
+            .foregroundColor(noteColor)
             .shadow(color: Color.black.opacity(0.15), radius: 5, x: 0, y: 0)
             .scaleEffect(handle.onDrag ? 0.8 : 0.6)
             .contentShape(Rectangle())
@@ -208,28 +217,29 @@ struct SliderPathBetweenView: View {
     }
 }
 
-struct RangeSliderView: View {
-    @ObservedObject var slider:CustomSlider
-
-    var body: some View {
-        VStack {
-            HStack{
-                Text("\(slider.highHandle.currentValue)")
-                SliderView(slider: slider)
-                Text("\(slider.lowHandle.currentValue)")
-            }.padding(.trailing,10)
-            
-        }
-        .onAppear() {
-            
-        }
-    }
-}
-struct RangeSliderView_Previews: PreviewProvider {
-    static var previews: some View {
-        RangeSliderView(slider: CustomSlider(start: 300, end: 400))
-    }
-}
+//struct RangeSliderView: View {
+//    @ObservedObject var slider:CustomSlider
+//
+//    var body: some View {
+//        VStack {
+//            HStack{
+//                Text("\(slider.highHandle.currentValue)")
+//                SliderView(slider: slider)
+//                Text("\(slider.lowHandle.currentValue)")
+//            }.padding(.trailing,10)
+//
+//        }
+//        .onAppear() {
+//
+//        }
+//    }
+//}
+//
+//struct RangeSliderView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        RangeSliderView(slider: CustomSlider(start: 300, end: 400))
+//    }
+//}
 
 
 //struct CustomRangeSlider: View {

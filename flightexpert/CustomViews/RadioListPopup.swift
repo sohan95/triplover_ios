@@ -64,7 +64,9 @@ struct RadioListPopup: View {
                     HStack{
                         Spacer()
                          Button(action: {
-                            self.show.toggle()
+                             withAnimation {
+                                 self.show.toggle()
+                             }
                          }) {
                              Text("CLOSE")
                                  .padding(.vertical, 12)
@@ -131,7 +133,9 @@ struct CabinClassPopup: View {
                     HStack{
                         Spacer()
                          Button(action: {
-                            self.show.toggle()
+                             withAnimation {
+                                 self.show.toggle()
+                             }
                          }) {
                              Text("CLOSE")
                                  .padding(.vertical, 10)

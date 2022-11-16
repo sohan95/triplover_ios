@@ -19,12 +19,6 @@ struct BookedFlight: View {
                 Text(flight.paxName ?? "")
                     .font(.system(size: 11, weight: .medium, design: .rounded))
                     .padding(.bottom, 10)
-                //getDateStringWithTemplate(dateStr:flight.issueDate ?? "", template: "yyyy-MM-dd'T'HH:mm:ss.SSS")
-//                Text("Issue: \(getTimeString(dateStr:flight.issueDate!))")
-//                Text("Depart: \(getTimeString(dateStr:flight.travellDate!))")
-//                Text("Pnr: \(getTimeString(dateStr:flight.pnr!))")
-//                Text("Status: \(getTimeString(dateStr:flight.status!))")
-                
                 Text("Issue: \(getDateStringWithTemplate(dateStr:flight.issueDate ?? "", template: "yyyy-MM-dd'T'HH:mm:ss.SSS"))")
                 Text("Depart: \(flight.travellDate ?? "")")
                 Text("Pnr: \(flight.pnr ?? "")")
@@ -55,15 +49,11 @@ struct BookedFlight: View {
 
 struct FlightCell: View {
     typealias Action = (Direction) -> Void
-    
-//    @State var selectedModel: RandomModel? = nil
     @State var direction: Direction
+    @State var currency: String = String()
     @Binding var isSelectBtnTapped: Bool
     var selectedDirection: Direction? = nil
     var action: Action?
-    
-//    @ObservedObject var flightSearchModel: FlightSearchModel()
-//    var selectedDirection: Direction
     
     var body: some View {
         
@@ -74,7 +64,6 @@ struct FlightCell: View {
                     //Icon & Name
                     VStack(alignment: .center, spacing:0) {
                         ImageUrlView(urlString: "\(ROOT_URL_THUMB)\(direction.platingCarrierCode!).png",sizeVal: 50)
-//                        .frame(minWidth: 50, maxWidth: .infinity)
 
                         Text(direction.platingCarrierName!)
                             .font(.system(size: 10, weight: .medium, design: .rounded))
@@ -82,10 +71,6 @@ struct FlightCell: View {
                             .minimumScaleFactor(0.8)
                     }
                     .frame(width: 110)
-//                    .background(.gray)
-//                    .padding(.leading, 5)
-                    
-//                    Spacer()
                     
                     //Transition
                     HStack(spacing:5) {
@@ -94,7 +79,6 @@ struct FlightCell: View {
                             Text(direction.from!)
                         }
                         .frame(width:35)
-//                        .background(.green)
                         .font(.system(size: 11, weight: .semibold, design: .rounded))
                         
                         VStack(alignment: .center, spacing: 0) {
@@ -130,36 +114,26 @@ struct FlightCell: View {
                             }
                             
                         }
-//                        .background(.yellow)
                         
                         VStack {
                             Text("\(getTimeString(dateStr: direction.segments?[0].details?[0].arrival ?? ""))")
                             Text(direction.to!)
                         }
                         .frame(width:35)
-//                        .background(.green)
                         .font(.system(size: 11, weight: .semibold, design: .rounded))
                     }
                     .frame(minWidth:0, maxWidth: .infinity)
-//                    .background(.blue)
-//                    .padding(.trailing, 5)
-                    
                 }
                 .frame(minWidth:0, maxWidth: .infinity)
-//                .background(.blue)
-                
             }
             .frame(minWidth:0, maxWidth: .infinity, minHeight:80,maxHeight: 80)
-//            .background(.red)
             .padding(.horizontal,5)
-            
-            
-            //Spacer()
+
             //:- Bottom
             HStack {
                 VStack(alignment: .leading, spacing: 5){
                     HStack(spacing: 5){
-                        Text("BDT")
+                        Text(currency)
                         Text("\((direction.bookingComponents?[0].basePrice)!.removeZerosFromEnd())")
                             .foregroundColor(.red.opacity(0.7))
                     }
@@ -255,9 +229,6 @@ struct FlightCell: View {
 
 struct FlightCell_Previews: PreviewProvider {
     static var previews: some View {
-//        let dir = try? Direction(from: "Dhaka" as! Decoder)
-//        FlightCell(direction: .constant(Direction()), isSelectBtnTapped: true)
-//        FlightSelectionView(title: "abc", flightSearchModel: FlightSearchModel())
         ZStack {
             Color.gray
             BookedFlight(flight: AirTicketingResponse(paxName: "Rafiur Rahamn", issueDate: "25-5-87", travellDate: "25-5-87", uniqueTransID: "25-5-87", pnr: "25-5-87", ticketNumber: "25-5-87", status: "25-5-87", platingCarrier: "25-5-87", airlineName: "25-5-87", origin: "25-5-87", destination: "25-5-87", journeyType: "25-5-87", gatewayCharge: 12.0))

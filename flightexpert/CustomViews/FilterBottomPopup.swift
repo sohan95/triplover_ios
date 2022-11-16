@@ -11,22 +11,19 @@ import SwiftUI
 
 struct FilterBottomPopup: View {
     @EnvironmentObject var flightSearchModel: FlightSearchModel
-    @Binding var selectedStop: String;
-    @Binding var selectedAirline: String;
-    @Binding var selectedMinMaxPrice: MinMaxPrice;
-    var minMaxPrice: MinMaxPrice
-    @ObservedObject var slider:CustomSlider
+    @Binding var filterTypeIndex: Int
+    @Binding var selectedStop: String
+    @Binding var selectedAirline: String
+    @Binding var selectedMinPrice: Double
+    @Binding var selectedMaxPrice: Double
+    @ObservedObject var slider: CustomSlider
     typealias Action = (Bool) -> Void
     var doneFilterAction: Action?
-    
-    @State var filterTypeIndex: Int = 2
-    
-    @State var width: Double = 0
-    @State var width1: Double = 15
-    @State var ratio: Double = 0
-    var totalWidth = UIScreen.main.bounds.width - 60
-    //@ObservedObject var slider: CustomSlider
-    //@StateObject var progress: CustomSlider
+//    @State var width: Double = 0
+//    @State var width1: Double = 15
+//    @State var ratio: Double = 0
+//    var totalWidth = UIScreen.main.bounds.width - 60
+    @State var popupViewHeight: CGFloat = 330.0
 
     
     var body: some View {
@@ -75,10 +72,10 @@ struct FilterBottomPopup: View {
                     .frame(maxWidth:.infinity, maxHeight: 35)
                     .foregroundColor(.white)
                     .font(.system(size: 12, weight: .semibold, design: .rounded))
-                    .padding(.vertical, 10)
+                    .padding(.top, 10)
                     
                     VStack(alignment: .leading) {
-                        VStack(alignment: .leading, spacing: 15) {
+                        VStack(alignment: .leading) {
                             if filterTypeIndex == 0 { // For stops
                                 VStack(alignment: .leading, spacing: 10) {
                                     /*HStack{
@@ -135,77 +132,92 @@ struct FilterBottomPopup: View {
                                     }
                                     .padding(.top, 25)*/
                                     HStack{
-                                        Text("\(slider.highHandle.currentValue)")
-                                        Text("\(slider.lowHandle.currentValue)")
+                                        Text("\(slider.lowHandle.currentValue, specifier: "%.2f")")
+                                        Spacer()
+                                        Text("\(slider.highHandle.currentValue, specifier: "%.2f")")
                                     }.padding(.trailing,10)
                                     ZStack{
-                                        Rectangle()
+                                        RoundedRectangle(cornerRadius: 20)
                                                 .fill(Color.gray.opacity(0.5))
-                                                .frame(height: 30)
+                                                .frame(height: 40)
                                         SliderView(slider: slider) 
                                     }
-                                    
                                 }
                                 .frame(maxWidth:.infinity)
                                 .padding()
                             }
                             
                             if filterTypeIndex == 1 { // For stops
-                                ForEach(stopsList,id: \.self){item in
+                                ScrollView {
+                                    VStack(alignment: .leading, spacing: 10) {
+                                        ForEach(stopsList,id: \.self){item in
+                                            Button(action: {
+                                                self.selectedStop = item
+                                                //self.doneAction()
+                                            }) {
+                                                HStack(alignment:.bottom, spacing: 15) {
+                                                    ZStack(alignment: .center){
+                                                        Rectangle().stroke(self.selectedStop == item ? Color.black : Color.gray, lineWidth: 2).frame(width: 16, height: 16)
 
-                                    Button(action: {
-                                        self.selectedStop = item
-                                        //self.doneAction()
-                                    }) {
-                                        HStack(alignment:.bottom, spacing: 15) {
-                                            ZStack(alignment: .center){
-                                                Rectangle().stroke(self.selectedStop == item ? Color.black : Color.gray, lineWidth: 2).frame(width: 16, height: 16)
+                                                        if self.selectedStop == item {
+                                                            Rectangle().fill(Color.black).frame(width: 10, height: 10)
+                                                        }
+                                                    }
+                                                    Text(item)
+                                                        .font(.system(size: 11, weight: .medium, design: .rounded))
 
-                                                if self.selectedStop == item {
-                                                    Rectangle().fill(Color.black).frame(width: 10, height: 10)
                                                 }
+                                                .foregroundColor(.black)
                                             }
-                                            Text(item)
-                                                .font(.system(size: 11, weight: .medium, design: .rounded))
-
                                         }
-                                        .foregroundColor(.black)
                                     }
                                 }
+                                .disableScrolling(disabled: true)
+                                
                             }
                             
-                            if filterTypeIndex == 2 { // For stops
-                                ForEach(flightSearchModel.airlineList,id: \.self){item in
+                            if filterTypeIndex == 2 { // For airlineList
+                                ScrollView {
+                                    VStack(alignment: .leading, spacing: 10) {
+                                        ForEach(flightSearchModel.airlineList,id: \.self){item in
+                                            Button(action: {
+                                                self.selectedAirline = item
+                                                //self.doneAction()
+                                            }) {
+                                                HStack(alignment:.bottom, spacing: 15) {
+                                                    ZStack(alignment: .center){
+                                                        Rectangle().stroke(self.selectedAirline == item ? Color.black : Color.gray, lineWidth: 1).frame(width: 16, height: 16)
 
-                                    Button(action: {
-                                        self.selectedAirline = item
-                                        //self.doneAction()
-                                    }) {
-                                        HStack(alignment:.bottom, spacing: 15) {
-                                            ZStack(alignment: .center){
-                                                Rectangle().stroke(self.selectedAirline == item ? Color.black : Color.gray, lineWidth: 1).frame(width: 16, height: 16)
+                                                        if self.selectedAirline == item {
+                                                            Rectangle().fill(Color.black).frame(width: 10, height: 10)
+                                                        }
+                                                    }
+                                                    Text(item)
+                                                        .font(.system(size: 11, weight: .medium, design: .rounded))
 
-                                                if self.selectedAirline == item {
-                                                    Rectangle().fill(Color.black).frame(width: 10, height: 10)
                                                 }
+                                                .foregroundColor(.black)
                                             }
-                                            Text(item)
-                                                .font(.system(size: 11, weight: .medium, design: .rounded))
-
                                         }
-                                        .foregroundColor(.black)
                                     }
+                                    .frame(maxWidth: .infinity)
                                 }
+                                .disableScrolling(disabled: flightSearchModel.airlineList.count < 6)
                             }
                             
                         }
-                        .frame(maxWidth:.infinity, minHeight: 160, maxHeight: 160)
+                        .frame(maxWidth:.infinity, maxHeight: 160)
+//                        .background(.yellow)
                         
                         //Footer
                         HStack(spacing: 5) {
                             Button {
-                                print("Reset")
-                                self.selectedMinMaxPrice = MinMaxPrice(minPrice: slider.lowHandle.currentValue, maxPrice: slider.highHandle.currentValue)
+                                self.selectedStop = ""
+                                self.selectedAirline = ""
+//                                self.selectedMinMaxPrice = MinMaxPrice(minPrice: slider.lowHandle.currentValue, maxPrice: slider.highHandle.currentValue)
+                                self.selectedMinPrice = slider.lowHandle.currentValue
+                                self.selectedMaxPrice = slider.highHandle.currentValue
+                                
                                 if let doneFilterAction = doneFilterAction {
                                     doneFilterAction(false)
                                 }
@@ -217,10 +229,15 @@ struct FilterBottomPopup: View {
                                     .cornerRadius(5)
                             }
                             Button {
-                                print("Apply")
                                 if let doneFilterAction = doneFilterAction {
 //                                    self.selectedMinMaxPrice = MinMaxPrice(minPrice: width*ratio, maxPrice: width1*ratio)
-                                    self.selectedMinMaxPrice = MinMaxPrice(minPrice: slider.lowHandle.currentValue, maxPrice: slider.highHandle.currentValue)
+                                    print("min=\(slider.lowHandle.currentValue)");
+                                    print("max=\(slider.highHandle.currentValue)");
+                                    self.selectedMinPrice = slider.lowHandle.currentValue
+                                    self.selectedMaxPrice = slider.highHandle.currentValue
+                                    print("selectedMinPrice=\(self.selectedMinPrice)");
+                                    print("selectedMaxPrice=\(self.selectedMaxPrice)");
+//                                    self.selectedMinMaxPrice = MinMaxPrice(minPrice: slider.lowHandle.currentValue, maxPrice: slider.highHandle.currentValue)
                                     doneFilterAction(true)
                                 }
                                 
@@ -232,37 +249,60 @@ struct FilterBottomPopup: View {
                                     .cornerRadius(5)
                             }
                         }
-                        .frame(maxWidth:.infinity, minHeight: 35, maxHeight:35)
+                        .frame(maxWidth:.infinity, maxHeight:35)
                         .foregroundColor(.white)
                         .font(.system(size: 11, weight: .medium, design: .rounded))
-                        .padding(.vertical,40)
+                        .padding(.vertical,5)
 //                        .background(.orange)
                         Spacer()
                     }
-                    .frame(maxWidth:.infinity, maxHeight: 230)
+                    .frame(maxWidth:.infinity, maxHeight: 250)
+//                    .background(.pink)
                     Spacer()
                 }
                 .font(.system(size: 12, weight: .semibold, design: .rounded))
                 .padding(.horizontal, 10)
-                .frame(maxWidth:.infinity, maxHeight: 330)
+                .frame(maxWidth:.infinity, maxHeight: popupViewHeight)//330
                 .background(.white)
             }
 
         }
-        .onAppear(){
-//            ratio = (minMaxPrice.maxPrice-minMaxPrice.minPrice)/totalWidth
-//            width1 = totalWidth
-//            print(String(format: "%.2f", ratio))
-            //self.slider = CustomSlider(start: 300, end: 400)
-//            self.progress = CustomSlider(start: self.flightSearchModel.minMaxPrice.minPrice, end: self.flightSearchModel.minMaxPrice.maxPrice)
-        }
+        .onAppear(perform: {
+            //check Device Notch
+            if UIDevice.current.hasNotch {
+                //... consider notch
+                popupViewHeight = 320.0
+            } else {
+                popupViewHeight = 370.0
+            }
+        })
     }
     
     
-    func getValue(val: Double) -> String{
+//    func getValue(val: Double) -> String{
+//
+//        let vall: Double = val * ratio
+//        return String(format: "%.2f", vall)
+//    }
+}
+
+struct DisableScrolling: ViewModifier {
+    var disabled: Bool
+    
+    func body(content: Content) -> some View {
+    
+        if disabled {
+            content
+                .simultaneousGesture(DragGesture(minimumDistance: 0), including: .all)
+        } else {
+            content
+        }
         
-        let vall: Double = val * ratio
-        return String(format: "%.2f", vall)
+    }
+}
+extension View {
+    func disableScrolling(disabled: Bool) -> some View {
+        modifier(DisableScrolling(disabled: disabled))
     }
 }
 

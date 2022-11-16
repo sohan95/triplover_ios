@@ -10,10 +10,11 @@ import Foundation
 
 class FlightSearchModel: ObservableObject {
     //@Published var prepareBookingRequest:PrepareBookingRequest = PrepareBookingRequest()
+    @Published var decorationData: DecorationData?
     @Published var userDataList = [UserData]()
     @Published var bookingResponse: BookingResponse?
     @Published var isBooking: Bool = false
-    
+    @Published var currency: String? = nil
     @Published var airSearchResponses: [AirSearchResponse] = []
     @Published var backwardDirections: [Direction] = []
     @Published var forwardDirections: [Direction] = []
@@ -43,8 +44,8 @@ class FlightSearchModel: ObservableObject {
     @Published  var routeIndex: Int = 0
     
     // Filter by total Price
-    @Published var maxPrice: Double = 0.0
-    @Published var minPrice: Double = 0.0
+//    @Published var maxPrice: Double = 0.0
+//    @Published var minPrice: Double = 0.0
     @Published var minMaxPrice: MinMaxPrice = MinMaxPrice(minPrice: 200.0, maxPrice: 10000.0)
     
     // Filter by airlines
@@ -127,7 +128,7 @@ class FlightSearchModel: ObservableObject {
                 var tempDir: Direction = direction
                 tempDir.uniqueTransID = airResponse.uniqueTransID
                 tempDir.itemCodeRef = airResponse.itemCodeRef
-                tempDir.totalPrice = airResponse.totalPrice!
+                tempDir.totalPrice = airResponse.totalPrice
                 
                 tempDir.platingCarrierName = airResponse.platingCarrierName
                 
@@ -155,16 +156,16 @@ class FlightSearchModel: ObservableObject {
         //airlineList
         self.airlineList = Array(airlineSet)
         // max-min filter:
-        let directionMax = directions.max { $0.totalPrice! < $1.totalPrice! }
+        //let directionMax = directions.max { $0.totalPrice! < $1.totalPrice! }
+        let directionMax = directions.max { ($0.bookingComponents?[0].basePrice)! < ($1.bookingComponents?[0].basePrice)! }
         //self.maxPrice = (directionMax?.totalPrice)!
-        self.minMaxPrice.maxPrice = (directionMax?.totalPrice)!
+        self.minMaxPrice.maxPrice = (directionMax?.bookingComponents?[0].basePrice)!
 
-        let directionMin = directions.min { $0.totalPrice! < $1.totalPrice! }
+        let directionMin = directions.min { ($0.bookingComponents?[0].basePrice)! < ($1.bookingComponents?[0].basePrice)! }
 //        self.minPrice = (directionMin?.totalPrice)!
-        self.minMaxPrice.minPrice = (directionMin?.totalPrice)!
+        self.minMaxPrice.minPrice = (directionMin?.bookingComponents?[0].basePrice)!
         
-        print("maxPrice=\(self.maxPrice)___minPrice=\(self.minPrice)")
-        print("maxPrice=\(self.maxPrice)___minPrice=\(self.minPrice)")
+        print("maxPrice=\(self.minMaxPrice.maxPrice)___minPrice=\(self.minMaxPrice.minPrice)")
         
         self.forwardDirections = directions
         self.selectedDirectionList.insert(directions, at: self.routeIndex)
@@ -180,7 +181,7 @@ class FlightSearchModel: ObservableObject {
                 var tempDir: Direction = direction
                 tempDir.uniqueTransID = airResponse.uniqueTransID
                 tempDir.itemCodeRef = airResponse.itemCodeRef
-                tempDir.totalPrice = airResponse.totalPrice!
+                tempDir.totalPrice = airResponse.totalPrice
                 
                 tempDir.bookingComponents = airResponse.bookingComponents
                 
