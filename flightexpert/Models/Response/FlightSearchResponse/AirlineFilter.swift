@@ -13,8 +13,25 @@ For support, please feel free to contact me at https://www.linkedin.com/in/syeda
 
 import Foundation
 struct AirlineFilter : Codable {
-	let airlineCode : String?
-	let airlineName : String?
-	let totalFlights : Int
-	let minPrice : Double
+    let airlineCode : String?
+    let airlineName : String?
+    let totalFlights : Int?
+    let minPrice : Double?
+
+    enum CodingKeys: String, CodingKey {
+
+        case airlineCode = "airlineCode"
+        case airlineName = "airlineName"
+        case totalFlights = "totalFlights"
+        case minPrice = "minPrice"
+    }
+
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        airlineCode = try values.decodeIfPresent(String.self, forKey: .airlineCode)
+        airlineName = try values.decodeIfPresent(String.self, forKey: .airlineName)
+        totalFlights = try values.decodeIfPresent(Int.self, forKey: .totalFlights)
+        minPrice = try values.decodeIfPresent(Double.self, forKey: .minPrice)
+    }
+
 }

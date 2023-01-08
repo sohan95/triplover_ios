@@ -250,7 +250,7 @@ final class HttpUtility {
     
     func bookingConfirm(requestBody:SSLComerzResponse, completionHandler:@escaping(_ result: BookingConfirmResponse?)->Void) {
         let token = UserDefaults.standard.string(forKey: "token")
-        print(token)
+        print("token=\(token)")
         guard let token = token else {
             return
         }

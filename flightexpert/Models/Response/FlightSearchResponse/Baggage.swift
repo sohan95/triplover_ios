@@ -14,5 +14,17 @@ For support, please feel free to contact me at https://www.linkedin.com/in/syeda
 import Foundation
 struct Baggage : Codable {
 	let units : String?
-	let amount : Double
+    let amount : Double?
+
+    enum CodingKeys: String, CodingKey {
+
+        case units = "units"
+        case amount = "amount"
+    }
+
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        units = try values.decodeIfPresent(String.self, forKey: .units)
+        amount = try values.decodeIfPresent(Double.self, forKey: .amount)
+    }
 }

@@ -47,8 +47,6 @@ class SSLCmzViewController: UIViewController, SSLCommerzDelegate {
 //    var doneAction : () -> ()
     static var callback : ((BookingConfirmResponse?) -> Void)?
 
-
-
     init(data: Binding<Int>, isShownSSL: Binding<Bool>) {
             self._data = data
             self._isShownSSL = isShownSSL
@@ -71,9 +69,9 @@ class SSLCmzViewController: UIViewController, SSLCommerzDelegate {
         print("balerId= .\(SSLCmzViewController.balerId)")
         
         data = 4
-        sslCom = SSLCommerz.init(integrationInformation: .init(storeID: "tripl627f321a2eb5a", storePassword: "tripl627f321a2eb5a@ssl", totalAmount: SSLCmzViewController.balerPrice, currency: "BDT", transactionId: SSLCmzViewController.balerId, productCategory: "TripLover"), emiInformation: nil, customerInformation:nil, shipmentInformation: nil, productInformation: nil, additionalInformation: nil)
+//        sslCom = SSLCommerz.init(integrationInformation: .init(storeID: "tripl627f321a2eb5a", storePassword: "tripl627f321a2eb5a@ssl", totalAmount: SSLCmzViewController.balerPrice, currency: "BDT", transactionId: SSLCmzViewController.balerId, productCategory: "TripLover"), emiInformation: nil, customerInformation:nil, shipmentInformation: nil, productInformation: nil, additionalInformation: nil)
         
-//        sslCom = SSLCommerz.init(integrationInformation: .init(storeID: "tripl627f321a2eb5a", storePassword: "tripl627f321a2eb5a@ssl", totalAmount: 1000.00, currency: "BDT", transactionId: "TLL1626185596", productCategory: "TripLover"), emiInformation: nil, customerInformation:nil, shipmentInformation: nil, productInformation: nil, additionalInformation: nil)
+        sslCom = SSLCommerz.init(integrationInformation: .init(storeID: "tripl627f321a2eb5a", storePassword: "tripl627f321a2eb5a@ssl", totalAmount: SSLCmzViewController.balerPrice, currency: "BDT", transactionId: SSLCmzViewController.balerId, productCategory: "TripLover"), emiInformation: nil, customerInformation:nil, shipmentInformation: nil, productInformation: nil, additionalInformation: nil)
         
         sslCom?.delegate = self
         sslCom?.start(in: self, shouldRunInTestMode: true)
@@ -107,36 +105,7 @@ class SSLCmzViewController: UIViewController, SSLCommerzDelegate {
 //                self.navigationController?.pushViewController(viewCtrl1, animated: true)
             }
         }
-
-//        data = 99
-//        isShownSSL = false
-//        sslCom = nil
     }
 }
-
-
-//struct SSLViewRepresentable: View {
-//    var body: some View {
-//        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-//    }
-//}
-//struct SSLViewRepresentable_Previews: PreviewProvider {
-//    static var previews: some View {
-//        VCRepresented()
-//    }
-//}
-//enum LinkAction {
-//    case takePhoto
-//}
-//
-//class VCLink : ObservableObject {
-//    @Published var action : LinkAction?
-//    @Published var name : String = ""
-//    @Published var amount : String?
-//
-//    func takePhoto() {
-//        action = .takePhoto
-//    }
-//}
 
 

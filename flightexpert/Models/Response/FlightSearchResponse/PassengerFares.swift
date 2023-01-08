@@ -18,4 +18,20 @@ struct PassengerFares : Codable {
     var cnn : PassengerFare?
     var inf : PassengerFare?
     var ins : PassengerFare?
+
+    enum CodingKeys: String, CodingKey {
+
+        case adt = "adt"
+        case cnn = "cnn"
+        case inf = "inf"
+        case ins = "ins"
+    }
+
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        adt = try values.decodeIfPresent(PassengerFare.self, forKey: .adt)
+        cnn = try values.decodeIfPresent(PassengerFare.self, forKey: .cnn)
+        inf = try values.decodeIfPresent(PassengerFare.self, forKey: .inf)
+        ins = try values.decodeIfPresent(PassengerFare.self, forKey: .ins)
+    }
 }
