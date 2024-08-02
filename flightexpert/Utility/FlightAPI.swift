@@ -11,10 +11,10 @@ class FlightAPI {
     private static let defaultSession = URLSession(configuration: .default)
     
 //    static func searchFlight(searchFlighRequest:SearchFlighRequest, completion:@escaping(SearchedFlightResponse?, String?)->Void) {
-////        guard let url = URL(string: "http://52.221.202.198:83/api/Search") else {
+////        guard let url = URL(string: "http://localhost:83/api/Search") else {
 ////            return
 ////        }
-//        var urlRequest = URLRequest(url: URL(string: "http://52.221.202.198:83/api/Search")!)
+//        var urlRequest = URLRequest(url: URL(string: "http://localhost:83/api/Search")!)
 //        urlRequest.httpMethod = "post"
 //        urlRequest.addValue("application/json", forHTTPHeaderField: "content-type")
 //        urlRequest.httpBody = try? JSONEncoder().encode(searchFlighRequest)
