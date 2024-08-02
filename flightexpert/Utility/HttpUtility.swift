@@ -9,8 +9,8 @@ import Foundation
 
 final class HttpUtility {
     static let shared = HttpUtility()
-    //static let baseUrl = "http://52.221.202.198:83/api"
-    static let baseUrl = "http://54.169.108.46:81/api"
+    //static let baseUrl = "http://localhost:83/api"
+    static let baseUrl = "http://localhost:81/api"
 //    static let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImJzcnNvZnRiZEBnbWFpbC5jb20iLCJyb2xlIjoiQjJDIiwibmJmIjoxNjU2ODQzODc4LCJleHAiOjE2NTc0NDg2NzgsImlhdCI6MTY1Njg0Mzg3OH0.bqPW0mNAK7vRGpvBdUImdEmDqH2Z2MUL70EhrrrtjZs"
     private init(){}
     
